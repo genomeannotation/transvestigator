@@ -54,6 +54,20 @@ class TestGFFReader(unittest.TestCase):
 
         self.assertEquals(len(gff.gene[0].mrna[0].cds[0].foo_feature), 1)
 
+    def test_read_gff_throws_on_missing_id(self):
+        test_gff = io.StringIO(\
+        'seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\t.\n'\
+        )
+
+        thrown = False
+        try:
+            gff = read_gff(test_gff)
+        except GFFException as error:
+            self.assertEquals(str(error), "at line 0: feature has no ID attribute")
+            thrown = True 
+        self.assertTrue(thrown)
+        
+
 ##########################
 def suite():
     suite = unittest.TestSuite()

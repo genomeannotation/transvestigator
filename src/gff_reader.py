@@ -63,7 +63,7 @@ def read_gff(io_buffer):
 
         # Make sure feature has ID
         if not 'ID' in feature.attributes:
-            raise GFFException(line_number, "feature has no ID attribute"+str(feature.attributes)+columns[8])
+            raise GFFException(line_number, "feature has no ID attribute")
 
         # Add feature to GFF tree
         if not 'Parent' in feature.attributes: # No parent, add to root
