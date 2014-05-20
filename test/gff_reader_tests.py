@@ -13,6 +13,10 @@ class TestGFFReader(unittest.TestCase):
         attr = '\t; foo=dog;baz=bub;  \t\n'
         self.assertEquals(parse_gff_attributes(attr), {'foo':'dog', 'baz':'bub'})
 
+    def test_parse_gff_attributes_multiple_identical_attributes(self):
+        attr = 'ID=foo_feature;foo=dog;foo=baz;foo=buzz'
+        self.assertEquals(parse_gff_attributes(attr), {'ID':'foo_feature', 'foo':['dog', 'baz', 'buzz']})
+
     def test_read_gff(self):
         test_gff = io.StringIO(\
         'seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\tID=foo_feat;Parent=foo_cds\n'+\

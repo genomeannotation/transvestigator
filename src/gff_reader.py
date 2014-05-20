@@ -18,8 +18,26 @@ def parse_gff_attributes(attr):
     """
 
     attr = attr.strip(' \t\n;').split(';') # Sanitize and split
-    key_vals = [a.split('=') for a in attr]
-    return dict(zip([kv[0] for kv in key_vals], [kv[1] for kv in key_vals]))
+    key_vals = [tuple(a.split('=')) for a in attr]
+    # Handle duplicates
+    to_remove = [] # duplicate entries to remove
+    to_add = {} # merged duplicates dictionary
+    for i, a in enumerate(key_vals):
+        if a in to_remove:
+            continue # Skip entries already marked for removal
+        for b in key_vals[i+1:]:
+            if a[0] == b[0]:
+                if a[0] in to_add: # It's another duplicate, append it
+                    to_add[a[0]].append(b[1])
+                    to_remove.append(b)
+                else: # First duplicate found, create entry
+                    to_add[a[0]] = [a[1], b[1]]
+                    to_remove.extend([a, b])
+    for r in to_remove:
+        key_vals.remove(r)
+    attr_dict = dict(key_vals)
+    attr_dict.update(to_add)
+    return attr_dict
 
 ###################
 
