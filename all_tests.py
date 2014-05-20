@@ -6,6 +6,7 @@ import test.sequence_tests
 import test.translator_tests
 import test.fasta_reader_tests
 import test.transcript_checker_tests
+import test.gff_reader_tests
 
 # get suites from test modules
 suites = [
@@ -13,6 +14,7 @@ test.sequence_tests.suite(),\
 test.translator_tests.suite(),\
 test.fasta_reader_tests.suite(),\
 test.transcript_checker_tests.suite()\
+test.gff_reader_tests.suite(),\
 ]
 
 # collect suites in a TestSuite object
