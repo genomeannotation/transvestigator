@@ -67,8 +67,8 @@ def read_gff(io_buffer):
         # Add feature to GFF tree
         if not 'Parent' in feature.attributes: # No parent, add to root
             root.add_child(feature)
-        elif feature.attributes['ID'] in features: # Has parent, parent has been created, add to parent
-            features[feature.attributes['ID']].add_child(feature)
+        elif feature.attributes['Parent'] in features: # Has parent, parent has been created, add to parent
+            features[feature.attributes['Parent']].add_child(feature)
         else: # Has parent, but it hasn't been created yet. It's an orphan
             orphans.append(feature)
 
@@ -79,8 +79,8 @@ def read_gff(io_buffer):
     while orphans:
         orphan = orphans[0]
         # Check if orphan's parent is in the feature list yet
-        if orphan.attributes['ID'] in features:
-            features[orphan.attributes['ID']].add_child(orphan)
+        if orphan.attributes['Parent'] in features:
+            features[orphan.attributes['Parent']].add_child(orphan)
             orphans.remove(orphan)
 
     return root
