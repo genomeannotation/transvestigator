@@ -8,7 +8,7 @@ class GFFException(Exception):
     """
 
     def __init__(self, line_num, message):
-        Exception.__init__(self, "GFF error:"+str(line_num)+": "+message)
+        Exception.__init__(self, "at line "+str(line_num)+": "+message)
 
 ###################
 
