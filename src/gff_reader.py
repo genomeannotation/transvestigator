@@ -33,11 +33,12 @@ def read_gff(io_buffer):
     orphans = []  # List of orphans
 
     for line_number, line in enumerate(io_buffer):
+        line = line.strip(' \t\n')
         # Skip comments and empty lines
         if not line or line[0] == '#':
             continue
 
-        columns = line.strip(' \t\n').split('\t')
+        columns = line.split('\t')
         
         # Build feature
         feature = GFFFeature()
