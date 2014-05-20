@@ -14,7 +14,7 @@ suites = [
 test.sequence_tests.suite(),\
 test.translator_tests.suite(),\
 test.fasta_reader_tests.suite(),\
-test.transcript_checker_tests.suite()\
+test.transcript_checker_tests.suite(),\
 test.gff_reader_tests.suite(),\
 test.gff_feature_tests.suite(),\
 ]

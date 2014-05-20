@@ -73,6 +73,22 @@ class TestTranscriptChecker(unittest.TestCase):
         self.assertTrue(self.checker.nested(indices1, indices2))
 
 
+    #### COUNT GENES TESTS ####
+
+    def test_sort_genes(self):
+        gff = Mock()
+        gene1, gene2, gene3 = Mock(), Mock(), Mock()
+        gene1.seqid = "foo_seq"
+        gene2.seqid = "foo_seq"
+        gene3.seqid = "bar_seq"
+        gff.gene = [gene1, gene2, gene3]
+        self.checker.sort_genes(gff)
+        self.assertEquals(2, len(self.checker.transcripts["foo_seq"]))
+        self.assertEquals(1, len(self.checker.transcripts["bar_seq"]))
+
+
+
+
 ##########################
 def suite():
     suite = unittest.TestSuite()

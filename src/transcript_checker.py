@@ -3,7 +3,7 @@
 class TranscriptChecker:
 
     def __init__(self):
-        pass
+        self.transcripts = {}
 
     def overlap(self, indices1, indices2):
         # Case 1:
@@ -27,3 +27,10 @@ class TranscriptChecker:
         else:
             return False
         
+    
+    def sort_genes(self, gff):
+        for gene in gff.gene:
+            if gene.seqid in self.transcripts:
+                self.transcripts[gene.seqid].append(gene)
+            else:
+                self.transcripts[gene.seqid] = [gene]
