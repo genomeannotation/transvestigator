@@ -34,7 +34,7 @@ def read_gff(io_buffer):
 
     for line_number, line in enumerate(io_buffer):
         # Skip comments and empty lines
-        if line or line[0] == '#':
+        if not line or line[0] == '#':
             continue
 
         columns = line.strip(' \t\n').split('\t')
@@ -62,7 +62,7 @@ def read_gff(io_buffer):
 
         # Make sure feature has ID
         if not 'ID' in feature.attributes:
-            raise GFFException("feature has no ID attribute")
+            raise GFFException(line_number, "feature has no ID attribute"+str(feature.attributes)+columns[8])
 
         # Add feature to GFF tree
         if not 'Parent' in feature.attributes: # No parent, add to root

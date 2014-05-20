@@ -14,10 +14,8 @@ class TestGFFReader(unittest.TestCase):
         self.assertEquals(parse_gff_attributes(attr), {'foo':'dog', 'baz':'bub'})
 
     def test_read_gff(self):
-        return
-        
         test_gff = io.StringIO(\
-        'seq0\tfoo_feature\t.\t.\t.\t.\t.\tID=foo_feat;Parent=foo_cds\n'+\
+        'seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\tID=foo_feat;Parent=foo_cds\n'+\
         'seq0\tGeibLabs\tgene\t1\t42\t.\t+\t.\tID=foo_gene\n'+\
         'seq0\tGeibLabs\tmRNA\t1\t42\t.\t+\t.\tID=foo_mrna;Parent=foo_gene\n'+\
         'seq0\tGeibLabs\texon\t1\t42\t0.9\t+\t.\tID=foo_exon0;Parent=foo_mrna\n'+\
