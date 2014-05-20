@@ -9,6 +9,8 @@ class TestTranscriptChecker(unittest.TestCase):
     def setUp(self):
         self.checker = TranscriptChecker()
 
+    #### OVERLAP TESTS ####
+
     def test_overlap(self):
         indices1 = [1, 10]
         indices2 = [9, 15]
@@ -29,6 +31,22 @@ class TestTranscriptChecker(unittest.TestCase):
         indices2 = [1, 10]
         self.assertFalse(self.checker.overlap(indices1, indices2))
 
+    def test_overlap_returns_true_when_sharing_one_base(self):
+        indices1 = [1, 5]
+        indices2 = [5, 10]
+        self.assertTrue(self.checker.overlap(indices1,indices2))
+        
+    def test_overlap_returns_true_when_sharing_one_base_case2(self):
+        indices1 = [5, 10]
+        indices2 = [1, 5]
+        self.assertTrue(self.checker.overlap(indices1,indices2))
+
+    def test_list_of_index_pairs_contains_overlap(self):
+        pass
+
+
+    #### NESTED TESTS ####
+
     def test_nested(self):
         indices1 = [1, 10]
         indices2 = [2, 9]
@@ -48,6 +66,11 @@ class TestTranscriptChecker(unittest.TestCase):
         indices1 = [1, 10]
         indices2 = [11, 20]
         self.assertFalse(self.checker.nested(indices1, indices2))
+
+    def test_nested_returns_true_when_flushed_on_one_side(self):
+        indices1 = [1, 10]
+        indices2 = [1, 5]
+        self.assertTrue(self.checker.nested(indices1, indices2))
 
 
 ##########################
