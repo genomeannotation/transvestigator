@@ -9,6 +9,7 @@ import test.transcript_checker_tests
 import test.gff_reader_tests
 import test.gff_feature_tests
 import test.annotation_extractor_tests
+import test.tbl_writer_tests
 
 # get suites from test modules
 suites = [
@@ -19,6 +20,7 @@ test.transcript_checker_tests.suite(),\
 test.gff_reader_tests.suite(),\
 test.gff_feature_tests.suite(),\
 test.annotation_extractor_tests.suite(),\
+test.tbl_writer_tests.suite(),\
 ]
 
 # collect suites in a TestSuite object
