@@ -5,4 +5,8 @@ def gff_gene_to_tbl(gff_gene):
         raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because it has no mRNAs")
     if len(gff_gene.mrna) > 1:
         raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because it has multiple mRNAs")
-    return ""
+    tbl = ""
+    tbl += "<"+str(gff_gene.start)+"\t>"+str(gff_gene.end)+"\tgene\n"
+    tbl += "<"+str(gff_gene.mrna[0].cds[0].start)+"\t>"+str(gff_gene.mrna[0].cds[0].end)+"\tCDS\n"
+    tbl += "\t\t\tprotein_id\t"+gff_gene.mrna[0].attributes["ID"]+"\n"
+    return tbl

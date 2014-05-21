@@ -50,7 +50,7 @@ class TestTblWriter(unittest.TestCase):
         gff_mrna = Mock()
         gff_mrna.start = 1
         gff_mrna.end = 100
-        gff_mrna.attributes = {"Name":"m.foo"}
+        gff_mrna.attributes = {"ID":"m.foo"}
 
         gff_cds = Mock()
         gff_cds.start = 1 
