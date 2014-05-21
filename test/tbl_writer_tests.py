@@ -26,6 +26,7 @@ class TestTblWriter(unittest.TestCase):
     def test_gff_gene_to_tbl_throws_on_multiple_mrnas(self):
         gff_gene = Mock()
         gff_gene.attributes = {"ID":"foo_gene"}
+        gff_gene.has_child = Mock(return_value=True)
         gff_gene.mrna = [Mock(), Mock()]
 
         thrown = False
@@ -34,6 +35,22 @@ class TestTblWriter(unittest.TestCase):
         except Exception as error:
             self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has multiple mRNAs")
             thrown = True
+        self.assertTrue(thrown)
+
+    def test_gff_gene_to_tbl_throws_on_no_cds(self):
+        gff_gene = Mock()
+        gff_gene.attributes = {"ID":"foo_gene"}
+        gff_gene.has_child = Mock(return_value=True)
+        gff_gene.mrna = [Mock()]
+        gff_gene.mrna[0].has_child = Mock(return_value=False)
+
+        thrown = False
+        try:
+            gff_gene_to_tbl(gff_gene)
+        except Exception as error:
+            self.assertEquals(str(error), "can't write tbl entry for foo_gene because its mRNA has no CDS")
+            thrown = True
+        gff_gene.mrna[0].has_child.assert_called_with("CDS")
         self.assertTrue(thrown)
 
     def test_gff_gene_to_tbl_nostart_nostop_nogenename(self):
