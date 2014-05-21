@@ -21,6 +21,6 @@ class GFFFeature:
             setattr(self, child_type, [child])
 
     def has_child(self, child_type):
-        if hasattr(self, child_type):
+        if hasattr(self, child_type.lower()):
             return True
         return False
