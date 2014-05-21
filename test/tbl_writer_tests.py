@@ -20,17 +20,19 @@ class TestTblWriter(unittest.TestCase):
         except Exception as error:
             self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has no mRNAs")
             thrown = True
+        gff_gene.has_child.assert_called_with("mRNA")
         self.assertTrue(thrown)
 
     def test_gff_gene_to_tbl_throws_on_multiple_mrnas(self):
         gff_gene = Mock()
+        gff_gene.attributes = {"ID":"foo_gene"}
         gff_gene.mrna = [Mock(), Mock()]
 
         thrown = False
         try:
             gff_gene_to_tbl(gff_gene)
         except Exception as error:
-            self.assertEquals(error, "can't write tbl entry for foo_gene because it has multiple mRNAs")
+            self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has multiple mRNAs")
             thrown = True
         self.assertTrue(thrown)
 
