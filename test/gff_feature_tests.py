@@ -22,6 +22,25 @@ class TestGFFFeature(unittest.TestCase):
         self.assertEqual(root.gene, [gene0, gene1])
         self.assertEqual(root.gene[0].mrna, [mrna])
 
+    def test_add_annotation_with_no_annotations(self):
+        mrna = GFFFeature()
+        self.assertFalse(mrna.attributes)
+        annokey = "Dbxref"
+        annovalue = "Pfam:foo"
+        mrna.add_annotation(annokey, annovalue)
+        self.assertTrue(mrna.attributes)
+        self.assertTrue("Pfam:foo" in mrna.attributes["Dbxref"])
+
+    def test_add_annotation_with_annotations_already_in_place(self):
+        mrna = GFFFeature()
+        mrna.attributes["Dbxref"] = ["Pfam:bar"]
+        self.assertEquals(1, len(mrna.attributes["Dbxref"]))
+        annokey = "Dbxref"
+        annovalue = "Pfam:foo"
+        mrna.add_annotation(annokey, annovalue)
+        self.assertEquals(2, len(mrna.attributes["Dbxref"]))
+        self.assertTrue("Pfam:foo" in mrna.attributes["Dbxref"])
+
 
 ###################
 def suite():

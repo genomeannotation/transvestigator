@@ -22,3 +22,9 @@ class GFFFeature:
             getattr(self, child_type).append(child)
         else: # No children with this type yet, make new list
             setattr(self, child_type, [child])
+
+    def add_annotation(self, key, value):
+        if(key in self.attributes):
+            self.attributes[key].append(value)
+        else:
+            self.attributes[key] = [value]
