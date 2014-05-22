@@ -2,7 +2,7 @@ import unittest
 import io
 import os
 from mock import Mock, patch, PropertyMock
-from src.gff_reader import *
+from src.gff_feature import *
 
 class TestGFFFeature(unittest.TestCase):
 
@@ -40,6 +40,10 @@ class TestGFFFeature(unittest.TestCase):
         mrna.add_annotation(annokey, annovalue)
         self.assertEquals(2, len(mrna.attributes["Dbxref"]))
         self.assertTrue("Pfam:foo" in mrna.attributes["Dbxref"])
+
+    def test_gff_feature_length(self):
+        feature = GFFFeature(start=5, end=10)
+        self.assertEquals(gff_feature_length(feature), 6)
 
 
 ###################
