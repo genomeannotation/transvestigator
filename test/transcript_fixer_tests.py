@@ -73,6 +73,31 @@ class TestTranscriptFixer(unittest.TestCase):
             thrown = True
         self.assertTrue(thrown)
 
+    def test_fix_transcript(self):
+        transcript = Mock()
+        gene0 = Mock()
+        gene1 = Mock()
+
+        mrna0 = Mock()
+        mrna1 = Mock()
+
+        cds0 = Mock()
+        cds0.start = 1
+        cds0.end = 5
+        cds1 = Mock()
+        cds1.start = 1
+        cds1.end = 6
+
+        transcript.genes = [gene0, gene1]
+        gene0.mrna = [mrna0]
+        gene1.mrna = [mrna1]
+        mrna0.cds = [cds0]
+        mrna1.cds = [cds1]
+
+        fix_transcript(transcript)
+
+        self.assertEquals(transcript.genes, [gene0])
+
 
 ###################
 def suite():
