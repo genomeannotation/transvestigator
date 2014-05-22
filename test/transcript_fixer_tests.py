@@ -19,6 +19,22 @@ class TestTranscriptFixer(unittest.TestCase):
             self.assertEqual(str(error), "can't fix transcript foo_seq because gene foo_gene has no mRNA")
             thrown = True
         self.assertTrue(thrown)
+        
+    def test_fix_transcript_throws_on_multiple_mrnas(self):
+        transcript = Mock()
+        transcript.sequence.header = "foo_seq"
+        gene = Mock()
+        gene.attributes = {"ID":"foo_gene"}
+        gene.mrna = [Mock(), Mock()]
+        transcript.genes = [gene]
+
+        thrown = False
+        try:
+            fix_transcript(transcript)
+        except Exception as error:
+            self.assertEqual(str(error), "can't fix transcript foo_seq because gene foo_gene has multiple mRNAs")
+            thrown = True
+        self.assertTrue(thrown)
 
 
 ###################
