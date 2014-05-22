@@ -2,16 +2,19 @@
 
 class GFFFeature:
 
-    def __init__(self):
-        self.seqid = None
-        self.source = None
-        self.type = None
-        self.start = None
-        self.end = None
-        self.score = None
-        self.strand = None
-        self.phase = None
-        self.attributes = {} # Empty dictionary
+    def __init__(self, seqid=None, source=None, type=None, start=None, end=None, score=None, strand=None, phase=None, attributes=None):
+        self.seqid = seqid
+        self.source = source
+        self.type = type
+        self.start = start
+        self.end = end
+        self.score = score
+        self.strand = strand
+        self.phase = phase
+        if not attributes:
+            self.attributes = {} # Empty dictionary
+        else:
+            self.attributes = attributes
 
     def add_child(self, child):
         child_type = child.type.lower() # For API, use lowercase names
