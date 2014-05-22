@@ -73,6 +73,7 @@ class TestTblWriter(unittest.TestCase):
         gff_gene.mrna = [gff_mrna]
         gff_mrna.cds = [gff_cds]
         del gff_mrna.start_codon
+        del gff_mrna.stop_codon
 
         tbl = gff_gene_to_tbl(gff_gene)
         self.assertEquals(tbl, expected)
@@ -101,10 +102,69 @@ class TestTblWriter(unittest.TestCase):
         gff_gene.mrna = [gff_mrna]
         gff_mrna.cds = [gff_cds]
         gff_mrna.start_codon = [Mock()]
+        del gff_mrna.stop_codon
 
         tbl = gff_gene_to_tbl(gff_gene)
         self.assertEquals(tbl, expected)
+
+    def test_gff_gene_to_tbl_nostart_stop_nogenename(self):
+        expected = \
+        "<1\t100\tgene\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
+        "<1\t100\tCDS\n"\
+        "\t\t\tprotein_id\tm.foo\n"
+
+        gff_gene = Mock()
+        gff_gene.start = 1
+        gff_gene.end = 100
+        gff_gene.attributes = {"ID":"foo_gene"}
         
+        gff_mrna = Mock()
+        gff_mrna.start = 1
+        gff_mrna.end = 100
+        gff_mrna.attributes = {"ID":"m.foo"}
+
+        gff_cds = Mock()
+        gff_cds.start = 1 
+        gff_cds.end = 100
+        
+        gff_gene.mrna = [gff_mrna]
+        gff_mrna.cds = [gff_cds]
+        del gff_mrna.start_codon
+        gff_mrna.stop_codon = [Mock()]
+
+        tbl = gff_gene_to_tbl(gff_gene)
+        self.assertEquals(tbl, expected)
+
+    def test_gff_gene_to_tbl_start_stop_nogenename(self):
+        expected = \
+        "1\t100\tgene\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
+        "1\t100\tCDS\n"\
+        "\t\t\tprotein_id\tm.foo\n"
+
+        gff_gene = Mock()
+        gff_gene.start = 1
+        gff_gene.end = 100
+        gff_gene.attributes = {"ID":"foo_gene"}
+        
+        gff_mrna = Mock()
+        gff_mrna.start = 1
+        gff_mrna.end = 100
+        gff_mrna.attributes = {"ID":"m.foo"}
+
+        gff_cds = Mock()
+        gff_cds.start = 1 
+        gff_cds.end = 100
+        
+        gff_gene.mrna = [gff_mrna]
+        gff_mrna.cds = [gff_cds]
+        gff_mrna.start_codon = [Mock()]
+        gff_mrna.stop_codon = [Mock()]
+
+        tbl = gff_gene_to_tbl(gff_gene)
+        self.assertEquals(tbl, expected)
+
 
 ##########################
 def suite():
