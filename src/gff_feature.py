@@ -22,8 +22,3 @@ class GFFFeature:
             getattr(self, child_type).append(child)
         else: # No children with this type yet, make new list
             setattr(self, child_type, [child])
-
-    def has_child(self, child_type):
-        if hasattr(self, child_type.lower()):
-            return True
-        return False

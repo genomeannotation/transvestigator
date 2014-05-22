@@ -22,14 +22,6 @@ class TestGFFFeature(unittest.TestCase):
         self.assertEqual(root.gene, [gene0, gene1])
         self.assertEqual(root.gene[0].mrna, [mrna])
 
-    def test_has_child(self):
-        feature = GFFFeature()
-        foo = GFFFeature()
-        foo.type = 'foo'
-        self.assertFalse(feature.has_child('foo'))
-        feature.add_child(foo)
-        self.assertTrue(feature.has_child('foo'))
-        
 
 ###################
 def suite():
