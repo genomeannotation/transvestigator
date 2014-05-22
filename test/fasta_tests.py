@@ -2,7 +2,7 @@
 
 import unittest
 import io
-from src.fasta_reader import read_fasta
+from src.fasta import read_fasta
 
 class TestFastaReader(unittest.TestCase):
 
