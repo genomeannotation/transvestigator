@@ -96,7 +96,7 @@ class TestTranscriptFixer(unittest.TestCase):
 
         fix_transcript(transcript)
 
-        self.assertEquals(transcript.genes, [gene0])
+        self.assertEquals(transcript.genes, [gene1])
 
 
 ###################
