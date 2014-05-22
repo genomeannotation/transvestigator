@@ -12,7 +12,7 @@ class TestTblWriter(unittest.TestCase):
     def test_gff_gene_to_tbl_throws_on_no_mrnas(self):
         gff_gene = Mock()
         gff_gene.attributes = {"ID":"foo_gene"}
-        gff_gene.has_child = Mock(return_value=False)
+        del gff_gene.mrna
 
         thrown = False
         try:
@@ -20,13 +20,11 @@ class TestTblWriter(unittest.TestCase):
         except Exception as error:
             self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has no mRNAs")
             thrown = True
-        gff_gene.has_child.assert_called_with("mRNA")
         self.assertTrue(thrown)
 
     def test_gff_gene_to_tbl_throws_on_multiple_mrnas(self):
         gff_gene = Mock()
         gff_gene.attributes = {"ID":"foo_gene"}
-        gff_gene.has_child = Mock(return_value=True)
         gff_gene.mrna = [Mock(), Mock()]
 
         thrown = False
@@ -40,9 +38,8 @@ class TestTblWriter(unittest.TestCase):
     def test_gff_gene_to_tbl_throws_on_no_cds(self):
         gff_gene = Mock()
         gff_gene.attributes = {"ID":"foo_gene"}
-        gff_gene.has_child = Mock(return_value=True)
         gff_gene.mrna = [Mock()]
-        gff_gene.mrna[0].has_child = Mock(return_value=False)
+        del gff_gene.mrna[0].cds
 
         thrown = False
         try:
@@ -50,7 +47,6 @@ class TestTblWriter(unittest.TestCase):
         except Exception as error:
             self.assertEquals(str(error), "can't write tbl entry for foo_gene because its mRNA has no CDS")
             thrown = True
-        gff_gene.mrna[0].has_child.assert_called_with("CDS")
         self.assertTrue(thrown)
 
     def test_gff_gene_to_tbl_nostart_nostop_nogenename(self):
@@ -58,6 +54,33 @@ class TestTblWriter(unittest.TestCase):
         "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\
+        "\t\t\tprotein_id\tm.foo\n"
+
+        gff_gene = Mock()
+        gff_gene.start = 1
+        gff_gene.end = 100
+        gff_gene.attributes = {"ID":"foo_gene"}
+        
+        gff_mrna = Mock()
+        gff_mrna.start = 1
+        gff_mrna.end = 100
+        gff_mrna.attributes = {"ID":"m.foo"}
+
+        gff_cds = Mock()
+        gff_cds.start = 1 
+        gff_cds.end = 100
+        
+        gff_gene.mrna = [gff_mrna]
+        gff_mrna.cds = [gff_cds]
+
+        tbl = gff_gene_to_tbl(gff_gene)
+        self.assertEquals(tbl, expected)
+
+    def test_gff_gene_to_tbl_start_nostop_nogenename(self):
+        expected = \
+        "1\t>100\tgene\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
+        "1\t>100\tCDS\n"\
         "\t\t\tprotein_id\tm.foo\n"
 
         gff_gene = Mock()
