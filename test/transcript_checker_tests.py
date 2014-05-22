@@ -2,7 +2,8 @@
 
 import unittest
 from mock import Mock
-from src.transcript_checker import TranscriptChecker
+from src.transcript_checker import TranscriptChecker, create_starts_and_stops
+from src.types import Sequence, Transcript
 
 class TestTranscriptChecker(unittest.TestCase):
 
@@ -85,6 +86,16 @@ class TestTranscriptChecker(unittest.TestCase):
         self.checker.sort_genes(gff)
         self.assertEquals(2, len(self.checker.transcripts["foo_seq"]))
         self.assertEquals(1, len(self.checker.transcripts["bar_seq"]))
+
+    def test_create_starts_and_stops(self):
+        seq = Sequence("foo_seq", "ATGNNN") 
+        gene = Mock()
+        gene.mrna = Mock()
+        tran = Transcript([gene], seq)
+        create_starts_and_stops(tran)
+        gene.mrna.add_child.assert_called_with()
+
+    #def __init__(self, seqid=None, source=None, type=None, start=None, end=None, score=None, strand=None, phase=None, attributes=None):
 
 
 

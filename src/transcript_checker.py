@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+from src.translator import has_start_codon, has_stop_codon
+
+def create_starts_and_stops(transcript):
+    # TODO
+    for gene in transcript.genes:
+        gene.mrna.add_child()
+
 class TranscriptChecker:
 
     def __init__(self):

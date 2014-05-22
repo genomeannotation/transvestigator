@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from src.translator import reverse_complement
+from src.translator import reverse_complement, has_start_codon, has_stop_codon
 
 class TestTranslate(unittest.TestCase):
 
@@ -14,6 +14,16 @@ class TestTranslate(unittest.TestCase):
 
     def test_reverse_complement_longer_seq(self):
         self.assertEquals('TGTAATCTGTAATCTGTAATCTGTAATCTGTAATC', reverse_complement('GATTACAGATTACAGATTACAGATTACAGATTACA'))
+
+    def test_has_start_codon(self):
+        self.assertTrue(has_start_codon('auggattaca'))
+        self.assertFalse(has_start_codon('guggattaca')) # currently no support for alternate start codons
+
+    def test_has_stop_codon(self):
+        self.assertTrue(has_stop_codon('gattacatag'))
+        self.assertTrue(has_stop_codon('gattacataa'))
+        self.assertTrue(has_stop_codon('gattacatga'))
+        self.assertFalse(has_stop_codon('gattacaact'))
 
         
 ##########################

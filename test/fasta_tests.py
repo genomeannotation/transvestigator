@@ -2,7 +2,7 @@
 
 import unittest
 import io
-from src.fasta import read_fasta, sequence_to_fasta
+from src.fasta import read_fasta, sequence_to_fasta, get_subsequence
 from src.types import Sequence
 
 class TestFastaReader(unittest.TestCase):
@@ -30,6 +30,11 @@ class TestFastaReader(unittest.TestCase):
         fasta = sequence_to_fasta(sequence)
         expected = ">foo_seq\nGATTACA\n"
         self.assertEquals(expected, fasta)
+
+    def test_get_subsequence(self):
+        sequence = Sequence("foo_seq", "GATTACA")
+        subseq = get_subsequence(sequence, 2, 4)
+        self.assertEquals("ATT", subseq)
 
 
 ##########################

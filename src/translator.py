@@ -11,3 +11,17 @@ def reverse_complement(seq):
             seq = seq[0:i] + 'N' + seq[i+1:]
     return ''.join([rev_comp_dict.get(base) for base in reversed(seq)])
 
+def has_start_codon(seq):
+    return seq[:3].lower() == 'aug' or seq[:3].lower() == 'atg'
+
+def has_stop_codon(seq):
+    last3 = seq[-3:].lower()
+    if last3 == 'tag':
+        return True
+    elif last3 == 'taa':
+        return True
+    elif last3 == 'tga':
+        return True
+    else:
+        return False
+
