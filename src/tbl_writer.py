@@ -34,7 +34,7 @@ def gff_gene_to_tbl(gff_gene):
 
 def transcript_to_tbl(transcript):
     if not transcript.genes: # No genes
-        raise Exception("can't write tbl entry for "+transcript.sequence.header+" because it has no genes")
+        raise Exception("can't write tbl entry for "+transcript.sequence.header+" because it has no gene")
     if len(transcript.genes) > 1:
         raise Exception("can't write tbl entry for "+transcript.sequence.header+" because it has multiple genes")
     tbl = ""

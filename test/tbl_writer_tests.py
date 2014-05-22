@@ -142,7 +142,7 @@ class TestTblWriter(unittest.TestCase):
         try:
             tbl = transcript_to_tbl(transcript)
         except Exception as error:
-            self.assertEquals(str(error), "can't write tbl entry for foo_seq because it has no genes")
+            self.assertEquals(str(error), "can't write tbl entry for foo_seq because it has no gene")
             thrown = True
         self.assertTrue(thrown)
 
