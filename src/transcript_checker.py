@@ -1,11 +1,44 @@
 #!/usr/bin/env python
 
+from src.gff_feature import GFFFeature
 from src.translator import has_start_codon, has_stop_codon
+from src.fasta import get_subsequence
 
 def create_starts_and_stops(transcript):
-    # TODO
     for gene in transcript.genes:
-        gene.mrna.add_child()
+        if not gene.mrna:
+            return
+        if not gene.mrna.cds:
+            return
+        begin, end = gene.mrna.cds.start, gene.mrna.cds.end
+        cds_seq = get_subsequence(transcript.sequence, begin, end)
+        if has_start_codon(cds_seq):
+            seqid = gene.mrna.seqid
+            source = gene.mrna.source
+            type = "start_codon"
+            codon_start = begin
+            codon_end = begin + 2
+            score = None
+            strand = gene.mrna.strand
+            phase = gene.mrna.phase
+            attributes = None # is this okay?
+            start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
+                                     strand, phase, attributes)
+            gene.mrna.add_child(start_codon) 
+        if has_stop_codon(cds_seq):
+            seqid = gene.mrna.seqid
+            source = gene.mrna.source
+            type = "stop_codon"
+            codon_start = end - 2
+            codon_end = end
+            score = None
+            strand = gene.mrna.strand
+            phase = gene.mrna.phase
+            attributes = None # is this okay?
+            stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
+                                     strand, phase, attributes)
+            gene.mrna.add_child(stop_codon) 
+
 
 class TranscriptChecker:
 
