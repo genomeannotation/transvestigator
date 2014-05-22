@@ -2,7 +2,8 @@
 
 import unittest
 import io
-from src.fasta import read_fasta
+from src.fasta import read_fasta, sequence_to_fasta
+from src.types import Sequence
 
 class TestFastaReader(unittest.TestCase):
 
@@ -24,6 +25,11 @@ class TestFastaReader(unittest.TestCase):
         self.assertEquals('seq_2', seqs[1].header)
         self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs[1].bases)
         
+    def test_sequence_to_fasta(self):
+        sequence = Sequence("foo_seq", "GATTACA")
+        fasta = sequence_to_fasta(sequence)
+        expected = ">foo_seq\nGATTACA\n"
+        self.assertEquals(expected, fasta)
 
 
 ##########################

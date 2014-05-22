@@ -19,3 +19,7 @@ def read_fasta(io_buffer):
     seqs.append(Sequence(header, bases))
     return seqs
 
+def sequence_to_fasta(seq):
+    result = '>' + seq.header + '\n'
+    result += seq.bases + '\n'
+    return result
