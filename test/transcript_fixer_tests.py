@@ -36,6 +36,43 @@ class TestTranscriptFixer(unittest.TestCase):
             thrown = True
         self.assertTrue(thrown)
 
+    def test_fix_transcript_throws_on_no_cds(self):
+        transcript = Mock()
+        transcript.sequence.header = "foo_seq"
+        gene = Mock()
+        mrna = Mock()
+        mrna.attributes = {"ID":"foo_mrna"}
+        del mrna.cds
+        gene.mrna = [mrna]
+        transcript.genes = [gene]
+
+        thrown = False
+        try:
+            fix_transcript(transcript)
+        except Exception as error:
+            self.assertEqual(str(error), "can't fix transcript foo_seq because mRNA foo_mrna has no CDS")
+            thrown = True
+        self.assertTrue(thrown)
+        
+    def test_fix_transcript_throws_on_multiple_cds(self):
+        transcript = Mock()
+        transcript.sequence.header = "foo_seq"
+        gene = Mock()
+        gene.attributes = {"ID":"foo_gene"}
+        mrna = Mock()
+        mrna.attributes = {"ID":"foo_mrna"}
+        mrna.cds = [Mock(), Mock()]
+        gene.mrna = [mrna]
+        transcript.genes = [gene]
+
+        thrown = False
+        try:
+            fix_transcript(transcript)
+        except Exception as error:
+            self.assertEqual(str(error), "can't fix transcript foo_seq because mRNA foo_mrna has multiple CDSs")
+            thrown = True
+        self.assertTrue(thrown)
+
 
 ###################
 def suite():
