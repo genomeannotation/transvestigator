@@ -56,13 +56,14 @@ class TestTblWriter(unittest.TestCase):
     def test_gff_gene_to_tbl_nostart_nostop_nogenename(self):
         expected = \
         "<1\t>100\tgene\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\
         "\t\t\tprotein_id\tm.foo\n"
 
         gff_gene = Mock()
         gff_gene.start = 1
         gff_gene.end = 100
-        gff_gene.attributes = {}
+        gff_gene.attributes = {"ID":"foo_gene"}
         
         gff_mrna = Mock()
         gff_mrna.start = 1

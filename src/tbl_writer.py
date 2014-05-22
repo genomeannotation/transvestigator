@@ -9,6 +9,7 @@ def gff_gene_to_tbl(gff_gene):
         raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because its mRNA has no CDS")
     tbl = ""
     tbl += "<"+str(gff_gene.start)+"\t>"+str(gff_gene.end)+"\tgene\n"
+    tbl += "\t\t\tlocus_tag\t"+gff_gene.attributes["ID"]+"\n"
     tbl += "<"+str(gff_gene.mrna[0].cds[0].start)+"\t>"+str(gff_gene.mrna[0].cds[0].end)+"\tCDS\n"
     tbl += "\t\t\tprotein_id\t"+gff_gene.mrna[0].attributes["ID"]+"\n"
     return tbl
