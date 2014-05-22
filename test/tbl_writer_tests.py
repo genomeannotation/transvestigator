@@ -72,6 +72,7 @@ class TestTblWriter(unittest.TestCase):
         
         gff_gene.mrna = [gff_mrna]
         gff_mrna.cds = [gff_cds]
+        del gff_mrna.start_codon
 
         tbl = gff_gene_to_tbl(gff_gene)
         self.assertEquals(tbl, expected)
@@ -99,6 +100,7 @@ class TestTblWriter(unittest.TestCase):
         
         gff_gene.mrna = [gff_mrna]
         gff_mrna.cds = [gff_cds]
+        gff_mrna.start_codon = [Mock()]
 
         tbl = gff_gene_to_tbl(gff_gene)
         self.assertEquals(tbl, expected)
