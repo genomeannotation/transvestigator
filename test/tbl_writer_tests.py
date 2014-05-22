@@ -50,7 +50,7 @@ class TestTblWriter(unittest.TestCase):
         try:
             gff_gene_to_tbl(gff_gene)
         except Exception as error:
-            self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has no mRNAs")
+            self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has no mRNA")
             thrown = True
         self.assertTrue(thrown)
 

@@ -2,7 +2,7 @@
 
 def gff_gene_to_tbl(gff_gene):
     if not hasattr(gff_gene, "mrna"):
-        raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because it has no mRNAs")
+        raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because it has no mRNA")
     if len(gff_gene.mrna) > 1:
         raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because it has multiple mRNAs")
     if not hasattr(gff_gene.mrna[0], "cds"):
