@@ -4,8 +4,21 @@ from src.transcript_fixer import fix_transcript
 
 class TestTranscriptFixer(unittest.TestCase):
 
-    def test_fix_transcript(self):
-        self.assertTrue(True)
+    def test_fix_transcript_throws_on_no_mrna(self):
+        transcript = Mock()
+        transcript.sequence.header = "foo_seq"
+        gene = Mock()
+        gene.attributes = {"ID":"foo_gene"}
+        del gene.mrna
+        transcript.genes = [gene]
+
+        thrown = False
+        try:
+            fix_transcript(transcript)
+        except Exception as error:
+            self.assertEqual(str(error), "can't fix transcript foo_seq because gene foo_gene has no mRNA")
+            thrown = True
+        self.assertTrue(thrown)
 
 
 ###################
