@@ -24,22 +24,8 @@ class TestTblWriter(unittest.TestCase):
         self.gff_gene0.mrna = [self.gff_mrna0]
         self.gff_mrna0.cds = [self.gff_cds0]
 
-        self.gff_gene1 = Mock()
-        self.gff_gene1.start = 42
-        self.gff_gene1.end = 80
-        self.gff_gene1.attributes = {"ID":"foo_gene"}
-        
-        self.gff_mrna1 = Mock()
-        self.gff_mrna1.start = 42 
-        self.gff_mrna1.end = 80
-        self.gff_mrna1.attributes = {"ID":"m.foo"}
-
-        self.gff_cds1 = Mock()
-        self.gff_cds1.start = 42 
-        self.gff_cds1.end = 80
-        
-        self.gff_gene1.mrna = [self.gff_mrna1]
-        self.gff_mrna1.cds = [self.gff_cds1]
+        del self.gff_mrna0.start_codon
+        del self.gff_mrna0.stop_codon
 
     def test_gff_gene_to_tbl_nostart_nostop_nogenename(self):
         expected = \
@@ -47,9 +33,6 @@ class TestTblWriter(unittest.TestCase):
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\
         "\t\t\tprotein_id\tm.foo\n"
-
-        del self.gff_mrna0.start_codon
-        del self.gff_mrna0.stop_codon
 
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
@@ -62,7 +45,6 @@ class TestTblWriter(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"
 
         self.gff_mrna0.start_codon = [Mock()]
-        del self.gff_mrna0.stop_codon
 
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
@@ -74,7 +56,6 @@ class TestTblWriter(unittest.TestCase):
         "<1\t100\tCDS\n"\
         "\t\t\tprotein_id\tm.foo\n"
 
-        del self.gff_mrna0.start_codon
         self.gff_mrna0.stop_codon = [Mock()]
 
         tbl = gff_gene_to_tbl(self.gff_gene0)
@@ -98,9 +79,9 @@ class TestTblWriter(unittest.TestCase):
         ">Feature foo_seq\n"\
         "1\t4\tREFERENCE\n"\
         "\t\t\tNCBI\t12345\n"\
-        "1\t100\tgene\n"\
+        "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
-        "1\t100\tCDS\n"\
+        "<1\t>100\tCDS\n"\
         "\t\t\tprotein_id\tm.foo\n"
 
         transcript = Mock()

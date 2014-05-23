@@ -16,6 +16,10 @@ def gff_gene_to_tbl(gff_gene):
     if not has_stop:
         tbl += ">"
     tbl += str(gff_gene.end)+"\tgene\n"
+    # Gene name if it has one
+    if "Name" in gff_gene.attributes:
+        tbl += "\t\t\tgene\t"+gff_gene.attributes["Name"]+"\n"
+    # Locus tag
     tbl += "\t\t\tlocus_tag\t"+gff_gene.attributes["ID"]+"\n"
     if not has_start:
         tbl += "<"
