@@ -80,7 +80,7 @@ class TestGFF(unittest.TestCase):
         self.assertTrue("DBXREF" not in test_gff.gene[0].mrna[0].attributes)
         annotate_gff(test_gff, annotations)
         self.assertTrue("DBXREF" in test_gff.gene[0].mrna[0].attributes)
-        self.assertEquals(["321"], test_gff.gene[0].mrna[0].attributes["DBXREF"])
+        self.assertEquals("321", test_gff.gene[0].mrna[0].attributes["DBXREF"])
 
 
 ##########################

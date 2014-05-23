@@ -24,10 +24,10 @@ class GFFFeature:
             setattr(self, child_type, [child])
 
     def add_annotation(self, key, value):
-        if(key in self.attributes):
-            self.attributes[key].append(value)
+        if key in self.attributes:
+            self.attributes[key] += ","+value
         else:
-            self.attributes[key] = [value]
+            self.attributes[key] = value
             
 
 ###################

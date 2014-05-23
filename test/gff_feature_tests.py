@@ -9,11 +9,11 @@ class TestGFFFeature(unittest.TestCase):
     def test_add_child(self):
         root = GFFFeature()
         gene0 = GFFFeature()
-        gene0.type = 'gene'
+        gene0.type = "gene"
         gene1 = GFFFeature()
-        gene1.type = 'gene'
+        gene1.type = "gene"
         mrna = GFFFeature()
-        mrna.type = 'mRNA'
+        mrna.type = "mRNA"
 
         root.add_child(gene0)
         root.add_child(gene1)
@@ -24,22 +24,18 @@ class TestGFFFeature(unittest.TestCase):
 
     def test_add_annotation_with_no_annotations(self):
         mrna = GFFFeature()
-        self.assertFalse(mrna.attributes)
         annokey = "Dbxref"
         annovalue = "Pfam:foo"
         mrna.add_annotation(annokey, annovalue)
-        self.assertTrue(mrna.attributes)
-        self.assertTrue("Pfam:foo" in mrna.attributes["Dbxref"])
+        self.assertTrue(mrna.attributes["Dbxref"] == "Pfam:foo")
 
     def test_add_annotation_with_annotations_already_in_place(self):
         mrna = GFFFeature()
-        mrna.attributes["Dbxref"] = ["Pfam:bar"]
-        self.assertEquals(1, len(mrna.attributes["Dbxref"]))
+        mrna.attributes["Dbxref"] = "Pfam:bar"
         annokey = "Dbxref"
         annovalue = "Pfam:foo"
         mrna.add_annotation(annokey, annovalue)
-        self.assertEquals(2, len(mrna.attributes["Dbxref"]))
-        self.assertTrue("Pfam:foo" in mrna.attributes["Dbxref"])
+        self.assertEquals(mrna.attributes["Dbxref"], "Pfam:bar,Pfam:foo")
 
     def test_gff_feature_length(self):
         feature = GFFFeature(start=5, end=10)
