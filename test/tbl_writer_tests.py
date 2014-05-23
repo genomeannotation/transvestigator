@@ -41,46 +41,6 @@ class TestTblWriter(unittest.TestCase):
         self.gff_gene1.mrna = [self.gff_mrna1]
         self.gff_mrna1.cds = [self.gff_cds1]
 
-    def test_gff_gene_to_tbl_throws_on_no_mrnas(self):
-        gff_gene = Mock()
-        gff_gene.attributes = {"ID":"foo_gene"}
-        del gff_gene.mrna
-
-        thrown = False
-        try:
-            gff_gene_to_tbl(gff_gene)
-        except Exception as error:
-            self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has no mRNA")
-            thrown = True
-        self.assertTrue(thrown)
-
-    def test_gff_gene_to_tbl_throws_on_multiple_mrnas(self):
-        gff_gene = Mock()
-        gff_gene.attributes = {"ID":"foo_gene"}
-        gff_gene.mrna = [Mock(), Mock()]
-
-        thrown = False
-        try:
-            gff_gene_to_tbl(gff_gene)
-        except Exception as error:
-            self.assertEquals(str(error), "can't write tbl entry for foo_gene because it has multiple mRNAs")
-            thrown = True
-        self.assertTrue(thrown)
-
-    def test_gff_gene_to_tbl_throws_on_no_cds(self):
-        gff_gene = Mock()
-        gff_gene.attributes = {"ID":"foo_gene"}
-        gff_gene.mrna = [Mock()]
-        del gff_gene.mrna[0].cds
-
-        thrown = False
-        try:
-            gff_gene_to_tbl(gff_gene)
-        except Exception as error:
-            self.assertEquals(str(error), "can't write tbl entry for foo_gene because its mRNA has no CDS")
-            thrown = True
-        self.assertTrue(thrown)
-
     def test_gff_gene_to_tbl_nostart_nostop_nogenename(self):
         expected = \
         "<1\t>100\tgene\n"\
@@ -132,32 +92,6 @@ class TestTblWriter(unittest.TestCase):
 
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
-
-    def test_transcript_to_tbl_throws_on_no_genes(self):
-        transcript = Mock()
-        transcript.genes = [] 
-        transcript.sequence.header = "foo_seq"
-
-        thrown = False
-        try:
-            tbl = transcript_to_tbl(transcript)
-        except Exception as error:
-            self.assertEquals(str(error), "can't write tbl entry for foo_seq because it has no gene")
-            thrown = True
-        self.assertTrue(thrown)
-
-    def test_transcript_to_tbl_throws_on_multiple_genes(self):
-        transcript = Mock()
-        transcript.genes = [self.gff_gene0, self.gff_gene1] 
-        transcript.sequence.header = "foo_seq"
-
-        thrown = False
-        try:
-            tbl = transcript_to_tbl(transcript)
-        except Exception as error:
-            self.assertEquals(str(error), "can't write tbl entry for foo_seq because it has multiple genes")
-            thrown = True
-        self.assertTrue(thrown)
 
     def test_transcript_to_tbl(self):
         expected = \

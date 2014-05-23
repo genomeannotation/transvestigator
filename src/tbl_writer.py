@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 
 def gff_gene_to_tbl(gff_gene):
-    if not hasattr(gff_gene, "mrna"):
-        raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because it has no mRNA")
-    if len(gff_gene.mrna) > 1:
-        raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because it has multiple mRNAs")
-    if not hasattr(gff_gene.mrna[0], "cds"):
-        raise Exception("can't write tbl entry for "+gff_gene.attributes["ID"]+" because its mRNA has no CDS")
     # Check for starts and stops
     has_start = False
     has_stop = False
@@ -33,10 +27,6 @@ def gff_gene_to_tbl(gff_gene):
     return tbl
 
 def transcript_to_tbl(transcript):
-    if not transcript.genes: # No genes
-        raise Exception("can't write tbl entry for "+transcript.sequence.header+" because it has no gene")
-    if len(transcript.genes) > 1:
-        raise Exception("can't write tbl entry for "+transcript.sequence.header+" because it has multiple genes")
     tbl = ""
     tbl += ">Feature "+transcript.sequence.header+"\n"
     tbl += "1\t"+str(len(transcript.sequence.bases))+"\tREFERENCE\n"
