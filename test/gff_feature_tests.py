@@ -37,16 +37,6 @@ class TestGFFFeature(unittest.TestCase):
         mrna.add_annotation(annokey, annovalue)
         self.assertEquals(mrna.attributes["Dbxref"], "Pfam:bar,Pfam:foo")
 
-    def test_get_annotation_one(self):
-        feature = GFFFeature()
-        feature.attributes["foo"] = "bar"
-        self.assertEquals(feature.get_annotation("foo"), ["bar"])
-
-    def test_get_annotation_multiple(self):
-        feature = GFFFeature()
-        feature.attributes["foo"] = "bar,baz"
-        self.assertEquals(feature.get_annotation("foo"), ["bar", "baz"])
-
     def test_gff_feature_length(self):
         feature = GFFFeature(start=5, end=10)
         self.assertEquals(gff_feature_length(feature), 6)

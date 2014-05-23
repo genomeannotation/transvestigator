@@ -29,9 +29,6 @@ class GFFFeature:
         else:
             self.attributes[key] = value
 
-    def get_annotation(self, key):
-        return self.attributes[key].split(",")
-            
 
 ###################
 
