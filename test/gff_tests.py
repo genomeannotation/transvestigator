@@ -10,33 +10,33 @@ class TestGFF(unittest.TestCase):
         pass
 
     def test_parse_gff_attributes(self):
-        attr = '\t; foo=dog;baz=bub;  \t\n'
-        self.assertEquals(parse_gff_attributes(attr), {'foo':'dog', 'baz':'bub'})
+        attr = "\t; foo=dog;baz=bub;  \t\n"
+        self.assertEquals(parse_gff_attributes(attr), {"foo":"dog", "baz":"bub"})
 
     def test_parse_gff_attributes_multiple_identical_attributes(self):
-        attr = 'ID=foo_feature;foo=dog;foo=baz;foo=buzz'
-        self.assertEquals(parse_gff_attributes(attr), {'ID':'foo_feature', 'foo':['dog', 'baz', 'buzz']})
+        attr = "ID=foo_feature;foo=dog;foo=baz;foo=buzz"
+        self.assertEquals(parse_gff_attributes(attr), {"ID":"foo_feature", "foo":["dog", "baz", "buzz"]})
 
     def test_read_gff(self):
         test_gff = io.StringIO(\
-        'seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\tID=foo_feat;Parent=foo_cds\n'+\
-        'seq0\tGeibLabs\tgene\t1\t42\t.\t+\t.\tID=foo_gene\n'+\
-        'seq0\tGeibLabs\tmRNA\t1\t42\t.\t+\t.\tID=foo_mrna;Parent=foo_gene\n'+\
-        'seq0\tGeibLabs\texon\t1\t42\t0.9\t+\t.\tID=foo_exon0;Parent=foo_mrna\n'+\
-        'seq0\tGeibLabs\texon\t1\t24\t0.9\t+\t.\tID=foo_exon1;Parent=foo_mrna\n'+\
-        'seq0\tGeibLabs\tCDS\t1\t42\t.\t+\t0\tID=foo_cds;Parent=foo_mrna\n'\
+        "seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\tID=foo_feat;Parent=foo_cds\n"+\
+        "seq0\tGeibLabs\tgene\t1\t42\t.\t+\t.\tID=foo_gene\n"+\
+        "seq0\tGeibLabs\tmRNA\t1\t42\t.\t+\t.\tID=foo_mrna;Parent=foo_gene\n"+\
+        "seq0\tGeibLabs\texon\t1\t42\t0.9\t+\t.\tID=foo_exon0;Parent=foo_mrna\n"+\
+        "seq0\tGeibLabs\texon\t1\t24\t0.9\t+\t.\tID=foo_exon1;Parent=foo_mrna\n"+\
+        "seq0\tGeibLabs\tCDS\t1\t42\t.\t+\t0\tID=foo_cds;Parent=foo_mrna\n"\
         )
 
         gff = read_gff(test_gff)
 
         self.assertEquals(len(gff.gene), 1)
-        self.assertEquals(gff.gene[0].source, 'GeibLabs')
+        self.assertEquals(gff.gene[0].source, "GeibLabs")
         self.assertEquals(gff.gene[0].start, 1)
         self.assertEquals(gff.gene[0].end, 42)
         self.assertEquals(gff.gene[0].score, None)
-        self.assertEquals(gff.gene[0].strand, '+')
+        self.assertEquals(gff.gene[0].strand, "+")
         self.assertEquals(gff.gene[0].phase, None)
-        self.assertEquals(gff.gene[0].attributes['ID'], 'foo_gene')
+        self.assertEquals(gff.gene[0].attributes["ID"], "foo_gene")
 
         self.assertEquals(len(gff.gene[0].mrna), 1)
         self.assertEquals(len(gff.gene[0].mrna[0].exon), 2)
@@ -45,7 +45,7 @@ class TestGFF(unittest.TestCase):
         self.assertEquals(gff.gene[0].mrna[0].exon[0].start, 1)
         self.assertEquals(gff.gene[0].mrna[0].exon[0].end, 42)
         self.assertEquals(gff.gene[0].mrna[0].exon[0].score, 0.9)
-        self.assertEquals(gff.gene[0].mrna[0].exon[0].strand, '+')
+        self.assertEquals(gff.gene[0].mrna[0].exon[0].strand, "+")
         self.assertEquals(gff.gene[0].mrna[0].exon[0].phase, None)
 
         self.assertEquals(gff.gene[0].mrna[0].exon[1].start, 1)
@@ -60,7 +60,7 @@ class TestGFF(unittest.TestCase):
 
     def test_read_gff_throws_on_missing_id(self):
         test_gff = io.StringIO(\
-        'seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\t.\n'\
+        "seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\t.\n"\
         )
 
         thrown = False
@@ -89,5 +89,5 @@ def suite():
     suite.addTest(unittest.makeSuite(TestGFF))
     return suite
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
