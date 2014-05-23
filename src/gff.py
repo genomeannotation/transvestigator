@@ -28,10 +28,10 @@ def parse_gff_attributes(attr):
         for b in key_vals[i+1:]:
             if a[0] == b[0]:
                 if a[0] in to_add: # It's another duplicate, append it
-                    to_add[a[0]].append(b[1])
+                    to_add[a[0]] += ","+b[1]
                     to_remove.append(b)
                 else: # First duplicate found, create entry
-                    to_add[a[0]] = [a[1], b[1]]
+                    to_add[a[0]] = a[1]+","+b[1]
                     to_remove.extend([a, b])
     for r in to_remove:
         key_vals.remove(r)

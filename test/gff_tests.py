@@ -15,7 +15,7 @@ class TestGFF(unittest.TestCase):
 
     def test_parse_gff_attributes_multiple_identical_attributes(self):
         attr = "ID=foo_feature;foo=dog;foo=baz;foo=buzz"
-        self.assertEquals(parse_gff_attributes(attr), {"ID":"foo_feature", "foo":["dog", "baz", "buzz"]})
+        self.assertEquals(parse_gff_attributes(attr), {"ID":"foo_feature", "foo":"dog,baz,buzz"})
 
     def test_read_gff(self):
         test_gff = io.StringIO(\
