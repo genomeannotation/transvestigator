@@ -27,7 +27,7 @@ class TestTblWriter(unittest.TestCase):
         del self.gff_mrna0.start_codon
         del self.gff_mrna0.stop_codon
 
-    def test_gff_gene_to_tbl_nostart_nostop_nogenename(self):
+    def test_gff_gene_to_tbl_nostart_nostop(self):
         expected = \
         "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
@@ -37,7 +37,7 @@ class TestTblWriter(unittest.TestCase):
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
 
-    def test_gff_gene_to_tbl_start_nostop_nogenename(self):
+    def test_gff_gene_to_tbl_start_nostop(self):
         expected = \
         "1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
@@ -49,7 +49,7 @@ class TestTblWriter(unittest.TestCase):
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
 
-    def test_gff_gene_to_tbl_nostart_stop_nogenename(self):
+    def test_gff_gene_to_tbl_nostart_stop(self):
         expected = \
         "<1\t100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
@@ -61,7 +61,7 @@ class TestTblWriter(unittest.TestCase):
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
 
-    def test_gff_gene_to_tbl_start_stop_nogenename(self):
+    def test_gff_gene_to_tbl_start_stop(self):
         expected = \
         "1\t100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
@@ -70,6 +70,19 @@ class TestTblWriter(unittest.TestCase):
 
         self.gff_mrna0.start_codon = [Mock()]
         self.gff_mrna0.stop_codon = [Mock()]
+
+        tbl = gff_gene_to_tbl(self.gff_gene0)
+        self.assertEquals(tbl, expected)
+
+    def test_gff_gene_to_tbl_genename(self):
+        expected = \
+        "<1\t>100\tgene\n"\
+        "\t\t\tgene\tf00x4\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
+        "<1\t>100\tCDS\n"\
+        "\t\t\tprotein_id\tm.foo\n"
+
+        self.gff_gene0.attributes["Name"] = "f00x4"
 
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
