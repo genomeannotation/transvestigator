@@ -35,7 +35,8 @@ class TestTranscriptBuilder(unittest.TestCase):
 
         transcripts = build_transcript_dictionary({"seq0":seq0, "seq1":seq1}, [gene0, gene1, gene2])
 
-        self.assertEquals(expected, transcripts)
+        self.assertEquals(expected["seq0"].genes, transcripts["seq0"].genes)
+        self.assertEquals(expected["seq1"].sequence, transcripts["seq1"].sequence)
 
 
 ###################
