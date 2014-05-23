@@ -87,31 +87,34 @@ class TestTranscriptChecker(unittest.TestCase):
         self.assertEquals(2, len(self.checker.transcripts["foo_seq"]))
         self.assertEquals(1, len(self.checker.transcripts["bar_seq"]))
 
+
+    #### STARTS AND STOPS TESTS ####
+    
     def test_create_starts_and_stops_creates_a_start(self):
         seq = Sequence("foo_seq", "ATGNNN") 
         gene = Mock()
-        gene.mrna = Mock()
-        gene.mrna.cds = Mock()
-        gene.mrna.cds.start = 1
-        gene.mrna.cds.end = 6
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = Mock()
+        gene.mrna[0].cds.start = 1
+        gene.mrna[0].cds.end = 6
         tran = Transcript([gene], seq)
-        self.assertEquals(0, len(gene.mrna.mock_calls))
+        self.assertEquals(0, len(gene.mrna[0].mock_calls))
         create_starts_and_stops(tran)
-        self.assertEquals(1, len(gene.mrna.mock_calls))
-        self.assertEquals("add_child", gene.mrna.mock_calls[0][0])
+        self.assertEquals(1, len(gene.mrna[0].mock_calls))
+        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
 
     def test_create_starts_and_stops_creates_a_stop(self):
         seq = Sequence("foo_seq", "NNNTAG") 
         gene = Mock()
-        gene.mrna = Mock()
-        gene.mrna.cds = Mock()
-        gene.mrna.cds.start = 1
-        gene.mrna.cds.end = 6
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = Mock()
+        gene.mrna[0].cds.start = 1
+        gene.mrna[0].cds.end = 6
         tran = Transcript([gene], seq)
-        self.assertEquals(0, len(gene.mrna.mock_calls))
+        self.assertEquals(0, len(gene.mrna[0].mock_calls))
         create_starts_and_stops(tran)
-        self.assertEquals(1, len(gene.mrna.mock_calls))
-        self.assertEquals("add_child", gene.mrna.mock_calls[0][0])
+        self.assertEquals(1, len(gene.mrna[0].mock_calls))
+        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
 
 
 ##########################
