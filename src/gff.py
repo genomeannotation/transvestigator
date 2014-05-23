@@ -103,3 +103,16 @@ def read_gff(io_buffer):
             orphans.remove(orphan)
 
     return root
+
+
+###################
+
+def annotate_gff(gff, annotations):
+    for gene in gff.gene:
+        for mrna in gene.mrna:
+            if "ID" in mrna.attributes:
+                mrna_id = mrna.attributes["ID"]
+                for anno in annotations:
+                    if anno[0] == mrna_id:
+                        mrna.add_annotation(anno[1], anno[2])
+

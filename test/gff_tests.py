@@ -2,9 +2,9 @@
 
 import unittest
 import io
-from src.gff_reader import *
+from src.gff import *
 
-class TestGFFReader(unittest.TestCase):
+class TestGFF(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -70,12 +70,23 @@ class TestGFFReader(unittest.TestCase):
             self.assertEquals(str(error), "at line 0: feature has no ID attribute")
             thrown = True 
         self.assertTrue(thrown)
-        
+    
+    def test_annotate_gff(self):
+        test_gff = GFFFeature()
+        test_gff.gene = [GFFFeature()]
+        test_gff.gene[0].mrna = [GFFFeature()]
+        test_gff.gene[0].mrna[0].attributes["ID"] = ":)"
+        annotations = [[":(", "DBXREF", "123"], [":)", "DBXREF", "321"]]
+        self.assertTrue("DBXREF" not in test_gff.gene[0].mrna[0].attributes)
+        annotate_gff(test_gff, annotations)
+        self.assertTrue("DBXREF" in test_gff.gene[0].mrna[0].attributes)
+        self.assertEquals(["321"], test_gff.gene[0].mrna[0].attributes["DBXREF"])
+
 
 ##########################
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestGFFReader))
+    suite.addTest(unittest.makeSuite(TestGFF))
     return suite
 
 if __name__ == '__main__':
