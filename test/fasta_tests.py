@@ -13,17 +13,17 @@ class TestFastaReader(unittest.TestCase):
 
         seqs = read_fasta(line_breaks)
         self.assertEquals(2, len(seqs))
-        self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs[1].bases)
+        self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs["seq_2"].bases)
 
     def test_read_without_line_breaks(self):
         no_line_breaks = io.StringIO('>seq_1\nGATTACAGATTACAGATTACAGATTACAGATTACAGATTACAGATTACAGATTACA\n' +
                                     '>seq_2\nNNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN')
         seqs = read_fasta(no_line_breaks)
         self.assertEquals(2, len(seqs))
-        self.assertEquals('seq_1', seqs[0].header)
-        self.assertEquals('GATTACAGATTACAGATTACAGATTACAGATTACAGATTACAGATTACAGATTACA', seqs[0].bases)
-        self.assertEquals('seq_2', seqs[1].header)
-        self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs[1].bases)
+        self.assertEquals('seq_1', seqs["seq_1"].header)
+        self.assertEquals('GATTACAGATTACAGATTACAGATTACAGATTACAGATTACAGATTACAGATTACA', seqs["seq_1"].bases)
+        self.assertEquals('seq_2', seqs["seq_2"].header)
+        self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs["seq_2"].bases)
         
     def test_sequence_to_fasta(self):
         sequence = Sequence("foo_seq", "GATTACA")
