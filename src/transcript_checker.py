@@ -11,7 +11,10 @@ def create_starts_and_stops(transcript):
         for mrna in gene.mrna:
             if not mrna.cds:
                 return
-            begin, end = mrna.cds.start, mrna.cds.end
+            # TODO get_cds_sequence([cds], Sequence) -- should check for strand
+            # TODO okay, gotta get actual cds start and stop,
+            # and take into account strand. argh.
+            begin, end = 0, 0 # what?
             cds_seq = get_subsequence(transcript.sequence, begin, end)
             if has_start_codon(cds_seq):
                 seqid = mrna.seqid
