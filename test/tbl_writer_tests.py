@@ -87,6 +87,21 @@ class TestTblWriter(unittest.TestCase):
         tbl = gff_gene_to_tbl(self.gff_gene0)
         self.assertEquals(tbl, expected)
 
+    def test_gff_gene_to_tbl_genename(self):
+        expected = \
+        "<1\t>100\tgene\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
+        "<1\t>100\tCDS\n"\
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tdb_xref\tPfam:foo\n"\
+        "\t\t\tdb_xref\tPfam:dog\n"\
+        "\t\t\tdb_xref\tPfam:baz\n"
+
+        self.gff_mrna0.attributes["Dbxref"] = "Pfam:foo,Pfam:dog,Pfam:baz"
+
+        tbl = gff_gene_to_tbl(self.gff_gene0)
+        self.assertEquals(tbl, expected)
+
     def test_transcript_to_tbl(self):
         expected = \
         ">Feature foo_seq\n"\

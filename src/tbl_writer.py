@@ -28,6 +28,10 @@ def gff_gene_to_tbl(gff_gene):
         tbl += ">"
     tbl += str(gff_gene.mrna[0].cds[0].end)+"\tCDS\n"
     tbl += "\t\t\tprotein_id\t"+gff_gene.mrna[0].attributes["ID"]+"\n"
+    # Dbxref if it has any
+    if "Dbxref" in gff_gene.mrna[0].attributes:
+        for dbxref in gff_gene.mrna[0].attributes["Dbxref"].split(","):
+            tbl += "\t\t\tdb_xref\t"+dbxref+"\n"
     return tbl
 
 def transcript_to_tbl(transcript):
