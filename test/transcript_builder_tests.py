@@ -5,6 +5,19 @@ from src.transcript_builder import build_transcript_dictionary
 
 class TestTranscriptBuilder(unittest.TestCase):
 
+    def test_build_transcript_dictionary_throws_on_seq_missing(self):
+        gene = Mock()
+        gene.seqid = "seq"
+        gene.attributes = {"ID":"foo_gene"}
+
+        thrown = False
+        try:
+            build_transcript_dictionary({}, [gene])
+        except Exception as error:
+            self.assertEquals(str(error), "can't build transcript dictionary because foo_gene's sequence seq doesn't exist")
+            thrown = True
+        self.assertTrue(thrown)
+
     def test_build_transcript_dictionary(self):
         seq0 = Mock()
         seq0.header = "seq0" 
