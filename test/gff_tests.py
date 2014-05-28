@@ -76,7 +76,7 @@ class TestGFF(unittest.TestCase):
         test_gff.gene = [GFFFeature()]
         test_gff.gene[0].mrna = [GFFFeature()]
         test_gff.gene[0].mrna[0].attributes["ID"] = ":)"
-        annotations = [[":(", "DBXREF", "123"], [":)", "DBXREF", "321"]]
+        annotations = {":(" : [["DBXREF", "123"]], ":)" : [["DBXREF", "321"]]}
         self.assertTrue("DBXREF" not in test_gff.gene[0].mrna[0].attributes)
         annotate_gff(test_gff, annotations)
         self.assertTrue("DBXREF" in test_gff.gene[0].mrna[0].attributes)
