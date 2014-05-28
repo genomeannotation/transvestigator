@@ -6,42 +6,24 @@ from src.fasta import get_subsequence
 
 def create_starts_and_stops(transcript):
     for gene in transcript.genes:
-        if not gene.mrna:
-            return
-        for mrna in gene.mrna:
-            if not mrna.cds:
-                return
-            # TODO get_cds_sequence([cds], Sequence) -- should check for strand
-            # TODO okay, gotta get actual cds start and stop,
-            # and take into account strand. argh.
-            begin, end = 0, 0 # what?
-            cds_seq = get_subsequence(transcript.sequence, begin, end)
-            if has_start_codon(cds_seq):
-                seqid = mrna.seqid
-                source = mrna.source
-                type = "start_codon"
-                codon_start = begin
-                codon_end = begin + 2
-                score = None
-                strand = mrna.strand
-                phase = mrna.phase
-                attributes = None # is this okay?
-                start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
-                                         strand, phase, attributes)
-                mrna.add_child(start_codon) 
-            if has_stop_codon(cds_seq):
-                seqid = mrna.seqid
-                source = mrna.source
-                type = "stop_codon"
-                codon_start = end - 2
-                codon_end = end
-                score = None
-                strand = mrna.strand
-                phase = mrna.phase
-                attributes = None # is this okay?
-                stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
-                                         strand, phase, attributes)
-                mrna.add_child(stop_codon) 
+        cds = gene.mrna[0].cds[0]
+        subseq = get_subsequence(transcript.sequence.bases, cds.start, cds.end)
+        if cds.strand == '-':
+            subseq = reverse_complement(subseq)
+        if has_start_codon(subseq):
+            seqid = cds.seqid
+            source = cds.source
+            type = "start_codon"
+            codon_start = cds.start
+            codon_end = cds.start + 2
+            score = None
+            strand = cds.strand
+            phase = cds.phase
+            mrna_id = gene.mrna[0].attributes["ID"]
+            attributes = {"ID": mrna_id+":start", "Parent": mrna_id}
+            start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
+                                    strand, phase, attributes)
+            gene.mrna[0].add_child(start_codon)
 
 
 class TranscriptChecker:

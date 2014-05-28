@@ -32,9 +32,10 @@ class TestFastaReader(unittest.TestCase):
         self.assertEquals(expected, fasta)
 
     def test_get_subsequence(self):
-        sequence = Sequence("foo_seq", "GATTACA")
-        subseq = get_subsequence(sequence, 2, 4)
+        bases = "GATTACA"
+        subseq = get_subsequence(bases, 2, 4)
         self.assertEquals("ATT", subseq)
+
 
 
 ##########################
