@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from src.gff_feature import GFFFeature
-from src.translator import has_start_codon, has_stop_codon
+from src.translator import has_start_codon, has_stop_codon, reverse_complement
 from src.fasta import get_subsequence
 
 def create_starts_and_stops(transcript):
