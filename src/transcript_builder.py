@@ -9,6 +9,9 @@ def build_transcript_dictionary(seqs, genes):
         if gene.seqid in transcripts:
             transcripts[gene.seqid].genes.append(gene)
         else:
-            transcripts[gene.seqid] = Transcript([gene], seqs[gene.seqid])
+            if gene.seqid in seqs:
+                transcripts[gene.seqid] = Transcript([gene], seqs[gene.seqid])
+            else:
+                print("Gene "+gene.attributes["ID"]+" is on sequence "+gene.seqid+" which does not exist. Skipping...")
 
     return transcripts
