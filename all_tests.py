@@ -10,6 +10,7 @@ import test.ipr_tests
 import test.transcript_tests
 import test.transcript_builder_tests
 import test.transcript_fixer_tests
+import test.annotation_tests
 
 # get suites from test modules
 suites = [
@@ -21,6 +22,7 @@ test.ipr_tests.suite(),\
 test.transcript_tests.suite(),\
 test.transcript_builder_tests.suite(),\
 test.transcript_fixer_tests.suite(),\
+test.annotation_tests.suite(),\
 ]
 
 # collect suites in a TestSuite object
