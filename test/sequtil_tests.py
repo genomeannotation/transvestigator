@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from src.translator import reverse_complement, has_start_codon, has_stop_codon
+from src.sequtil import reverse_complement, has_start_codon, has_stop_codon
 
 class TestTranslate(unittest.TestCase):
 

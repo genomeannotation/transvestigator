@@ -2,7 +2,7 @@
 
 # import all the lovely files
 import unittest
-import test.translator_tests
+import test.sequtil_tests
 import test.fasta_tests
 import test.transcript_checker_tests
 import test.gff_tests
@@ -14,7 +14,7 @@ import test.transcript_fixer_tests
 
 # get suites from test modules
 suites = [
-test.translator_tests.suite(),\
+test.sequtil_tests.suite(),\
 test.fasta_tests.suite(),\
 test.transcript_checker_tests.suite(),\
 test.gff_tests.suite(),\
