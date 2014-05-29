@@ -31,7 +31,7 @@ class TestAnnotation(unittest.TestCase):
         anno1 = Annotation("foo_mrna", "product", "foo-like protein")
         
         anno2 = Annotation("foo_gene", "name", "fgnX")
-        expected = [anno1, anno2]
+        expected = [anno1, anno2]  # only two annotations made it
         actual = read_annotations(anno_input)
         self.assertEqual(actual, expected)
 
