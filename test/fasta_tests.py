@@ -2,7 +2,8 @@
 
 import unittest
 import io
-from src.fasta import read_fasta, sequence_to_fasta, get_subsequence
+from src.fasta import read_fasta, sequence_to_fasta
+from src.sequtil import get_subsequence
 from src.types import Sequence
 
 class TestFastaReader(unittest.TestCase):

@@ -2,7 +2,7 @@
 
 from src.gff_feature import GFFFeature
 from src.sequtil import has_start_codon, has_stop_codon, reverse_complement
-from src.fasta import get_subsequence
+from src.sequtil import get_subsequence
 
 def create_starts_and_stops(transcript):
     for gene in transcript.genes:

@@ -25,3 +25,5 @@ def has_stop_codon(seq):
     else:
         return False
 
+def get_subsequence(bases, begin, end):
+    return bases[begin-1:end]

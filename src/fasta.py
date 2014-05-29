@@ -24,5 +24,3 @@ def sequence_to_fasta(seq):
     result += seq.bases + '\n'
     return result
 
-def get_subsequence(bases, begin, end):
-    return bases[begin-1:end]
