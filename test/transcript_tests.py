@@ -2,9 +2,12 @@
 
 import unittest
 from mock import Mock
+from src.types import Sequence
 from src.transcript import gene_to_tbl, Transcript 
 
 class TestTranscript(unittest.TestCase):
+
+    ### TO TBL TESTS ###
 
     def create_fake_gene(self):
         gff_gene0 = Mock()
@@ -136,6 +139,66 @@ class TestTranscript(unittest.TestCase):
 
         tbl = transcript.to_tbl()
         self.assertEquals(tbl, expected)
+
+    #### STARTS AND STOPS TESTS ####
+    
+    def test_create_starts_and_stops_creates_a_start(self):
+        seq = Sequence("foo_seq", "ATGNNN") 
+        gene = Mock()
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 1
+        gene.mrna[0].cds[0].end = 6
+        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        tran = Transcript([gene], seq)
+        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        tran.create_starts_and_stops()
+        self.assertEquals(1, len(gene.mrna[0].mock_calls))
+        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
+
+    def test_create_starts_and_stops_creates_a_start_reverse_complement(self):
+        seq = Sequence("foo_seq", "NNNCAT") 
+        gene = Mock()
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 1
+        gene.mrna[0].cds[0].end = 6
+        gene.mrna[0].cds[0].strand = "-"
+        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        tran = Transcript([gene], seq)
+        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        tran.create_starts_and_stops()
+        self.assertEquals(1, len(gene.mrna[0].mock_calls))
+        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
+
+    def test_create_starts_and_stops_creates_a_stop(self):
+        seq = Sequence("foo_seq", "NNNTAG") 
+        gene = Mock()
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 1
+        gene.mrna[0].cds[0].end = 6
+        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        tran = Transcript([gene], seq)
+        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        tran.create_starts_and_stops()
+        self.assertEquals(1, len(gene.mrna[0].mock_calls))
+        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
+
+    def test_create_starts_and_stops_creates_a_stop_reverse_complement(self):
+        seq = Sequence("foo_seq", "CTANNN") 
+        gene = Mock()
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 1
+        gene.mrna[0].cds[0].end = 6
+        gene.mrna[0].cds[0].strand = "-"
+        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        tran = Transcript([gene], seq)
+        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        tran.create_starts_and_stops()
+        self.assertEquals(1, len(gene.mrna[0].mock_calls))
+        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
 
 
 ##########################

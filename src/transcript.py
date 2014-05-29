@@ -48,6 +48,41 @@ class Transcript:
         else:
             self.sequence = sequence
 
+    def create_starts_and_stops(self):
+        for gene in self.genes:
+            cds = gene.mrna[0].cds[0]
+            subseq = get_subsequence(self.sequence.bases, cds.start, cds.end)
+            if cds.strand == '-':
+                subseq = reverse_complement(subseq)
+            if has_start_codon(subseq):
+                seqid = cds.seqid
+                source = cds.source
+                type = "start_codon"
+                codon_start = cds.start
+                codon_end = cds.start + 2
+                score = None
+                strand = cds.strand
+                phase = cds.phase
+                mrna_id = gene.mrna[0].attributes["ID"]
+                attributes = {"ID": mrna_id+":start", "Parent": mrna_id}
+                start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
+                                        strand, phase, attributes)
+                gene.mrna[0].add_child(start_codon)
+            if has_stop_codon(subseq):
+                seqid = cds.seqid
+                source = cds.source
+                type = "stop_codon"
+                codon_start = cds.end - 2
+                codon_end = cds.start
+                score = None
+                strand = cds.strand
+                phase = cds.phase
+                mrna_id = gene.mrna[0].attributes["ID"]
+                attributes = {"ID": mrna_id+":stop", "Parent": mrna_id}
+                stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
+                                        strand, phase, attributes)
+                gene.mrna[0].add_child(stop_codon)
+
     def to_tbl(self):
         tbl = ""
         tbl += ">Feature "+self.sequence.header+"\n"
