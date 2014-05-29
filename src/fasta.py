@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from src.types import Sequence
+from src.sequence import Sequence
 
 def read_fasta(io_buffer):
     header = ''
