@@ -2,7 +2,7 @@
 
 import unittest
 from mock import Mock
-from src.types import Sequence
+from src.sequence import Sequence
 from src.transcript import gene_to_tbl, Transcript 
 
 class TestTranscript(unittest.TestCase):

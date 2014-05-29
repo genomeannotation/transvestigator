@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from src.sequtil import get_subsequence, reverse_complement, has_start_codon, has_stop_codon
+from src.gff_feature import GFFFeature
+
 def gene_to_tbl(gene):
     # Check for starts and stops
     has_start = False
