@@ -107,8 +107,8 @@ def read_gff(io_buffer):
 
 ###################
 
-def annotate_gff(gff, annotations):
-    for gene in gff.gene:
+def annotate_genes(genes, annotations):
+    for gene in genes:
         for mrna in gene.mrna:
             if "ID" in mrna.attributes:
                 mrna_id = mrna.attributes["ID"]
