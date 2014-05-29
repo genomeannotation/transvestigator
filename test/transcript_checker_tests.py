@@ -4,7 +4,7 @@ import unittest
 from mock import Mock
 from src.transcript_checker import TranscriptChecker, create_starts_and_stops
 from src.sequence import Sequence
-from src.types import Transcript
+from src.transcript import Transcript
 
 class TestTranscriptChecker(unittest.TestCase):
 

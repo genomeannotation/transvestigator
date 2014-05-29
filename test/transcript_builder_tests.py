@@ -1,6 +1,6 @@
 import unittest
 from mock import Mock, patch, PropertyMock
-from src.types import Transcript
+from src.transcript import Transcript
 from src.transcript_builder import build_transcript_dictionary 
 
 class TestTranscriptBuilder(unittest.TestCase):

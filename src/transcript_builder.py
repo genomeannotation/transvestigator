@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from src.types import Transcript 
+from src.transcript import Transcript 
 
 def build_transcript_dictionary(seqs, genes):
     transcripts = {}
