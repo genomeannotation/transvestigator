@@ -31,5 +31,6 @@ def read_annotations(io_buffer):
         anno = Annotation(splitline[0], splitline[1], splitline[2])
         if not validate_annotation(anno):
             sys.stderr.write(error_message + line + "\n")
+            continue
         annotations.append(anno)
     return annotations
