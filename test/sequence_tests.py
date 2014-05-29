@@ -2,7 +2,7 @@
 
 import unittest
 import io
-from src.sequence import Sequence
+from src.sequence import Sequence, read_fasta
 
 class TestSequence(unittest.TestCase):
 
@@ -11,11 +11,6 @@ class TestSequence(unittest.TestCase):
         fasta = sequence.to_fasta()
         expected = ">foo_seq\nGATTACA\n"
         self.assertEquals(expected, fasta)
-
-    def test_get_subsequence(self):
-        bases = "GATTACA"
-        subseq = get_subsequence(bases, 2, 4)
-        self.assertEquals("ATT", subseq)
 
     def test_read_fasta_with_line_breaks(self):
         line_breaks = io.StringIO('>seq_1\nGATTACAGATTACAGATTACAGATTACA\nGATTACAGATTACAGATTACAGATTACA\n' +
@@ -35,3 +30,11 @@ class TestSequence(unittest.TestCase):
         self.assertEquals('seq_2', seqs["seq_2"].header)
         self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs["seq_2"].bases)
         
+##########################
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestSequence))
+    return suite
+
+if __name__ == '__main__':
+    unittest.main()

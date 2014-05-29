@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from src.sequtil import reverse_complement, has_start_codon, has_stop_codon
+from src.sequtil import reverse_complement, has_start_codon, has_stop_codon, get_subsequence
 
 class TestTranslate(unittest.TestCase):
 
@@ -14,6 +14,11 @@ class TestTranslate(unittest.TestCase):
 
     def test_reverse_complement_longer_seq(self):
         self.assertEquals('TGTAATCTGTAATCTGTAATCTGTAATCTGTAATC', reverse_complement('GATTACAGATTACAGATTACAGATTACAGATTACA'))
+
+    def test_get_subsequence(self):
+        bases = "GATTACA"
+        subseq = get_subsequence(bases, 2, 4)
+        self.assertEquals("ATT", subseq)
 
     def test_has_start_codon(self):
         self.assertTrue(has_start_codon('auggattaca'))
