@@ -7,7 +7,7 @@ import test.sequence_tests
 import test.transcript_checker_tests
 import test.gff_tests
 import test.gff_feature_tests
-import test.annotation_extractor_tests
+import test.ipr_tests
 import test.transcript_tests
 import test.transcript_builder_tests
 import test.transcript_fixer_tests
@@ -19,7 +19,7 @@ test.sequence_tests.suite(),\
 test.transcript_checker_tests.suite(),\
 test.gff_tests.suite(),\
 test.gff_feature_tests.suite(),\
-test.annotation_extractor_tests.suite(),\
+test.ipr_tests.suite(),\
 test.transcript_tests.suite(),\
 test.transcript_builder_tests.suite(),\
 test.transcript_fixer_tests.suite(),\
