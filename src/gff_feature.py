@@ -29,8 +29,5 @@ class GFFFeature:
         else:
             self.attributes[key] = value
 
-
-###################
-
-def gff_feature_length(feature):
-    return feature.end-feature.start+1
+    def length(self):
+        return self.end-self.start+1
