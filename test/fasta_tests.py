@@ -2,7 +2,7 @@
 
 import unittest
 import io
-from src.fasta import read_fasta, sequence_to_fasta
+from src.fasta import read_fasta
 from src.sequtil import get_subsequence
 from src.sequence import Sequence
 
@@ -26,12 +26,6 @@ class TestFastaReader(unittest.TestCase):
         self.assertEquals('seq_2', seqs["seq_2"].header)
         self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs["seq_2"].bases)
         
-    def test_sequence_to_fasta(self):
-        sequence = Sequence("foo_seq", "GATTACA")
-        fasta = sequence_to_fasta(sequence)
-        expected = ">foo_seq\nGATTACA\n"
-        self.assertEquals(expected, fasta)
-
     def test_get_subsequence(self):
         bases = "GATTACA"
         subseq = get_subsequence(bases, 2, 4)
