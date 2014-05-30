@@ -1,39 +1,37 @@
 #!/usr/bin/env python
 
 import sys
-from collections import namedtuple
-
-Annotation = namedtuple('Annotation', 'id key value')
-
-def validate_annotation(anno):
-    """Checks that no field is blank and that the 'key' entry on a list of allowed keys."""
-
-    for field in anno:
-        if not field:
-            return False
-
-    # The following list can be modified as we support more annotations,
-    # but for now let's not add annotations like "Zub=foo:skittles"
-    permitted_keys = ["name", "Dbxref", "Ontology_term", "product"]
-    if anno.key not in permitted_keys:
-        return False
-    return True
 
 def read_annotations(io_buffer):
-    error_message = ("Error on read_annotations-- unable to turn"
-                    " the following line into an annotation (will skip line):\n")
-    annotations = []
+    """Reads input buffer of annotations, returns dictionary of id: [(key, value)].
+
+    Input file should be in the format 'id\tkey\tvalue'.
+    """
+    error_message = ("Error on read_annotations -- skipping invalid line:\n")
+    annotations = {}
     for line in io_buffer:
         splitline = line.strip().split("\t")
         if len(splitline) != 3:
             sys.stderr.write(error_message + line + "\n")
             continue
-        anno = Annotation(splitline[0], splitline[1], splitline[2])
-        if not validate_annotation(anno):
+        identifier = splitline[0]
+        key = splitline[1]
+        value = splitline[2]
+        if not validate_key(key):
             sys.stderr.write(error_message + line + "\n")
             continue
-        annotations.append(anno)
+        if identifier in annotations:
+            annotations[identifier].append((key, value))
+        else:
+            annotations[identifier] = [(key, value)]
     return annotations
+
+def validate_key(key):
+    """Checks annotation key against list of approved keys."""
+    permitted_keys = ["name", "Dbxref", "Ontology_term", "product"]
+    if key in permitted_keys:
+        return True
+    return False
 
 def annotate_genes(genes, annotations):
     for gene in genes:
