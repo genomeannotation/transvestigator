@@ -25,6 +25,16 @@ class TestAnnotation(unittest.TestCase):
         self.assertTrue("DBXREF" in gene.mrna[0].attributes)
         self.assertEquals("321", gene.mrna[0].attributes["DBXREF"])
 
+    def test_annotate_genes_names_genes(self):
+        gene = GFFFeature()
+        gene.attributes = {"ID": "foo_gene"}
+        gene.mrna = [GFFFeature()]
+        gene.mrna[0].attributes["ID"] = ":)"
+        annotations = {"foo_gene": [("name", "fGnX")]}
+        self.assertTrue("DBXREF" not in gene.mrna[0].attributes)
+        annotate_genes([gene], annotations)
+        self.assertEqual("fGnX", gene.attributes["Name"])
+
 
 ##########################
 

@@ -35,6 +35,13 @@ def validate_key(key):
 
 def annotate_genes(genes, annotations):
     for gene in genes:
+        # TODO do we only annotate mrnas for genes with names?
+        if "ID" in gene.attributes:
+            gene_id = gene.attributes["ID"]
+            if gene_id in annotations:
+                gene_anno = annotations[gene_id]
+                gene_name = gene_anno[0][1]
+                gene.attributes["Name"] = gene_name
         for mrna in gene.mrna:
             if "ID" in mrna.attributes:
                 mrna_id = mrna.attributes["ID"]
