@@ -2,7 +2,8 @@
 
 import unittest
 import io
-from src.annotation import Annotation, validate_annotation, read_annotations
+from src.annotation import Annotation, validate_annotation, read_annotations, annotate_genes
+from src.gff import GFFFeature
 
 class TestAnnotation(unittest.TestCase):
 
@@ -34,6 +35,16 @@ class TestAnnotation(unittest.TestCase):
         expected = [anno1, anno2]  # only two annotations made it
         actual = read_annotations(anno_input)
         self.assertEqual(actual, expected)
+
+    def test_annotate_genes(self):
+        gene = GFFFeature()
+        gene.mrna = [GFFFeature()]
+        gene.mrna[0].attributes["ID"] = ":)"
+        annotations = {":(" : [["DBXREF", "123"]], ":)" : [["DBXREF", "321"]]}
+        self.assertTrue("DBXREF" not in gene.mrna[0].attributes)
+        annotate_genes([gene], annotations)
+        self.assertTrue("DBXREF" in gene.mrna[0].attributes)
+        self.assertEquals("321", gene.mrna[0].attributes["DBXREF"])
 
 
 
