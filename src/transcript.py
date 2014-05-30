@@ -35,6 +35,14 @@ def gene_to_tbl(gene):
     if "Dbxref" in gene.mrna[0].attributes:
         for dbxref in gene.mrna[0].attributes["Dbxref"].split(","):
             tbl += "\t\t\tdb_xref\t"+dbxref+"\n"
+    # product if it has any
+    if "product" in gene.mrna[0].attributes:
+        for product in gene.mrna[0].attributes["product"].split(","):
+            tbl += "\t\t\tproduct\t"+product+"\n"
+    # Ontology_term if it has any
+    if "Ontology_term" in gene.mrna[0].attributes:
+        for term in gene.mrna[0].attributes["Ontology_term"].split(","):
+            tbl += "\t\t\tOntology_term\t"+term+"\n"
     return tbl
 
 ###################
