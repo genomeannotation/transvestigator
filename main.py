@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
-from src.gff import read_gff, annotate_genes
+from src.gff import read_gff 
+from src.annotation import read_annotations, annotate_genes
 from src.sequence import read_fasta
 from src.ipr import read_ipr
 from src.transcript_builder import build_transcript_dictionary
@@ -22,7 +23,7 @@ def main():
     if not gff:
         exit()
     with open(annopath, "r") as annofile:
-        annos = read_ipr(annofile)
+        annos = read_annotations(annofile)
     if not annos:
         exit() # TODO maybe no annos is okay...
     annotate_genes(gff.gene, annos)
