@@ -38,8 +38,6 @@ def annotate_genes(genes, annotations):
         for mrna in gene.mrna:
             if "ID" in mrna.attributes:
                 mrna_id = mrna.attributes["ID"]
-                print("working on mrna " + mrna_id)
                 if mrna_id in annotations:
                     for anno in annotations[mrna_id]:
-                        print("adding annotation " + str(anno))
                         mrna.add_annotation(anno[0], anno[1])
