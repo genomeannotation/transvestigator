@@ -37,7 +37,8 @@ class TestTranscript(unittest.TestCase):
         "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"
 
         gff_gene0 = self.create_fake_gene()
 
@@ -49,7 +50,8 @@ class TestTranscript(unittest.TestCase):
         "1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "1\t>100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"
 
         gff_gene0 = self.create_fake_gene()
 
@@ -63,7 +65,8 @@ class TestTranscript(unittest.TestCase):
         "<1\t100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"
 
         gff_gene0 = self.create_fake_gene()
 
@@ -77,7 +80,8 @@ class TestTranscript(unittest.TestCase):
         "1\t100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "1\t100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"
 
         gff_gene0 = self.create_fake_gene()
 
@@ -93,7 +97,8 @@ class TestTranscript(unittest.TestCase):
         "\t\t\tgene\tf00x4\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"
 
         gff_gene0 = self.create_fake_gene()
 
@@ -110,7 +115,8 @@ class TestTranscript(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tdb_xref\tPfam:foo\n"\
         "\t\t\tdb_xref\tPfam:dog\n"\
-        "\t\t\tdb_xref\tPfam:baz\n"
+        "\t\t\tdb_xref\tPfam:baz\n"\
+        "\t\t\tproduct\thypothetical protein\n"\
 
         gff_gene0 = self.create_fake_gene()
 
@@ -127,7 +133,8 @@ class TestTranscript(unittest.TestCase):
         "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"
 
         gff_gene0 = self.create_fake_gene()
 

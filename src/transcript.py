@@ -38,6 +38,8 @@ def gene_to_tbl(gene):
     # product if it has any
     if "product" in gene.mrna[0].attributes:
         tbl += "\t\t\tproduct\t"+gene.mrna[0].attributes["product"]+"\n"
+    else: # no product, write hypothetical protein
+        tbl += "\t\t\tproduct\thypothetical protein\n"
     # Ontology_term if it has any
     if "Ontology_term" in gene.mrna[0].attributes:
         for term in gene.mrna[0].attributes["Ontology_term"].split(","):
