@@ -185,6 +185,39 @@ class TestTranscript(unittest.TestCase):
         self.assertEqual(tran.genes[0].mrna[0].exon[0].end, 7)
         self.assertEqual(tran.genes[0].mrna[0].exon[0].strand, '+')
 
+    #### FIX LENGTHS TESTS ####
+
+    def test_fix_feature_lengths(self):
+        seq = Mock()
+        seq.header = "foo_seq"
+        seq.bases = "ACACACTT"
+
+        gene = Mock()
+        gene.start = 1
+        gene.end = 7
+        gene.mrna = [Mock()]
+        gene.mrna[0].start = 1
+        gene.mrna[0].end = 9
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 2
+        gene.mrna[0].cds[0].end = 10
+        gene.mrna[0].exon = [Mock()]
+        gene.mrna[0].exon[0].start = 3
+        gene.mrna[0].exon[0].end = 11
+        
+        tran = Transcript([gene], seq)
+        tran.fix_feature_lengths()
+
+        self.assertEqual(tran.sequence.bases, "ACACACTT")
+        self.assertEqual(tran.genes[0].start, 1)
+        self.assertEqual(tran.genes[0].end, 7)
+        self.assertEqual(tran.genes[0].mrna[0].start, 1)
+        self.assertEqual(tran.genes[0].mrna[0].end, 6)
+        self.assertEqual(tran.genes[0].mrna[0].cds[0].start, 2)
+        self.assertEqual(tran.genes[0].mrna[0].cds[0].end, 7)
+        self.assertEqual(tran.genes[0].mrna[0].exon[0].start, 3)
+        self.assertEqual(tran.genes[0].mrna[0].exon[0].end, 8)
+
     #### STARTS AND STOPS TESTS ####
     
     def test_create_starts_and_stops_creates_a_start(self):

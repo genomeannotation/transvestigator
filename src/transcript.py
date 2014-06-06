@@ -78,6 +78,25 @@ class Transcript:
                     exon.start, exon.end = seq_len-exon.end+1, seq_len-exon.start+1
                     exon.strand = "+"
 
+    def fix_feature_lengths(self):
+        seq_len = len(self.sequence.bases)
+        for gene in self.genes:
+            if gene.end > seq_len:
+                over = gene.end-seq_len
+                gene.end = seq_len-((abs(3-over))%3)
+            for mrna in gene.mrna:
+                if mrna.end > seq_len:
+                    over = mrna.end-seq_len
+                    mrna.end = seq_len-((abs(3-over))%3)
+                for cds in mrna.cds:
+                    if cds.end > seq_len:
+                        over = cds.end-seq_len
+                        cds.end = seq_len-((abs(3-over))%3)
+                for exon in mrna.exon: 
+                    if exon.end > seq_len:
+                        over = exon.end-seq_len
+                        exon.end = seq_len-((abs(3-over))%3)
+
     def create_starts_and_stops(self):
         for gene in self.genes:
             cds = gene.mrna[0].cds[0]
