@@ -60,6 +60,24 @@ class Transcript:
         else:
             self.sequence = sequence
 
+    def make_positive(self):
+        if not self.genes or self.genes[0].strand == "+":
+            return
+        seq_len = len(self.sequence.bases)
+        self.sequence.bases = reverse_complement(self.sequence.bases)
+        for gene in self.genes:
+            gene.start, gene.stop = seq_len-gene.stop+1, seq_len-gene.start+1
+            gene.strand = "+"
+            for mrna in gene.mrna:
+                mrna.start, mrna.stop = seq_len-mrna.stop+1, seq_len-mrna.start+1
+                mrna.strand = "+"
+                for cds in mrna.cds:
+                    cds.start, cds.stop = seq_len-cds.stop+1, seq_len-cds.start+1
+                    cds.strand = "+"
+                for exon in mrna.exon:
+                    exon.start, exon.stop = seq_len-exon.stop+1, seq_len-exon.start+1
+                    exon.strand = "+"
+
     def create_starts_and_stops(self):
         for gene in self.genes:
             cds = gene.mrna[0].cds[0]

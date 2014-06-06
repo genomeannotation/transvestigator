@@ -147,6 +147,44 @@ class TestTranscript(unittest.TestCase):
         tbl = transcript.to_tbl()
         self.assertEquals(tbl, expected)
 
+    #### MAKE POSITIVE TESTS ####
+
+    def test_make_positive(self):
+        seq = Mock()
+        seq.header = "foo_seq"
+        seq.bases = "ACACACTT"
+
+        gene = Mock()
+        gene.start = 1
+        gene.stop = 7
+        gene.strand = '-'
+        gene.mrna = [Mock()]
+        gene.mrna[0].start = 2
+        gene.mrna[0].stop = 6
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 2
+        gene.mrna[0].cds[0].stop = 6
+        gene.mrna[0].exon = [Mock()]
+        gene.mrna[0].exon[0].start = 2
+        gene.mrna[0].exon[0].stop = 6
+        
+        tran = Transcript([gene], seq)
+        tran.make_positive()
+
+        self.assertEqual(tran.sequence.bases, "AAGTGTGT")
+        self.assertEqual(tran.genes[0].start, 2)
+        self.assertEqual(tran.genes[0].stop, 8)
+        self.assertEqual(tran.genes[0].strand, '+')
+        self.assertEqual(tran.genes[0].mrna[0].start, 3)
+        self.assertEqual(tran.genes[0].mrna[0].stop, 7)
+        self.assertEqual(tran.genes[0].mrna[0].strand, '+')
+        self.assertEqual(tran.genes[0].mrna[0].cds[0].start, 3)
+        self.assertEqual(tran.genes[0].mrna[0].cds[0].stop, 7)
+        self.assertEqual(tran.genes[0].mrna[0].cds[0].strand, '+')
+        self.assertEqual(tran.genes[0].mrna[0].exon[0].start, 3)
+        self.assertEqual(tran.genes[0].mrna[0].exon[0].stop, 7)
+        self.assertEqual(tran.genes[0].mrna[0].exon[0].strand, '+')
+
     #### STARTS AND STOPS TESTS ####
     
     def test_create_starts_and_stops_creates_a_start(self):
