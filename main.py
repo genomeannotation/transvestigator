@@ -30,6 +30,7 @@ def main():
     transcript_dict = build_transcript_dictionary(seqs, gff.gene)
     with open(tblpath, "w") as tblfile:
         for transcript in transcript_dict.values():
+            transcript.make_positive()
             transcript.create_starts_and_stops()
             fix_transcript(transcript)
             tblfile.write(transcript.to_tbl())

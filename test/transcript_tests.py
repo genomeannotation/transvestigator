@@ -156,33 +156,33 @@ class TestTranscript(unittest.TestCase):
 
         gene = Mock()
         gene.start = 1
-        gene.stop = 7
+        gene.end = 7
         gene.strand = '-'
         gene.mrna = [Mock()]
         gene.mrna[0].start = 2
-        gene.mrna[0].stop = 6
+        gene.mrna[0].end = 6
         gene.mrna[0].cds = [Mock()]
         gene.mrna[0].cds[0].start = 2
-        gene.mrna[0].cds[0].stop = 6
+        gene.mrna[0].cds[0].end = 6
         gene.mrna[0].exon = [Mock()]
         gene.mrna[0].exon[0].start = 2
-        gene.mrna[0].exon[0].stop = 6
+        gene.mrna[0].exon[0].end = 6
         
         tran = Transcript([gene], seq)
         tran.make_positive()
 
         self.assertEqual(tran.sequence.bases, "AAGTGTGT")
         self.assertEqual(tran.genes[0].start, 2)
-        self.assertEqual(tran.genes[0].stop, 8)
+        self.assertEqual(tran.genes[0].end, 8)
         self.assertEqual(tran.genes[0].strand, '+')
         self.assertEqual(tran.genes[0].mrna[0].start, 3)
-        self.assertEqual(tran.genes[0].mrna[0].stop, 7)
+        self.assertEqual(tran.genes[0].mrna[0].end, 7)
         self.assertEqual(tran.genes[0].mrna[0].strand, '+')
         self.assertEqual(tran.genes[0].mrna[0].cds[0].start, 3)
-        self.assertEqual(tran.genes[0].mrna[0].cds[0].stop, 7)
+        self.assertEqual(tran.genes[0].mrna[0].cds[0].end, 7)
         self.assertEqual(tran.genes[0].mrna[0].cds[0].strand, '+')
         self.assertEqual(tran.genes[0].mrna[0].exon[0].start, 3)
-        self.assertEqual(tran.genes[0].mrna[0].exon[0].stop, 7)
+        self.assertEqual(tran.genes[0].mrna[0].exon[0].end, 7)
         self.assertEqual(tran.genes[0].mrna[0].exon[0].strand, '+')
 
     #### STARTS AND STOPS TESTS ####
