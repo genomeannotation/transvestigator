@@ -136,6 +136,5 @@ class Transcript:
         tbl = ""
         tbl += ">Feature "+self.sequence.header+"\n"
         tbl += "1\t"+str(len(self.sequence.bases))+"\tREFERENCE\n"
-        tbl += "\t\t\tNCBI\t12345\n"
         tbl += gene_to_tbl(self.genes[0])
         return tbl

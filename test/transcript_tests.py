@@ -129,7 +129,6 @@ class TestTranscript(unittest.TestCase):
         expected = \
         ">Feature foo_seq\n"\
         "1\t4\tREFERENCE\n"\
-        "\t\t\tNCBI\t12345\n"\
         "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\

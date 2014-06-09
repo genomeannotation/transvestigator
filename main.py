@@ -12,6 +12,7 @@ fastapath = "foo.fasta"
 gffpath = "foo.gff"
 annopath = "foo.anno"
 tblpath = "foo.tbl"
+outfastapath = "foo.out.fsa"
 
 def main():
     with open(fastapath, "r") as fastafile:
@@ -35,6 +36,9 @@ def main():
             transcript.create_starts_and_stops()
             fix_transcript(transcript)
             tblfile.write(transcript.to_tbl())
+    with open(outfastapath, "w") as outfastafile:
+        for transcript in transcript_dict.values():
+            outfastafile.write(transcript.sequence.to_fasta())
 
 
 
