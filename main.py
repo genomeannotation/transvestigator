@@ -14,6 +14,14 @@ annopath = "foo.anno"
 tblpath = "foo.tbl"
 outfastapath = "foo.out.fsa"
 
+def read_transcript_blacklist(io_buffer):
+    blacklist = []
+    for line in io_buffer:
+        transcript = line.strip("\n\t ")
+        if transcript:
+            blacklist.append(transcript)
+    return blacklist
+
 def main():
     with open(fastapath, "r") as fastafile:
         seqs = read_fasta(fastafile)
@@ -27,10 +35,16 @@ def main():
         annos = read_annotations(annofile)
     if not annos:
         exit() # TODO maybe no annos is okay...
+    with open("transcript_blacklist", "r") as transcript_blacklist_file:
+        transcript_blacklist = read_transcript_blacklist(transcript_blacklist_file)
+    if not transcript_blacklist:
+        exit()
     annotate_genes(gff.gene, annos)
     transcript_dict = build_transcript_dictionary(seqs, gff.gene)
     with open(tblpath, "w") as tblfile:
         for transcript in transcript_dict.values():
+            if transcript.sequence.header in transcript_blacklist:
+                continue
             transcript.fix_feature_lengths()
             transcript.make_positive()
             transcript.create_starts_and_stops()
@@ -39,11 +53,6 @@ def main():
     with open(outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
             outfastafile.write(transcript.sequence.to_fasta())
-
-
-
-
-
 
 
 ###########################################
