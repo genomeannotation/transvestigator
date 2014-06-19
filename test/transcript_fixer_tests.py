@@ -1,6 +1,6 @@
 import unittest
 from mock import Mock, patch, PropertyMock
-from src.transcript_fixer import fix_transcript 
+from src.transcript_fixer import fix_transcript, fix_phase
 
 class TestTranscriptFixer(unittest.TestCase):
 
@@ -28,9 +28,32 @@ class TestTranscriptFixer(unittest.TestCase):
         self.assertEquals(self.transcript.genes, [self.gene1])
 
     def test_fix_phase(self):
-        transcript = Mock()
-
-
+        self.gene0.start = 2
+        self.mrna0.start = 2
+        self.cds0.start = 2
+        self.cds0.phase = 0
+        self.assertEqual(self.cds0.phase, 0)
+        fix_phase(self.transcript)
+        self.assertEqual(self.cds0.phase, 1)
+        
+    def test_fix_phase_to_two(self):
+        self.gene0.start = 3
+        self.mrna0.start = 3
+        self.cds0.start = 3
+        self.cds0.phase = 0
+        self.assertEqual(self.cds0.phase, 0)
+        fix_phase(self.transcript)
+        self.assertEqual(self.cds0.phase, 2)
+        
+    def test_fix_phase_does_nothing_when_indices_too_large(self):
+        self.gene0.start = 4
+        self.mrna0.start = 4
+        self.cds0.start = 4
+        self.cds0.phase = 0
+        self.assertEqual(self.cds0.phase, 0)
+        fix_phase(self.transcript)
+        self.assertEqual(self.cds0.phase, 0)
+        
 
 ###################
 def suite():
