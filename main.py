@@ -6,7 +6,7 @@ from src.annotation import read_annotations, annotate_genes
 from src.sequence import read_fasta
 from src.ipr import read_ipr
 from src.transcript_builder import build_transcript_dictionary
-from src.transcript_fixer import fix_transcript
+from src.transcript_fixer import fix_transcript, fix_phase
 
 fastapath = "foo.fasta"
 gffpath = "foo.gff"
@@ -49,6 +49,7 @@ def main():
             transcript.make_positive()
             transcript.create_starts_and_stops()
             fix_transcript(transcript)
+            fix_phase(transcript)
             tblfile.write(transcript.to_tbl())
     with open(outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
