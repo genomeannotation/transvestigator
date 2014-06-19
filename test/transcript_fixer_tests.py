@@ -30,6 +30,7 @@ class TestTranscriptFixer(unittest.TestCase):
     def test_fix_phase(self):
         self.gene0.start = 2
         self.mrna0.start = 2
+        del self.mrna0.start_codon
         self.cds0.start = 2
         self.cds0.phase = 0
         self.assertEqual(self.cds0.phase, 0)
@@ -39,6 +40,7 @@ class TestTranscriptFixer(unittest.TestCase):
     def test_fix_phase_to_two(self):
         self.gene0.start = 3
         self.mrna0.start = 3
+        del self.mrna0.start_codon
         self.cds0.start = 3
         self.cds0.phase = 0
         self.assertEqual(self.cds0.phase, 0)
@@ -49,6 +51,15 @@ class TestTranscriptFixer(unittest.TestCase):
         self.gene0.start = 4
         self.mrna0.start = 4
         self.cds0.start = 4
+        self.cds0.phase = 0
+        self.assertEqual(self.cds0.phase, 0)
+        fix_phase(self.transcript)
+        self.assertEqual(self.cds0.phase, 0)
+
+    def test_fix_phase_does_nothing_when_not_partial(self):
+        self.gene0.start = 2
+        self.mrna0.start = 2
+        self.cds0.start = 2
         self.cds0.phase = 0
         self.assertEqual(self.cds0.phase, 0)
         fix_phase(self.transcript)
