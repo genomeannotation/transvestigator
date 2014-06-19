@@ -24,7 +24,7 @@ class TestGFF(unittest.TestCase):
         "seq0\tGeibLabs\tmRNA\t1\t42\t.\t+\t.\tID=foo_mrna;Parent=foo_gene\n"+\
         "seq0\tGeibLabs\texon\t1\t42\t0.9\t+\t.\tID=foo_exon0;Parent=foo_mrna\n"+\
         "seq0\tGeibLabs\texon\t1\t24\t0.9\t+\t.\tID=foo_exon1;Parent=foo_mrna\n"+\
-        "seq0\tGeibLabs\tCDS\t1\t42\t.\t+\t0\tID=foo_cds;Parent=foo_mrna\n"\
+        "seq0\tGeibLabs\tCDS\t1\t42\t.\t+\t2\tID=foo_cds;Parent=foo_mrna\n"\
         )
 
         gff = read_gff(test_gff)
@@ -35,7 +35,7 @@ class TestGFF(unittest.TestCase):
         self.assertEquals(gff.gene[0].end, 42)
         self.assertEquals(gff.gene[0].score, None)
         self.assertEquals(gff.gene[0].strand, "+")
-        self.assertEquals(gff.gene[0].phase, None)
+        self.assertEquals(gff.gene[0].phase, 0)
         self.assertEquals(gff.gene[0].attributes["ID"], "foo_gene")
 
         self.assertEquals(len(gff.gene[0].mrna), 1)
@@ -46,7 +46,7 @@ class TestGFF(unittest.TestCase):
         self.assertEquals(gff.gene[0].mrna[0].exon[0].end, 42)
         self.assertEquals(gff.gene[0].mrna[0].exon[0].score, 0.9)
         self.assertEquals(gff.gene[0].mrna[0].exon[0].strand, "+")
-        self.assertEquals(gff.gene[0].mrna[0].exon[0].phase, None)
+        self.assertEquals(gff.gene[0].mrna[0].exon[0].phase, 0)
 
         self.assertEquals(gff.gene[0].mrna[0].exon[1].start, 1)
         self.assertEquals(gff.gene[0].mrna[0].exon[1].end, 24)
@@ -54,7 +54,7 @@ class TestGFF(unittest.TestCase):
 
         self.assertEquals(gff.gene[0].mrna[0].cds[0].start, 1)
         self.assertEquals(gff.gene[0].mrna[0].cds[0].end, 42)
-        self.assertEquals(gff.gene[0].mrna[0].cds[0].phase, 0)
+        self.assertEquals(gff.gene[0].mrna[0].cds[0].phase, 2)
 
         self.assertEquals(len(gff.gene[0].mrna[0].cds[0].foo_feature), 1)
 

@@ -30,6 +30,10 @@ def gene_to_tbl(gene):
     if not has_stop:
         tbl += ">"
     tbl += str(gene.mrna[0].cds[0].end)+"\tCDS\n"
+    # Codon start
+    if gene.mrna[0].cds[0].phase != 0:
+        tbl += "\t\t\tcodon_start\t"+str(gene.mrna[0].cds[0].phase+1)+"\n"
+    # Protein id
     tbl += "\t\t\tprotein_id\t"+gene.mrna[0].attributes["ID"]+"\n"
     # Dbxref if it has any
     if "Dbxref" in gene.mrna[0].attributes:

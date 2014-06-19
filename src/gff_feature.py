@@ -2,7 +2,7 @@
 
 class GFFFeature:
 
-    def __init__(self, seqid=None, source=None, type=None, start=None, end=None, score=None, strand=None, phase=None, attributes=None):
+    def __init__(self, seqid=None, source=None, type=None, start=None, end=None, score=None, strand=None, phase=0, attributes=None):
         self.seqid = seqid
         self.source = source
         self.type = type

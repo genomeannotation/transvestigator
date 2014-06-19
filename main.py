@@ -52,6 +52,8 @@ def main():
             tblfile.write(transcript.to_tbl())
     with open(outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
+            if transcript.sequence.header in transcript_blacklist:
+                continue
             outfastafile.write(transcript.sequence.to_fasta())
 
 

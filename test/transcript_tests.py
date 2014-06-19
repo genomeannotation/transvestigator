@@ -23,6 +23,7 @@ class TestTranscript(unittest.TestCase):
         gff_cds0 = Mock()
         gff_cds0.start = 1 
         gff_cds0.end = 100
+        gff_cds0.phase = 0
         
         gff_gene0.mrna = [gff_mrna0]
         gff_mrna0.cds = [gff_cds0]
@@ -107,7 +108,7 @@ class TestTranscript(unittest.TestCase):
         tbl = gene_to_tbl(gff_gene0)
         self.assertEquals(tbl, expected)
 
-    def test_gene_to_tbl_genename(self):
+    def test_gene_to_tbl_dbxref(self):
         expected = \
         "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
@@ -121,6 +122,22 @@ class TestTranscript(unittest.TestCase):
         gff_gene0 = self.create_fake_gene()
 
         gff_gene0.mrna[0].attributes["Dbxref"] = "Pfam:foo,Pfam:dog,Pfam:baz"
+
+        tbl = gene_to_tbl(gff_gene0)
+        self.assertEquals(tbl, expected)
+
+    def test_gene_to_tbl_codon_start(self):
+        expected = \
+        "<1\t>100\tgene\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
+        "<1\t>100\tCDS\n"\
+        "\t\t\tcodon_start\t2\n"\
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"\
+
+        gff_gene0 = self.create_fake_gene()
+
+        gff_gene0.mrna[0].cds[0].phase = 1
 
         tbl = gene_to_tbl(gff_gene0)
         self.assertEquals(tbl, expected)
