@@ -7,7 +7,7 @@ class TestTranscriptFixer(unittest.TestCase):
     def setUp(self):
         self.transcript = Mock()
         self.transcript.sequence = Mock()
-        self.transcript.bases = "GATACA"
+        self.transcript.sequence.bases = "GATACA"
         self.gene0 = Mock()
         self.gene1 = Mock()
 

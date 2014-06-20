@@ -45,6 +45,6 @@ def fix_phase(transcript):
                 gene.mrna[0].cds[0].phase = 2
         # Adjust end if partial
         if not hasattr(gene.mrna[0], "stop_codon"):
-            gene.end = len(transcript.bases)
-            gene.mrna[0].end = len(transcript.bases)
-            gene.mrna[0].cds[0].end = len(transcript.bases)
+            gene.end = len(transcript.sequence.bases)
+            gene.mrna[0].end = len(transcript.sequence.bases)
+            gene.mrna[0].cds[0].end = len(transcript.sequence.bases)
