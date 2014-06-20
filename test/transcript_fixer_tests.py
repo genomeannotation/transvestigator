@@ -6,6 +6,8 @@ class TestTranscriptFixer(unittest.TestCase):
 
     def setUp(self):
         self.transcript = Mock()
+        self.transcript.sequence = Mock()
+        self.transcript.bases = "GATACA"
         self.gene0 = Mock()
         self.gene1 = Mock()
 
@@ -64,6 +66,18 @@ class TestTranscriptFixer(unittest.TestCase):
         self.assertEqual(self.cds0.phase, 0)
         fix_phase(self.transcript)
         self.assertEqual(self.cds0.phase, 0)
+
+    def test_fix_phase_adjusts_end_on_3prime_partial(self):
+        self.gene0.start = 2
+        self.mrna0.start = 2
+        self.cds0.start = 2
+        self.gene0.end = 2
+        self.mrna0.end = 2
+        self.cds0.end = 2
+        del self.mrna0.stop_codon
+        self.assertEqual(self.cds0.end, 2)
+        fix_phase(self.transcript)
+        self.assertEqual(self.cds0.end, 6)
         
 
 ###################
