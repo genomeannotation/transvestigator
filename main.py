@@ -8,11 +8,11 @@ from src.ipr import read_ipr
 from src.transcript_builder import build_transcript_dictionary
 from src.transcript_fixer import fix_transcript, fix_phase
 
-fastapath = "foo.fasta"
-gffpath = "foo.gff"
-annopath = "foo.anno"
-tblpath = "foo.tbl"
-outfastapath = "foo.out.fsa"
+fastapath = "transcriptome.fasta"
+gffpath = "transcriptome.gff"
+annopath = "transcriptome.anno"
+tblpath = "transcriptome.new.tbl"
+outfastapath = "transcriptome.new.fsa"
 
 def read_transcript_blacklist(io_buffer):
     blacklist = []
