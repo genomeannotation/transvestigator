@@ -15,6 +15,8 @@ Optionally, you may include a file called "transcriptome.anno" -- this is a tab-
 
 If you include a file named "transcriptome.blacklist", the transcripts listed in that file will be excluded from your output.
 
+After the program runs, you will find files called "transcriptome.new.fsa" and "transcriptome.new.tbl". These are your input files for [tbl2asn](https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2).
+
 
 ## What It Does:
 
