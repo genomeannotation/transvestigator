@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
-
 import os
 import sys
-from src.gff import read_gff 
+from src.gff import read_gff, write_gff
 from src.annotation import read_annotations, annotate_genes
 from src.sequence import read_fasta
 from src.transcript_builder import build_transcript_dictionary
@@ -14,6 +12,7 @@ gffpath = "transcriptome.gff"  # Required
 annopath = "transcriptome.anno"  # Optional
 blacklistpath = "transcriptome.blacklist"  # Optional
 tblpath = "transcriptome.new.tbl"
+outgffpath = "transcriptome.new.gff"
 outfastapath = "transcriptome.new.fsa"
 
 def read_transcript_blacklist(io_buffer):
@@ -73,6 +72,14 @@ def main():
             fix_transcript(transcript)
             fix_phase(transcript)
             tblfile.write(transcript.to_tbl())
+    sys.stderr.write("done.\n\n")
+    sys.stderr.write("Writing new .gff file...")
+    with open(outgffpath, "w") as outgfffile:
+        for transcript in transcript_dict.values():
+            if transcript_blacklist and\
+                    transcript.sequence.header in transcript_blacklist:
+                continue
+            write_gff(outgfffile, transcript.genes[0])
     sys.stderr.write("done.\n\n")
     sys.stderr.write("Writing .fsa file ... ")
     with open(outfastapath, "w") as outfastafile:
