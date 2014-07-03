@@ -41,6 +41,11 @@ class TestGFFFeature(unittest.TestCase):
         feature = GFFFeature(start=5, end=10)
         self.assertEquals(feature.length(), 6)
 
+    def test_write(self):
+        test = GFFFeature("foo_seq", "geiblabs", "foo", 1, 42, None, '-', 1, {"ID":"1234", "dog":"bazz"})
+        expected = "foo_seq\tgeiblabs\tfoo\t1\t42\t.\t-\t1\tID=1234;dog=bazz"
+        self.assertEqual(test.write(), expected)
+
 
 ###################
 def suite():

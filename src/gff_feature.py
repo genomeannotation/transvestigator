@@ -31,3 +31,40 @@ class GFFFeature:
 
     def length(self):
         return self.end-self.start+1
+
+    def write(self):
+        out = ""
+        if self.seqid != None:
+            out += self.seqid+"\t"
+        else:
+            out += ".\t"
+        if self.source != None:
+            out += self.source+"\t"
+        else:
+            out += ".\t"
+        if self.type != None:
+            out += self.type+"\t"
+        else:
+            out += ".\t"
+        if self.start != None:
+            out += str(self.start)+"\t"
+        else:
+            out += ".\t"
+        if self.end != None:
+            out += str(self.end)+"\t"
+        else:
+            out += ".\t"
+        if self.score != None:
+            out += str(self.score)+"\t"
+        else:
+            out += ".\t"
+        if self.strand != None:
+            out += self.strand+"\t"
+        else:
+            out += ".\t"
+        if self.phase != None:
+            out += str(self.phase)+"\t"
+        else:
+            out += ".\t"
+        out += ";".join([key+"="+val for key, val in self.attributes.items()])
+        return out
