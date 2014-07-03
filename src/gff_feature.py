@@ -15,6 +15,7 @@ class GFFFeature:
             self.attributes = {} # Empty dictionary
         else:
             self.attributes = attributes
+        self.children = []
 
     def add_child(self, child):
         child_type = child.type.lower() # For API, use lowercase names
@@ -22,6 +23,7 @@ class GFFFeature:
             getattr(self, child_type).append(child)
         else: # No children with this type yet, make new list
             setattr(self, child_type, [child])
+        self.children.append(child)
 
     def add_annotation(self, key, value):
         if key in self.attributes:

@@ -107,3 +107,10 @@ def read_gff(io_buffer):
 
 ###################
 
+def write(io_buffer, gff):
+    io_buffer.write(gff.write()+"\n")
+    for child in gff.children:
+        write(io_buffer, child)
+
+###################
+
