@@ -15,7 +15,7 @@ Optionally, you may include a file called "transcriptome.anno" -- this is a tab-
 
 If you include a file named "transcriptome.blacklist", the transcripts listed in that file will be excluded from your output.
 
-After the program runs, you will find files called "transcriptome.new.fsa" and "transcriptome.new.tbl". These are your input files for [tbl2asn](https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2).
+After the program runs, you will find files called "transcriptome.new.gff", "transcriptome.new.fsa" and "transcriptome.new.tbl". The latter two are your input files for [tbl2asn](https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2).
 
 
 ## What It Does:
@@ -29,7 +29,7 @@ If the indices given for a gene, mRNA or CDS extend beyond the actual length of 
 
 #### Create Starts And Stops
 
-The .tbl file indicates the presence of start and stop codons, but the .gff file associated with a transcriptome may not explicitly indicate the presence or absence of these features. So transvestigator inspects the first/last three bases of each CDS to determine whether they are a start/stop, then updates the transcriptome accordingly. This step is the key to eliminated the dreaded "PartialProblem" errors further downstream.
+The .tbl file indicates the presence of start and stop codons, but the .gff file associated with a transcriptome may not explicitly indicate the presence or absence of these features. So transvestigator inspects the first/last three bases of each CDS to determine whether they are a start/stop, then updates the transcriptome accordingly. This step is the key to eliminating the dreaded "PartialProblem" errors further downstream.
 
 
 #### Remove Multiple CDS Features
