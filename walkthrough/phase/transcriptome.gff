@@ -1,0 +1,4 @@
+comp10000_c0_seq1	.	gene	3	659	.	+	.	ID=g.4856;Name=ORF%20g.4856%20m.4856%20type%3Ainternal%20len%3A218%20%28%2B%29
+comp10000_c0_seq1	.	mRNA	3	659	.	+	.	ID=m.4856;Parent=g.4856
+comp10000_c0_seq1	.	exon	3	659	.	+	.	ID=m.4856.exon1;Parent=m.4856
+comp10000_c0_seq1	.	CDS	3	659	.	+	.	ID=cds.m.4856;Parent=m.4856

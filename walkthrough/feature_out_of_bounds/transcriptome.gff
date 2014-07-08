@@ -1,0 +1,4 @@
+comp10008_c0_seq1	.	gene	3	851	.	+	.	ID=g.4861;Name=ORF%20g.4861%20m.4861%20type%3Ainternal%20len%3A282%20%28%2B%29
+comp10008_c0_seq1	.	mRNA	3	851	.	+	.	ID=m.4861;Parent=g.4861
+comp10008_c0_seq1	.	exon	3	851	.	+	.	ID=m.4861.exon1;Parent=m.4861
+comp10008_c0_seq1	.	CDS	3	851	.	+	.	ID=cds.m.4861;Parent=m.4861
