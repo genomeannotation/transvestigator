@@ -61,7 +61,7 @@ def main():
     transcript_dict = build_transcript_dictionary(seqs, gff.gene)
     sys.stderr.write("done.\n\n")
     sys.stderr.write("Writing .tbl file ... ")
-    with open(tblpath, "w") as tblfile:
+    with open(path + tblpath, "w") as tblfile:
         for transcript in transcript_dict.values():
             if transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist:
@@ -74,7 +74,7 @@ def main():
             tblfile.write(transcript.to_tbl())
     sys.stderr.write("done.\n\n")
     sys.stderr.write("Writing new .gff file...")
-    with open(outgffpath, "w") as outgfffile:
+    with open(path + outgffpath, "w") as outgfffile:
         for transcript in transcript_dict.values():
             if transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist:
@@ -82,7 +82,7 @@ def main():
             write_gff(outgfffile, transcript.genes[0])
     sys.stderr.write("done.\n\n")
     sys.stderr.write("Writing .fsa file ... ")
-    with open(outfastapath, "w") as outfastafile:
+    with open(path + outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
             if transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist:
