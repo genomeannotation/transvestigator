@@ -82,15 +82,21 @@
 <a name="remove-multiple-cds-features-example" class="anchor" href="#remove-multiple-cds-features-example"><span class="octicon octicon-link"></span></a>Fixing a Transcriptome with Multiple CDS Features</h4>
 <p>First take a look at the file 'walkthrough/multi_cds/transcriptome.gff':</p>
 <pre><code>
-comp10026_c0_seq1	.	gene	1	1674	.	+	.	ID=g.4872;
+comp10026_c0_seq1	.	gene	1	1674	.	+	.	ID=g.4872
 comp10026_c0_seq1	.	mRNA	1	1674	.	+	.	ID=m.4872;Parent=g.4872
 comp10026_c0_seq1	.	exon	1	1674	.	+	.	ID=m.4872.exon1;Parent=m.4872
 comp10026_c0_seq1	.	CDS	1	1674	.	+	.	ID=cds.m.4872;Parent=m.4872
-comp10026_c0_seq1	.	gene	1568	1969	.	+	.	ID=g.4873;
+comp10026_c0_seq1	.	gene	1568	1969	.	+	.	ID=g.4873
 comp10026_c0_seq1	.	mRNA	1568	1969	.	+	.	ID=m.4873;Parent=g.4873
 comp10026_c0_seq1	.	exon	1568	1969	.	+	.	ID=m.4873.exon1;Parent=m.4873
 comp10026_c0_seq1	.	CDS	1568	1969	.	+	.	ID=cds.m.4873;Parent=m.4873
 </code></pre>
+<p>Note that the contig 'comp100026_c0_seq1' contains two gene/mRNA/exon/CDS features. We can only have one in our final submission. Take care of this by running transvestigator. If you're in the root folder of the repository, you can run it by typing<p>
+<code>python3 transvestigator.py walkthrough/multi_cds/</code>
+<p>After the program runs, take a look at the file 'walkthrough/multi_cds/transcriptome.new.gff':</p>
+<pre><code>
+</code></pre>
+<p>The shorter CDS has been removed. This change also carries over to the .tbl file that is written.</p>
 
 
       </section>
