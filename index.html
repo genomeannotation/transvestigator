@@ -18,7 +18,7 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/genomeannotation/transvestigator">View on GitHub</a>
 
-          <h1 id="project_title">Transvestigator</h1>
+          <h1 id="project_title">transvestigator</h1>
           <h2 id="project_tagline">Validates transcriptome and prepares it for submission to the NCBI</h2>
 
             <section id="downloads">
@@ -32,7 +32,6 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="transvestigator" class="anchor" href="#transvestigator"><span class="octicon octicon-link"></span></a>transvestigator</h1>
 
 <h2>
 <a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
@@ -53,7 +52,7 @@
 <h2>
 <a name="what-it-does" class="anchor" href="#what-it-does"><span class="octicon octicon-link"></span></a>What It Does:</h2>
 
-<p>When you run transvestigator, it reads the transcriptome into memory. It then fixes feature lengths, creates starts and stops, removes multiple CDS features, adjusts CDS phase, then writes a .fasta and .tbl file. If the directory contained a "transcriptome.anno" file, the .tbl file will contain functional annotations. If the directory contained a "transcriptome.blacklist" file, those transcripts will be excluded.</p>
+<p>When you run transvestigator, it reads the transcriptome into memory. It then fixes feature lengths, creates starts and stops, removes multiple CDS features, adjusts CDS phase, and writes a .fasta and .tbl file. If the directory contained a "transcriptome.anno" file, the .tbl file will contain functional annotations. If the directory contained a "transcriptome.blacklist" file, those transcripts will be excluded.</p>
 
 <h4>
 <a name="fix-feature-lengths" class="anchor" href="#fix-feature-lengths"><span class="octicon octicon-link"></span></a>Fix Feature Lengths</h4>
@@ -74,6 +73,16 @@
 <a name="adjust-cds-phase" class="anchor" href="#adjust-cds-phase"><span class="octicon octicon-link"></span></a>Adjust CDS Phase</h4>
 
 <p>A strange error arises in NCBI TSA submissions when a CDS begins at the second or third base of a sequence. The fix we apply changes the start index of the feature to 1 and adjusts its phase in order to compensate. This adds a "codon_start" annotation to the .tbl file and, more importantly, makes errors go away :)</p>
+
+<h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+<p>Minimal examples of transcriptomes in need of the above fixes can be found in the 'walkthrough' directory of the repository. Here's an example of running transvestigator on the "Multiple CDS" data; the process for the other walkthroughs is similar.</p>
+
+<h4>
+<a name="remove-multiple-cds-features-example" class="anchor" href="#remove-multiple-cds-features-example"><span class="octicon octicon-link"></span></a>Fixing a Transcriptome with Multiple CDS Features</h4>
+<p>First take a look at the file 'walkthrough/multi_cds/transcriptome.gff'.
+
+
       </section>
     </div>
 
