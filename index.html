@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Transvestigator : Validates transcriptome and prepares it for submission to the NCBI" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Transvestigator</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/genomeannotation/transvestigator">View on GitHub</a>
+
+          <h1 id="project_title">Transvestigator</h1>
+          <h2 id="project_tagline">Validates transcriptome and prepares it for submission to the NCBI</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/genomeannotation/transvestigator/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/genomeannotation/transvestigator/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="transvestigator" class="anchor" href="#transvestigator"><span class="octicon octicon-link"></span></a>transvestigator</h1>
+
+<h2>
+<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
+
+<p>Type</p>
+
+<pre><code>python3 transvestigator.py
+</code></pre>
+
+<p>in a directory containing files called "transcriptome.fasta" and "transcriptome.gff".</p>
+
+<p>Optionally, you may include a file called "transcriptome.anno" -- this is a tab-separated file of annotations in the format specified <a href="http://genomeannotation.github.io/GAG/#functional-annotations">here</a>.</p>
+
+<p>If you include a file named "transcriptome.blacklist", the transcripts listed in that file will be excluded from your output.</p>
+
+<p>After the program runs, you will find files called "transcriptome.new.gff", "transcriptome.new.fsa" and "transcriptome.new.tbl". The latter two are your input files for <a href="https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2">tbl2asn</a>.</p>
+
+<h2>
+<a name="what-it-does" class="anchor" href="#what-it-does"><span class="octicon octicon-link"></span></a>What It Does:</h2>
+
+<p>When you run transvestigator, it reads the transcriptome into memory. It then fixes feature lengths, creates starts and stops, removes multiple CDS features, adjusts CDS phase, then writes a .fasta and .tbl file. If the directory contained a "transcriptome.anno" file, the .tbl file will contain functional annotations. If the directory contained a "transcriptome.blacklist" file, those transcripts will be excluded.</p>
+
+<h4>
+<a name="fix-feature-lengths" class="anchor" href="#fix-feature-lengths"><span class="octicon octicon-link"></span></a>Fix Feature Lengths</h4>
+
+<p>If the indices given for a gene, mRNA or CDS extend beyond the actual length of the sequence which contains them, the end index of the feature is adjusted to fall within the sequence boundaries.</p>
+
+<h4>
+<a name="create-starts-and-stops" class="anchor" href="#create-starts-and-stops"><span class="octicon octicon-link"></span></a>Create Starts And Stops</h4>
+
+<p>The .tbl file indicates the presence of start and stop codons, but the .gff file associated with a transcriptome may not explicitly indicate the presence or absence of these features. So transvestigator inspects the first/last three bases of each CDS to determine whether they are a start/stop, then updates the transcriptome accordingly. This step is the key to eliminating the dreaded "PartialProblem" errors further downstream.</p>
+
+<h4>
+<a name="remove-multiple-cds-features" class="anchor" href="#remove-multiple-cds-features"><span class="octicon octicon-link"></span></a>Remove Multiple CDS Features</h4>
+
+<p>If a transcript contains multiple CDS features, the longest one is chosen and the others are discarded. Future work may involve more complicated algorithms for making this decision.</p>
+
+<h4>
+<a name="adjust-cds-phase" class="anchor" href="#adjust-cds-phase"><span class="octicon octicon-link"></span></a>Adjust CDS Phase</h4>
+
+<p>A strange error arises in NCBI TSA submissions when a CDS begins at the second or third base of a sequence. The fix we apply changes the start index of the feature to 1 and adjusts its phase in order to compensate. This adds a "codon_start" annotation to the .tbl file and, more importantly, makes errors go away :)</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Transvestigator maintained by <a href="https://github.com/genomeannotation">genomeannotation</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
