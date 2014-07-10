@@ -75,7 +75,13 @@
 <p>A strange error arises in NCBI TSA submissions when a CDS begins at the second or third base of a sequence. The fix we apply changes the start index of the feature to 1 and adjusts its phase in order to compensate. This adds a "codon_start" annotation to the .tbl file and, more importantly, makes errors go away :)</p>
 
 <h2>
-<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+<a name="citing" class="anchor" href="#citing"><span class="octicon octicon-link"></span></a>Citing transvestigator</h2>
+<p>Citation instructions and export to BibTeX, EndNote, etc. are available at the link below. Thanks for citing us!</p>
+<a href="http://dx.doi.org/10.5281/zenodo.10471"><img src="https://zenodo.org/badge/doi/10.5281/zenodo.10471.png" alt="10.5281/zenodo.10471"></a>
+
+
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
 <p>Minimal examples of transcriptomes in need of the above fixes can be found in the 'walkthrough' directory of the repository. Here's an example of running transvestigator on the "Multiple CDS" data; the process for the other walkthroughs is similar.</p>
 
 <h4>
@@ -91,12 +97,19 @@ comp10026_c0_seq1	.	mRNA	1568	1969	.	+	.	ID=m.4873;Parent=g.4873
 comp10026_c0_seq1	.	exon	1568	1969	.	+	.	ID=m.4873.exon1;Parent=m.4873
 comp10026_c0_seq1	.	CDS	1568	1969	.	+	.	ID=cds.m.4873;Parent=m.4873
 </code></pre>
-<p>Note that the contig 'comp100026_c0_seq1' contains two gene/mRNA/exon/CDS features. We can only have one in our final submission. Take care of this by running transvestigator. If you're in the root folder of the repository, you can run it by typing<p>
-<code>python3 transvestigator.py walkthrough/multi_cds/</code>
+<p>Note that the contig 'comp100026_c0_seq1' contains two gene/mRNA/exon/CDS features. We can only have one in our final submission. Take care of this by running transvestigator.</p>
+<p>If you're in the root folder of the repository, you can run it by typing</p>
+<pre><code>python3 transvestigator.py walkthrough/multi_cds/
+</code></pre>
 <p>After the program runs, take a look at the file 'walkthrough/multi_cds/transcriptome.new.gff':</p>
 <pre><code>
+comp10026_c0_seq1	.	gene	1	1674	.	+	0	ID=g.4872
+comp10026_c0_seq1	.	mRNA	1	1674	.	+	0	ID=m.4872;Parent=g.4872
+comp10026_c0_seq1	.	exon	1	1674	.	+	0	ID=m.4872.exon1;Parent=m.4872
+comp10026_c0_seq1	.	CDS	1	1674	.	+	0	ID=cds.m.4872;Parent=m.4872
+comp10026_c0_seq1	.	stop_codon	1672	1	.	+	0	ID=m.4872:stop;Parent=m.4872
 </code></pre>
-<p>The shorter CDS has been removed. This change also carries over to the .tbl file that is written.</p>
+<p>The shorter CDS has been removed. This change also carries over to the .tbl file that is written. As an added bonus, we've discovered a stop codon :)</p>
 
 
       </section>
