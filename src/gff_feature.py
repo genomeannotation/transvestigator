@@ -68,5 +68,5 @@ class GFFFeature:
             out += str(self.phase)+"\t"
         else:
             out += ".\t"
-        out += ";".join([key+"="+val for key, val in self.attributes.items()])
+        out += ";".join([key+"="+val for key, val in sorted(self.attributes.items())])
         return out
