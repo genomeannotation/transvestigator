@@ -1,0 +1,1 @@
+for x in `ls Other\ Sequences/mid_gut/seq_1/ | awk -F "_" '{print $1"_"$2"_"$3}'| sort | uniq ` ; do echo $x; zcat Other\ Sequences/mid_gut/seq_*/*$x*R1*fastq.gz > RawData/$x.R1.fastq ; zcat Other\ Sequences/mid_gut/seq_*/*$x*R2*fastq.gz > RawData/$x.R2.fastq ; done

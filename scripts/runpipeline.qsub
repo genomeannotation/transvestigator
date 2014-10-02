@@ -1,0 +1,12 @@
+#!/bin/sh
+#$-S /bin/sh
+#$-o $JOB_ID.out 
+#$-e $JOB_ID.err
+#$-q new.q
+#$-pe orte 32
+#$-cwd
+#$-V
+#./trinity_assembly.sh
+#./rsem_abundance.sh
+#./transdecoder.sh
+./blast_sprot.sh
