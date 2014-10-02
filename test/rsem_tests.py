@@ -1,6 +1,6 @@
 import io
 import unittest
-from mock import Mock, patch, PropertyMock
+from unittest.mock import Mock, patch, PropertyMock
 from src.rsem import read_rsem
 
 class TestRsem(unittest.TestCase):

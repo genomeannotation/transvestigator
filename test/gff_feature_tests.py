@@ -1,7 +1,7 @@
 import unittest
 import io
 import os
-from mock import Mock, patch, PropertyMock
+from unittest.mock import Mock, patch, PropertyMock
 from src.gff_feature import *
 
 class TestGFFFeature(unittest.TestCase):

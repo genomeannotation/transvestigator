@@ -1,5 +1,5 @@
 import unittest
-from mock import Mock, patch, PropertyMock
+from unittest.mock import Mock, patch, PropertyMock
 from src.transcript_fixer import fix_transcript, fix_phase
 
 class TestTranscriptFixer(unittest.TestCase):

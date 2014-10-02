@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from mock import Mock
+from unittest.mock import Mock
 from src.sequence import Sequence
 from src.transcript import gene_to_tbl, Transcript 
 

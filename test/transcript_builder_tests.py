@@ -1,5 +1,5 @@
 import unittest
-from mock import Mock, patch, PropertyMock
+from unittest.mock import Mock, patch, PropertyMock
 from src.transcript import Transcript
 from src.transcript_builder import build_transcript_dictionary 
 
