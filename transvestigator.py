@@ -6,14 +6,17 @@ from src.annotation import read_annotations, annotate_genes
 from src.sequence import read_fasta
 from src.transcript_builder import build_transcript_dictionary
 from src.transcript_fixer import fix_transcript, fix_phase
+from src.rsem import read_rsem
 
 fastapath = "transcriptome.fasta"  # Required
 gffpath = "transcriptome.gff"  # Required
+rsempath = "RSEM.isoforms.results" # Optional
 annopath = "transcriptome.anno"  # Optional
 blacklistpath = "transcriptome.blacklist"  # Optional
 tblpath = "transcriptome.new.tbl"
 outgffpath = "transcriptome.new.gff"
 outfastapath = "transcriptome.new.fsa"
+outrsempath = "rsem.out"
 
 def read_transcript_blacklist(io_buffer):
     blacklist = []
@@ -25,11 +28,12 @@ def read_transcript_blacklist(io_buffer):
 
 def main():
     path = ""
+    rsems = None
     annos = None
     transcript_blacklist = None
     if len(sys.argv) > 1:
         path = sys.argv[1] + "/"
-    sys.stderr.write("Reading files ... ")
+    print("Reading files ... ")
     with open(path + fastapath, "r") as fastafile:
         seqs = read_fasta(fastafile)
     if not seqs:
@@ -40,6 +44,12 @@ def main():
     if not gff:
         sys.stderr.write("Error reading gff; exiting now\n")
         exit()
+    if verify_path(path + rsempath):
+        with open(path + rsempath) as rsemfile:
+            rsems = read_rsem(rsemfile)
+        if not rsems:
+            sys.stderr.write("Error reading rsem; exiting now\n")
+            exit()
     if verify_path(path + annopath):
         with open(path + annopath, "r") as annofile:
             annos = read_annotations(annofile)
@@ -52,44 +62,63 @@ def main():
         if not transcript_blacklist:
             sys.stderr.write("Error reading blacklist; exiting now\n")
             exit()
-    sys.stderr.write("done.\n\n")
+    print("done.\n\n")
     if annos:
-        sys.stderr.write("Annotating genes ... ")
+        print("Annotating genes ... ")
         annotate_genes(gff.gene, annos)
-        sys.stderr.write("done.\n\n")
-    sys.stderr.write("Mapping gff data to transcripts ... ")
+        print("done.\n\n")
+    print("Mapping gff data to transcripts ... ")
     transcript_dict = build_transcript_dictionary(seqs, gff.gene)
-    sys.stderr.write("done.\n\n")
-    sys.stderr.write("Writing .tbl file ... ")
+    for transcript in transcript_dict.values():
+        transcript.fix_feature_lengths()
+        transcript.make_positive()
+        transcript.create_starts_and_stops()
+    print("done.\n\n")
+    print("Writing RSEM info...")
+    if rsems:
+        with open(path + outrsempath, "w") as outrsemfile:
+            outrsemfile.write("transcript_id\tnumber_of_CDSs\tcontains_complete_CDS\tTMP\tFPKM\tIsoPct\n")
+            for rsem in rsems:
+                if rsem.transcript_id not in transcript_dict:
+                    sys.stderr.write("RSEM transcript "+rsem.transcript_id+" does not exist. Skipping...\n")
+                    continue
+                transcript = transcript_dict[rsem.transcript_id]
+                cds_count = 0
+                contains_complete_cds = False
+                for gene in transcript.genes:
+                    for mrna in gene.mrna:
+                        cds_count += len(mrna.cds)
+                        if hasattr(mrna, "start_codon") and hasattr(mrna, "stop_codon"):
+                            contains_complete_cds = True
+                outrsemfile.write("\t".join([rsem.transcript_id, str(cds_count), str(contains_complete_cds), str(rsem.tpm), str(rsem.fpkm), str(rsem.isopct)])+"\n")
+        print("done.\n\n")
+
+    print("Writing .tbl file ... ")
     with open(path + tblpath, "w") as tblfile:
         for transcript in transcript_dict.values():
             if transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist:
                 continue
-            transcript.fix_feature_lengths()
-            transcript.make_positive()
-            transcript.create_starts_and_stops()
             fix_transcript(transcript)
             fix_phase(transcript)
             tblfile.write(transcript.to_tbl())
-    sys.stderr.write("done.\n\n")
-    sys.stderr.write("Writing new .gff file...")
+    print("done.\n\n")
+    print("Writing new .gff file...")
     with open(path + outgffpath, "w") as outgfffile:
         for transcript in transcript_dict.values():
             if transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist:
                 continue
             write_gff(outgfffile, transcript.genes[0])
-    sys.stderr.write("done.\n\n")
-    sys.stderr.write("Writing .fsa file ... ")
+    print("done.\n\n")
+    print("Writing .fsa file ... ")
     with open(path + outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
             if transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist:
                 continue
             outfastafile.write(transcript.sequence.to_fasta())
-    sys.stderr.write("done.\n\n")
-
+    print("done.\n\n")
 
 def verify_path(path):
     if not os.path.isfile(path):
