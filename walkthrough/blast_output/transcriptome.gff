@@ -1,0 +1,4 @@
+comp10207_c0_seq1	.	gene	178	747	.	+	.	ID=g.4944;Name=ORF%20g.4944%20m.4944%20type%3Acomplete%20len%3A190%20%28%2B%29
+comp10207_c0_seq1	.	mRNA	178	747	.	+	.	ID=m.4944;Parent=g.4944
+comp10207_c0_seq1	.	exon	178	747	.	+	.	ID=m.4944.exon1;Parent=m.4944
+comp10207_c0_seq1	.	CDS	178	747	.	+	.	ID=cds.m.4944;Parent=m.4944

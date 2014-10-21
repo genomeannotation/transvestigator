@@ -6,10 +6,12 @@ from src.annotation import read_annotations, annotate_genes
 from src.sequence import read_fasta
 from src.transcript_builder import build_transcript_dictionary
 from src.transcript_fixer import fix_transcript, fix_phase
+from src.blast import read_blast
 from src.rsem import read_rsem
 
 fastapath = "transcriptome.fasta"  # Required
 gffpath = "transcriptome.gff"  # Required
+blastpath = "transcriptome.blastout" #Optional
 rsempath = "RSEM.isoforms.results" # Optional
 annopath = "transcriptome.anno"  # Optional
 blacklistpath = "transcriptome.blacklist"  # Optional
@@ -55,6 +57,12 @@ def main():
         exit()
 
     # Read optional inputs; exit on failure
+    if verify_path(path + blastpath):
+        with open(path + blastpath) as blastfile:
+            blast_hits = read_blast(blastfile)
+        if not blast_hits:
+            sys.stderr.write("Error reading blast output file; exiting now\n")
+            exit()
     if verify_path(path + rsempath):
         with open(path + rsempath) as rsemfile:
             rsems = read_rsem(rsemfile)
@@ -84,6 +92,11 @@ def main():
     # Convert all that data into Transcript objects
     print("Mapping gff data to transcripts ... ")
     transcript_dict = build_transcript_dictionary(seqs, gff.gene)
+    # transcript_dict maps transcript/sequence ids to Transcript objects
+    print("done.\n\n")
+
+    # Do magical fixes on transcripts
+    print("Cleaning up transcripts ... ")
     for transcript in transcript_dict.values():
         transcript.fix_feature_lengths()
         transcript.make_positive()
