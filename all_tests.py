@@ -11,6 +11,7 @@ import test.transcript_builder_tests
 import test.transcript_fixer_tests
 import test.annotation_tests
 import test.rsem_tests
+import test.blast_tests
 
 # get suites from test modules
 suites = [
@@ -23,6 +24,7 @@ test.transcript_builder_tests.suite(),\
 test.transcript_fixer_tests.suite(),\
 test.annotation_tests.suite(),\
 test.rsem_tests.suite(),\
+test.blast_tests.suite(),\
 ]
 
 # collect suites in a TestSuite object
