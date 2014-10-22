@@ -105,14 +105,21 @@ def main():
 
     # Write RSEM info if provided
     if rsems:
+        print("Adding RSEM info to transcripts...")
+        for rsem in rsems:
+            if rsem.transcript_id not in transcript_dict:
+                sys.stderr.write("RSEM transcript "+rsem.transcript_id+" does not exist. Skipping...\n")
+                continue
+            transcript = transcript_dict[rsem.transcript_id]
+            transcript.tpm = rsem.tpm
+            transcript.fpkm = rsem.fpkm
+            transcript.isopct = rsem.isopct
+        print("done.\n\n")
+
         print("Writing RSEM info...")
         with open(path + outrsempath, "w") as outrsemfile:
-            outrsemfile.write("transcript_id\tnumber_of_CDSs\tcontains_complete_CDS\tTMP\tFPKM\tIsoPct\n")
-            for rsem in rsems:
-                if rsem.transcript_id not in transcript_dict:
-                    sys.stderr.write("RSEM transcript "+rsem.transcript_id+" does not exist. Skipping...\n")
-                    continue
-                transcript = transcript_dict[rsem.transcript_id]
+            outrsemfile.write("transcript_id\tnumber_of_CDSs\tcontains_complete_CDS\tTPM\tFPKM\tIsoPct\n")
+            for transcript_id, transcript in transcript_dict.items():
                 cds_count = 0
                 contains_complete_cds = False
                 for gene in transcript.genes:
@@ -120,7 +127,7 @@ def main():
                         cds_count += len(mrna.cds)
                         if hasattr(mrna, "start_codon") and hasattr(mrna, "stop_codon"):
                             contains_complete_cds = True
-                outrsemfile.write("\t".join([rsem.transcript_id, str(cds_count), str(contains_complete_cds), str(rsem.tpm), str(rsem.fpkm), str(rsem.isopct)])+"\n")
+                outrsemfile.write("\t".join([transcript_id, str(cds_count), str(contains_complete_cds), str(transcript.tpm), str(transcript.fpkm), str(transcript.isopct)])+"\n")
         print("done.\n\n")
 
     # Write .tbl file

@@ -63,6 +63,9 @@ class Transcript:
             self.sequence = Sequence()
         else:
             self.sequence = sequence
+        self.tpm = None
+        self.fpkm = None
+        self.isopct = None
 
     def make_positive(self):
         if not self.genes or self.genes[0].strand == "+":
