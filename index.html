@@ -52,7 +52,7 @@
 <h2>
 <a name="what-it-does" class="anchor" href="#what-it-does"><span class="octicon octicon-link"></span></a>What It Does:</h2>
 
-<p>When you run transvestigator, it reads the transcriptome into memory. It then fixes feature lengths, creates starts and stops, removes multiple CDS features, adjusts CDS phase, and writes a .fasta and .tbl file. If the directory contained a "transcriptome.anno" file, the .tbl file will contain functional annotations. If the directory contained a "transcriptome.blacklist" file, those transcripts will be excluded.</p>
+<p>When you run transvestigator, it reads the transcriptome into memory. It then fixes feature lengths, creates starts and stops, removes multiple CDS features, adjusts CDS phase, places transcript on the positive strand (if not already),  and writes a .fasta and .tbl file. If the directory contained a "transcriptome.anno" file, the .tbl file will contain functional annotations. If the directory contained a "transcriptome.blacklist" file, those transcripts will be excluded.</p>
 
 <h4>
 <a name="fix-feature-lengths" class="anchor" href="#fix-feature-lengths"><span class="octicon octicon-link"></span></a>Fix Feature Lengths</h4>
@@ -109,7 +109,7 @@ comp10026_c0_seq1	.	exon	1	1674	.	+	0	ID=m.4872.exon1;Parent=m.4872
 comp10026_c0_seq1	.	CDS	1	1674	.	+	0	ID=cds.m.4872;Parent=m.4872
 comp10026_c0_seq1	.	stop_codon	1672	1	.	+	0	ID=m.4872:stop;Parent=m.4872
 </code></pre>
-<p>The shorter CDS has been removed. This change also carries over to the .tbl file that is written. As an added bonus, we've discovered a stop codon :)</p>
+<p>The shorter CDS has been removed.  This of course may have removed a real CDS (maybe the longer one was wrong, or maybe this was a fusion of two transcripts), future improvements hope to provide more technical apporaches for dealing with multiple CDS.  This change also carries over to the .tbl file that is written. As an added bonus, we've discovered a stop codon :)</p>
 
 
       </section>
