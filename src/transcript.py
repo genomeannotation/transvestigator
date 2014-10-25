@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from collections import namedtuple
+
 from src.sequtil import get_subsequence, reverse_complement, has_start_codon, has_stop_codon
 from src.gff_feature import GFFFeature
 
@@ -52,6 +54,10 @@ def gene_to_tbl(gene):
 
 ###################
 
+Rsem = namedtuple('Rsem', ['tpm', 'fpkm', 'isopct'])
+
+###################
+
 class Transcript:
 
     def __init__(self, genes=None, sequence=None):
@@ -63,9 +69,7 @@ class Transcript:
             self.sequence = Sequence()
         else:
             self.sequence = sequence
-        self.tpm = None
-        self.fpkm = None
-        self.isopct = None
+        self.rsem = None
 
     def make_positive(self):
         if not self.genes or self.genes[0].strand == "+":
@@ -138,6 +142,11 @@ class Transcript:
                 stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
                                         strand, phase, attributes)
                 gene.mrna[0].add_child(stop_codon)
+
+    def passes_filtering(self):
+        if self.rsem == None or self.rsem.tpm < 0.5 or self.rsem.isopct < 5.0:
+            return False
+        return True
 
     def to_tbl(self):
         tbl = ""

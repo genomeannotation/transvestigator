@@ -4,6 +4,7 @@ import sys
 from src.gff import read_gff, write_gff
 from src.annotation import read_annotations, annotate_genes
 from src.sequence import read_fasta
+from src.transcript import Rsem
 from src.transcript_builder import build_transcript_dictionary
 from src.transcript_fixer import fix_transcript, fix_phase
 from src.blast import read_blast
@@ -12,7 +13,7 @@ from src.rsem import read_rsem
 fastapath = "transcriptome.fasta"  # Required
 gffpath = "transcriptome.gff"  # Required
 blastpath = "transcriptome.blastout" #Optional
-rsempath = "RSEM.isoforms.results" # Optional
+rsempath = "transcriptome.rsem" # Optional
 annopath = "transcriptome.anno"  # Optional
 blacklistpath = "transcriptome.blacklist"  # Optional
 tblpath = "transcriptome.new.tbl"
@@ -111,15 +112,17 @@ def main():
                 sys.stderr.write("RSEM transcript "+rsem.transcript_id+" does not exist. Skipping...\n")
                 continue
             transcript = transcript_dict[rsem.transcript_id]
-            transcript.tpm = rsem.tpm
-            transcript.fpkm = rsem.fpkm
-            transcript.isopct = rsem.isopct
+            transcript.rsem = Rsem(rsem.tpm, rsem.fpkm, rsem.isopct)
         print("done.\n\n")
 
         print("Writing RSEM info...")
         with open(path + outrsempath, "w") as outrsemfile:
             outrsemfile.write("transcript_id\tnumber_of_CDSs\tcontains_complete_CDS\tTPM\tFPKM\tIsoPct\n")
             for transcript_id, transcript in transcript_dict.items():
+                if (transcript_blacklist and\
+                        transcript.sequence.header in transcript_blacklist) or\
+                        not transcript.passes_filtering():
+                    continue
                 cds_count = 0
                 contains_complete_cds = False
                 for gene in transcript.genes:
@@ -127,15 +130,16 @@ def main():
                         cds_count += len(mrna.cds)
                         if hasattr(mrna, "start_codon") and hasattr(mrna, "stop_codon"):
                             contains_complete_cds = True
-                outrsemfile.write("\t".join([transcript_id, str(cds_count), str(contains_complete_cds), str(transcript.tpm), str(transcript.fpkm), str(transcript.isopct)])+"\n")
+                outrsemfile.write("\t".join([transcript_id, str(cds_count), str(contains_complete_cds), str(transcript.rsem.tpm), str(transcript.rsem.fpkm), str(transcript.rsem.isopct)])+"\n")
         print("done.\n\n")
 
     # Write .tbl file
     print("Writing .tbl file ... ")
     with open(path + tblpath, "w") as tblfile:
         for transcript in transcript_dict.values():
-            if transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist:
+            if (transcript_blacklist and\
+                    transcript.sequence.header in transcript_blacklist) or\
+                    not transcript.passes_filtering():
                 continue
             fix_transcript(transcript)
             fix_phase(transcript)
@@ -146,8 +150,9 @@ def main():
     print("Writing new .gff file...")
     with open(path + outgffpath, "w") as outgfffile:
         for transcript in transcript_dict.values():
-            if transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist:
+            if (transcript_blacklist and\
+                    transcript.sequence.header in transcript_blacklist) or\
+                    not transcript.passes_filtering():
                 continue
             write_gff(outgfffile, transcript.genes[0])
     print("done.\n\n")
@@ -156,8 +161,9 @@ def main():
     print("Writing .fsa file ... ")
     with open(path + outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
-            if transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist:
+            if (transcript_blacklist and\
+                    transcript.sequence.header in transcript_blacklist) or\
+                    not transcript.passes_filtering():
                 continue
             outfastafile.write(transcript.sequence.to_fasta())
     print("done.\n\n")
