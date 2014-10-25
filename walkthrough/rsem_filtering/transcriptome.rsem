@@ -1,0 +1,4 @@
+transcript_id	gene_id	length	effective_length	expected_count	TPM	FPKM	IsoPct
+comp10008_c0_seq	g.4861	3938	3717.75	8342.00	19.55	14.87	100.00
+comp10207_c0_seq	g.4944	774	553.75	20.24	0.32	0.24	100.00
+comp10208_c0_seq	g.4953	3676	3455.75	5136.76	12.95	9.85	3.30
