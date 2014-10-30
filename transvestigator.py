@@ -100,8 +100,10 @@ def main():
     print("Cleaning up transcripts ... ")
     for transcript in transcript_dict.values():
         transcript.fix_feature_lengths()
-        transcript.make_positive()
         transcript.create_starts_and_stops()
+        fix_transcript(transcript) # removes multiple CDS features
+        transcript.make_positive()
+        fix_phase(transcript)
     print("done.\n\n")
 
     # Write RSEM info if provided
@@ -141,8 +143,6 @@ def main():
                     transcript.sequence.header in transcript_blacklist) or\
                     not transcript.passes_filtering():
                 continue
-            fix_transcript(transcript)
-            fix_phase(transcript)
             tblfile.write(transcript.to_tbl())
     print("done.\n\n")
 
