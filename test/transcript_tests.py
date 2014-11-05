@@ -163,6 +163,20 @@ class TestTranscript(unittest.TestCase):
         tbl = transcript.to_tbl()
         self.assertEquals(tbl, expected)
 
+    def test_remove_contig_from_gene_id(self):
+        expected = 'g.123'
+        gff_gene0 = self.create_fake_gene()
+        gff_gene0.attributes['ID'] = 'contig123|g.123'
+
+        sequence = Mock()
+        sequence.header = "foo_seq"
+        sequence.bases = "ATGC"
+
+        transcript = Transcript([gff_gene0], sequence) 
+        transcript.remove_contig_from_gene_id()
+
+        self.assertEquals(transcript.genes[0].attributes['ID'], expected)
+
     #### MAKE POSITIVE TESTS ####
 
     def test_make_positive(self):

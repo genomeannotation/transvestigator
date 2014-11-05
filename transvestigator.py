@@ -99,6 +99,7 @@ def main():
     # Do magical fixes on transcripts
     print("Cleaning up transcripts ... ")
     for transcript in transcript_dict.values():
+        transcript.remove_contig_from_gene_id()
         transcript.fix_feature_lengths()
         transcript.create_starts_and_stops()
         fix_transcript(transcript) # removes multiple CDS features

@@ -71,6 +71,12 @@ class Transcript:
             self.sequence = sequence
         self.rsem = None
 
+    def remove_contig_from_gene_id(self):
+        for gene in self.genes:
+            id_split = gene.attributes['ID'].split('|')
+            if len(id_split) == 2:
+                gene.attributes['ID'] = id_split[1]
+
     def make_positive(self):
         if not self.genes or self.genes[0].strand == "+":
             return
