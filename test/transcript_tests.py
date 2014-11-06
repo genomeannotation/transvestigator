@@ -248,6 +248,48 @@ class TestTranscript(unittest.TestCase):
         self.assertEqual(tran.genes[0].mrna[0].exon[0].start, 3)
         self.assertEqual(tran.genes[0].mrna[0].exon[0].end, 8)
 
+    #### MATCH CDS AND EXON END TESTS ####
+
+    def test_match_cds_and_exon_end(self):
+        seq = Sequence("foo_seq", "ATGNNN") 
+        gene = Mock()
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 1
+        gene.mrna[0].cds[0].end = 5
+        gene.mrna[0].exon = [Mock()]
+        gene.mrna[0].exon[0].start = 1
+        gene.mrna[0].exon[0].end = 6
+        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+
+        # method doesn't touch indices if a stop codon is present;
+        # mock will return True to the 'hasattr' question unless I do this
+        delattr(gene.mrna[0], "stop_codon")
+        
+        tran = Transcript([gene], seq)
+        self.assertEquals(5, gene.mrna[0].cds[0].end)
+        tran.match_cds_and_exon_end()
+        self.assertEquals(6, gene.mrna[0].cds[0].end)
+
+    def test_match_cds_and_exon_end_does_nothing_if_stop_codon_present(self):
+        seq = Sequence("foo_seq", "ATGNNN") 
+        gene = Mock()
+        gene.mrna = [Mock()]
+        gene.mrna[0].cds = [Mock()]
+        gene.mrna[0].cds[0].start = 1
+        gene.mrna[0].cds[0].end = 4
+        gene.mrna[0].exon = [Mock()]
+        gene.mrna[0].exon[0].start = 1
+        gene.mrna[0].exon[0].end = 6
+        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        # Note: not necessary to mock stop_codon feature, 
+        # since hasattr(Mock, "wateva") returns True
+        tran = Transcript([gene], seq)
+        self.assertEquals(4, gene.mrna[0].cds[0].end)
+        tran.match_cds_and_exon_end()
+        self.assertEquals(4, gene.mrna[0].cds[0].end) # cds end is unchanged
+
+
     #### STARTS AND STOPS TESTS ####
     
     def test_create_starts_and_stops_creates_a_start(self):

@@ -104,6 +104,7 @@ def main():
         transcript.create_starts_and_stops()
         fix_transcript(transcript) # removes multiple CDS features
         transcript.make_positive()
+        transcript.match_cds_and_exon_end()
         fix_phase(transcript)
     print("done.\n\n")
 

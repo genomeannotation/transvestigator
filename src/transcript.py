@@ -114,6 +114,17 @@ class Transcript:
                         over = exon.end-seq_len
                         exon.end = seq_len-((abs(3-over))%3)
 
+    def match_cds_and_exon_end(self):
+        """Check each mRNA's exon/CDS. If no stop codon, make their ends equal.
+        This is a blind attempt to avoid PartialProblem errors from the NCBI."""
+        for gene in self.genes:
+            for mrna in gene.mrna:
+                if hasattr(mrna, "stop_codon"):
+                    return
+                else:
+                    if mrna.cds[0].end != mrna.exon[0].end:
+                        mrna.cds[0].end = mrna.exon[0].end
+
     def create_starts_and_stops(self):
         for gene in self.genes:
             cds = gene.mrna[0].cds[0]
