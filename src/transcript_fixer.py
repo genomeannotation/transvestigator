@@ -27,9 +27,6 @@ def fix_phase(transcript):
         gene_start = gene.start
         mrna_start = gene.mrna[0].start
         cds_start = gene.mrna[0].cds[0].start
-        # All three indices should be the same, or this task gets complicated
-        if not (gene_start == mrna_start and mrna_start == cds_start):
-            return
 
         # Adjust phase if our feature start on base 2 or 3
         if not hasattr(gene.mrna[0], "start_codon"):
@@ -41,6 +38,12 @@ def fix_phase(transcript):
             elif gene_start == 3:
                 gene.start = 1
                 gene.mrna[0].start = 1
+                gene.mrna[0].cds[0].start = 1
+                gene.mrna[0].cds[0].phase = 2
+            if gene.mrna[0].cds[0].start == 2:
+                gene.mrna[0].cds[0].start = 1
+                gene.mrna[0].cds[0].phase = 1
+            elif gene.mrna[0].cds[0].start == 3:
                 gene.mrna[0].cds[0].start = 1
                 gene.mrna[0].cds[0].phase = 2
         # Adjust end if partial
