@@ -29,34 +29,34 @@ class TestGFF(unittest.TestCase):
 
         gff = read_gff(test_gff)
 
-        self.assertEquals(len(gff.gene), 1)
-        self.assertEquals(gff.gene[0].source, "GeibLabs")
-        self.assertEquals(gff.gene[0].start, 1)
-        self.assertEquals(gff.gene[0].end, 42)
-        self.assertEquals(gff.gene[0].score, None)
-        self.assertEquals(gff.gene[0].strand, "+")
-        self.assertEquals(gff.gene[0].phase, 0)
-        self.assertEquals(gff.gene[0].attributes["ID"], "foo_gene")
+        self.assertEquals(len(gff["gene"]), 1)
+        self.assertEquals(gff["gene"][0].source, "GeibLabs")
+        self.assertEquals(gff["gene"][0].start, 1)
+        self.assertEquals(gff["gene"][0].end, 42)
+        self.assertEquals(gff["gene"][0].score, None)
+        self.assertEquals(gff["gene"][0].strand, "+")
+        self.assertEquals(gff["gene"][0].phase, 0)
+        self.assertEquals(gff["gene"][0].attributes["ID"], "foo_gene")
 
-        self.assertEquals(len(gff.gene[0].mrna), 1)
-        self.assertEquals(len(gff.gene[0].mrna[0].exon), 2)
-        self.assertEquals(len(gff.gene[0].mrna[0].cds), 1)
+        self.assertEquals(len(gff["gene"][0]["mrna"]), 1)
+        self.assertEquals(len(gff["gene"][0]["mrna"][0]["exon"]), 2)
+        self.assertEquals(len(gff["gene"][0]["mrna"][0]["cds"]), 1)
 
-        self.assertEquals(gff.gene[0].mrna[0].exon[0].start, 1)
-        self.assertEquals(gff.gene[0].mrna[0].exon[0].end, 42)
-        self.assertEquals(gff.gene[0].mrna[0].exon[0].score, 0.9)
-        self.assertEquals(gff.gene[0].mrna[0].exon[0].strand, "+")
-        self.assertEquals(gff.gene[0].mrna[0].exon[0].phase, 0)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][0].start, 1)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][0].end, 42)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][0].score, 0.9)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][0].strand, "+")
+        self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][0].phase, 0)
 
-        self.assertEquals(gff.gene[0].mrna[0].exon[1].start, 1)
-        self.assertEquals(gff.gene[0].mrna[0].exon[1].end, 24)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][1].start, 1)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][1].end, 24)
 
 
-        self.assertEquals(gff.gene[0].mrna[0].cds[0].start, 1)
-        self.assertEquals(gff.gene[0].mrna[0].cds[0].end, 42)
-        self.assertEquals(gff.gene[0].mrna[0].cds[0].phase, 2)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["cds"][0].start, 1)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["cds"][0].end, 42)
+        self.assertEquals(gff["gene"][0]["mrna"][0]["cds"][0].phase, 2)
 
-        self.assertEquals(len(gff.gene[0].mrna[0].cds[0].foo_feature), 1)
+        self.assertEquals(len(gff["gene"][0]["mrna"][0]["cds"][0]["foo_feature"]), 1)
 
     def test_read_gff_throws_on_missing_id(self):
         test_gff = io.StringIO(\

@@ -19,8 +19,8 @@ class TestGFFFeature(unittest.TestCase):
         root.add_child(gene1)
         gene0.add_child(mrna)
 
-        self.assertEqual(root.gene, [gene0, gene1])
-        self.assertEqual(root.gene[0].mrna, [mrna])
+        self.assertEqual(root["gene"], [gene0, gene1])
+        self.assertEqual(root["gene"][0]["mrna"], [mrna])
 
     def test_add_annotation_with_no_annotations(self):
         mrna = GFFFeature()

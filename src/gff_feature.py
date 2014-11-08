@@ -15,15 +15,20 @@ class GFFFeature:
             self.attributes = {} # Empty dictionary
         else:
             self.attributes = attributes
-        self.children = []
+        self.children = {}
 
     def add_child(self, child):
-        child_type = child.type.lower() # For API, use lowercase names
-        if hasattr(self, child_type): # Already have children of this type, append it to the list
-            getattr(self, child_type).append(child)
-        else: # No children with this type yet, make new list
-            setattr(self, child_type, [child])
-        self.children.append(child)
+        child_type = child.type.lower()
+        if child.type in self.children:
+            self.children[child_type].append(child)
+        else:
+            self.children[child_type] = [child]
+
+    def __getitem__(self, index):
+        return self.children[index]
+
+    def __setitem__(self, index, value):
+        self.children[index] = value
 
     def add_annotation(self, key, value):
         if key in self.attributes:
