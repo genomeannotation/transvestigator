@@ -8,7 +8,6 @@ import test.gff_tests
 import test.gff_feature_tests
 import test.transcript_tests
 import test.transcript_builder_tests
-import test.transcript_fixer_tests
 import test.annotation_tests
 import test.rsem_tests
 import test.blast_tests
@@ -22,7 +21,6 @@ test.gff_tests.suite(),\
 test.gff_feature_tests.suite(),\
 test.transcript_tests.suite(),\
 test.transcript_builder_tests.suite(),\
-test.transcript_fixer_tests.suite(),\
 test.annotation_tests.suite(),\
 test.rsem_tests.suite(),\
 test.blast_tests.suite(),\

@@ -6,7 +6,6 @@ from src.annotation import read_annotations, annotate_genes
 from src.sequence import read_fasta
 from src.transcript import Rsem
 from src.transcript_builder import build_transcript_dictionary
-from src.transcript_fixer import fix_transcript, fix_phase
 from src.blast import read_blast
 from src.rsem import read_rsem
 
@@ -102,10 +101,10 @@ def main():
         transcript.remove_contig_from_gene_id()
         transcript.fix_feature_lengths()
         transcript.create_starts_and_stops()
-        fix_transcript(transcript) # removes multiple CDS features
+        transcript.fix_multiple_genes() 
         transcript.make_positive()
         transcript.match_cds_and_exon_end()
-        fix_phase(transcript)
+        transcript.fix_phase()
     print("done.\n\n")
 
     # Write RSEM info if provided

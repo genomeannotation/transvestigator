@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from collections import namedtuple
-
+from src.sequence import Sequence
 from src.sequtil import get_subsequence, reverse_complement, has_start_codon, has_stop_codon
 from src.gff_feature import GFFFeature
 
@@ -70,6 +70,59 @@ class Transcript:
         else:
             self.sequence = sequence
         self.rsem = None
+
+    def fix_phase(self):
+        """Changes start indices and phase values for CDSs starting at 2 or 3.
+
+        Adjusts start index for partial gene, mRNA and CDS to 1 and adds
+        appropriate phase value for the CDS; we theorize that this
+        is necessary to eliminate errors from the NCBI TSA submission.
+        """
+        for gene in self.genes:
+            # Verify we have a valid gene here
+            if not gene.mrna:
+                return
+            if not gene.mrna[0].cds:
+                return
+            gene_start = gene.start
+            mrna_start = gene.mrna[0].start
+            cds_start = gene.mrna[0].cds[0].start
+
+            # Adjust phase if our feature start on base 2 or 3
+            if not hasattr(gene.mrna[0], "start_codon"):
+                if gene_start == 2:
+                    gene.start = 1
+                    gene.mrna[0].start = 1
+                    gene.mrna[0].cds[0].start = 1
+                    gene.mrna[0].cds[0].phase = 1
+                elif gene_start == 3:
+                    gene.start = 1
+                    gene.mrna[0].start = 1
+                    gene.mrna[0].cds[0].start = 1
+                    gene.mrna[0].cds[0].phase = 2
+                if gene.mrna[0].cds[0].start == 2:
+                    gene.mrna[0].cds[0].start = 1
+                    gene.mrna[0].cds[0].phase = 1
+                elif gene.mrna[0].cds[0].start == 3:
+                    gene.mrna[0].cds[0].start = 1
+                    gene.mrna[0].cds[0].phase = 2
+            # Adjust end if partial
+            if not hasattr(gene.mrna[0], "stop_codon"):
+                gene.end = len(self.sequence.bases)
+                gene.mrna[0].end = len(self.sequence.bases)
+                gene.mrna[0].cds[0].end = len(self.sequence.bases)
+
+    def fix_multiple_genes(self):
+        print("\n\n\nfoo")
+        longest = None
+        length = 0
+        for gene in self.genes:
+            this_length = gene.mrna[0].cds[0].length()
+            if this_length > length:
+                length = this_length
+                longest = gene
+        if longest:
+            self.genes = [longest]
 
     def remove_contig_from_gene_id(self):
         for gene in self.genes:
