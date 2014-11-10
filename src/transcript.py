@@ -113,7 +113,6 @@ class Transcript:
                 gene.mrna[0].cds[0].end = len(self.sequence.bases)
 
     def fix_multiple_genes(self):
-        print("\n\n\nfoo")
         longest = None
         length = 0
         for gene in self.genes:
