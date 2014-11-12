@@ -116,7 +116,7 @@ class Transcript:
         longest = None
         length = 0
         for gene in self.genes:
-            this_length = gene["mrna"][0]["cds"][0].length()
+            this_length = gene.get_cds_length()
             if this_length > length:
                 length = this_length
                 longest = gene
