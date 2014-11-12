@@ -91,7 +91,7 @@ def main():
 
     # Convert all that data into Transcript objects
     print("Mapping gff data to transcripts ... ")
-    transcript_dict = build_transcript_dictionary(seqs, gff.gene)
+    transcript_dict = build_transcript_dictionary(seqs, gff["gene"])
     # transcript_dict maps transcript/sequence ids to Transcript objects
     print("done.\n\n")
 
@@ -131,7 +131,7 @@ def main():
                 for gene in transcript.genes:
                     for mrna in gene.mrna:
                         cds_count += len(mrna.cds)
-                        if hasattr(mrna, "start_codon") and hasattr(mrna, "stop_codon"):
+                        if "start_codon" in mrna and "stop_codon" in mrna:
                             contains_complete_cds = True
                 outrsemfile.write("\t".join([transcript_id, str(cds_count), str(contains_complete_cds), str(transcript.rsem.tpm), str(transcript.rsem.fpkm), str(transcript.rsem.isopct)])+"\n")
         print("done.\n\n")

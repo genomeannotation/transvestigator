@@ -109,8 +109,9 @@ def read_gff(io_buffer):
 
 def write_gff(io_buffer, gff):
     io_buffer.write(gff.write()+"\n")
-    for child in gff.children:
-        write_gff(io_buffer, child)
+    for features in gff.children.values():
+        for feature in features:
+            write_gff(io_buffer, feature)
 
 ###################
 

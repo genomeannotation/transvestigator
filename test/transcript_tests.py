@@ -23,10 +23,16 @@ class TestTranscript(unittest.TestCase):
         self.cds1.length = Mock(return_value=6)
 
         self.transcript.genes = [self.gene0, self.gene1]
-        self.gene0.mrna = [self.mrna0]
-        self.gene1.mrna = [self.mrna1]
-        self.mrna0.cds = [self.cds0]
-        self.mrna1.cds = [self.cds1]
+        self.gene0.__getitem__ = Mock(return_value=[self.mrna0])
+        self.gene0.__contains__ = Mock()
+        self.gene0.__contains__.assertCalledWith("mrna")
+        self.gene1.__getitem__ = Mock(return_value=[self.mrna1])
+        self.gene1.__iter__ = Mock(return_value=[self.mrna1].__iter__())
+        #self.gene1["mrna"] = [self.mrna1]
+        self.mrna0.__getitem__ = Mock(return_value=[self.cds0])
+        self.mrna1.__getitem__ = Mock(return_value=[self.cds1])
+        #self.mrna0["cds"] = [self.cds0]
+        #self.mrna1["cds"] = [self.cds1]
 
     def test_fix_multiple_genes(self):
         self.transcript.fix_multiple_genes()
@@ -113,8 +119,8 @@ class TestTranscript(unittest.TestCase):
         gff_cds0.end = 100
         gff_cds0.phase = 0
         
-        gff_gene0.mrna = [gff_mrna0]
-        gff_mrna0.cds = [gff_cds0]
+        gff_gene0["mrna"] = [gff_mrna0]
+        gff_mrna0["cds"] = [gff_cds0]
 
         del gff_mrna0.start_codon
         del gff_mrna0.stop_codon
@@ -144,7 +150,7 @@ class TestTranscript(unittest.TestCase):
 
         gff_gene0 = self.create_fake_gene()
 
-        gff_gene0.mrna[0].start_codon = [Mock()]
+        gff_gene0["mrna"][0].start_codon = [Mock()]
 
         tbl = gene_to_tbl(gff_gene0)
         self.assertEquals(tbl, expected)
@@ -159,7 +165,7 @@ class TestTranscript(unittest.TestCase):
 
         gff_gene0 = self.create_fake_gene()
 
-        gff_gene0.mrna[0].stop_codon = [Mock()]
+        gff_gene0["mrna"][0].stop_codon = [Mock()]
 
         tbl = gene_to_tbl(gff_gene0)
         self.assertEquals(tbl, expected)
@@ -174,8 +180,8 @@ class TestTranscript(unittest.TestCase):
 
         gff_gene0 = self.create_fake_gene()
 
-        gff_gene0.mrna[0].start_codon = [Mock()]
-        gff_gene0.mrna[0].stop_codon = [Mock()]
+        gff_gene0["mrna"][0].start_codon = [Mock()]
+        gff_gene0["mrna"][0].stop_codon = [Mock()]
 
         tbl = gene_to_tbl(gff_gene0)
         self.assertEquals(tbl, expected)
@@ -209,7 +215,7 @@ class TestTranscript(unittest.TestCase):
 
         gff_gene0 = self.create_fake_gene()
 
-        gff_gene0.mrna[0].attributes["Dbxref"] = "Pfam:foo,Pfam:dog,Pfam:baz"
+        gff_gene0["mrna"][0].attributes["Dbxref"] = "Pfam:foo,Pfam:dog,Pfam:baz"
 
         tbl = gene_to_tbl(gff_gene0)
         self.assertEquals(tbl, expected)
@@ -225,7 +231,7 @@ class TestTranscript(unittest.TestCase):
 
         gff_gene0 = self.create_fake_gene()
 
-        gff_gene0.mrna[0].cds[0].phase = 1
+        gff_gene0["mrna"][0]["cds"][0].phase = 1
 
         tbl = gene_to_tbl(gff_gene0)
         self.assertEquals(tbl, expected)
@@ -276,15 +282,15 @@ class TestTranscript(unittest.TestCase):
         gene.start = 1
         gene.end = 7
         gene.strand = '-'
-        gene.mrna = [Mock()]
-        gene.mrna[0].start = 2
-        gene.mrna[0].end = 6
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 2
-        gene.mrna[0].cds[0].end = 6
-        gene.mrna[0].exon = [Mock()]
-        gene.mrna[0].exon[0].start = 2
-        gene.mrna[0].exon[0].end = 6
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0].start = 2
+        gene["mrna"][0].end = 6
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 2
+        gene["mrna"][0]["cds"][0].end = 6
+        gene["mrna"][0]["exon"] = [Mock()]
+        gene["mrna"][0]["exon"][0].start = 2
+        gene["mrna"][0]["exon"][0].end = 6
         
         tran = Transcript([gene], seq)
         tran.make_positive()
@@ -293,15 +299,15 @@ class TestTranscript(unittest.TestCase):
         self.assertEqual(tran.genes[0].start, 2)
         self.assertEqual(tran.genes[0].end, 8)
         self.assertEqual(tran.genes[0].strand, '+')
-        self.assertEqual(tran.genes[0].mrna[0].start, 3)
-        self.assertEqual(tran.genes[0].mrna[0].end, 7)
-        self.assertEqual(tran.genes[0].mrna[0].strand, '+')
-        self.assertEqual(tran.genes[0].mrna[0].cds[0].start, 3)
-        self.assertEqual(tran.genes[0].mrna[0].cds[0].end, 7)
-        self.assertEqual(tran.genes[0].mrna[0].cds[0].strand, '+')
-        self.assertEqual(tran.genes[0].mrna[0].exon[0].start, 3)
-        self.assertEqual(tran.genes[0].mrna[0].exon[0].end, 7)
-        self.assertEqual(tran.genes[0].mrna[0].exon[0].strand, '+')
+        self.assertEqual(tran.genes[0]["mrna"][0].start, 3)
+        self.assertEqual(tran.genes[0]["mrna"][0].end, 7)
+        self.assertEqual(tran.genes[0]["mrna"][0].strand, '+')
+        self.assertEqual(tran.genes[0]["mrna"][0]["cds"][0].start, 3)
+        self.assertEqual(tran.genes[0]["mrna"][0]["cds"][0].end, 7)
+        self.assertEqual(tran.genes[0]["mrna"][0]["cds"][0].strand, '+')
+        self.assertEqual(tran.genes[0]["mrna"][0]["exon"][0].start, 3)
+        self.assertEqual(tran.genes[0]["mrna"][0]["exon"][0].end, 7)
+        self.assertEqual(tran.genes[0]["mrna"][0]["exon"][0].strand, '+')
 
     #### FIX LENGTHS TESTS ####
 
@@ -313,15 +319,15 @@ class TestTranscript(unittest.TestCase):
         gene = Mock()
         gene.start = 1
         gene.end = 7
-        gene.mrna = [Mock()]
-        gene.mrna[0].start = 1
-        gene.mrna[0].end = 9
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 2
-        gene.mrna[0].cds[0].end = 10
-        gene.mrna[0].exon = [Mock()]
-        gene.mrna[0].exon[0].start = 3
-        gene.mrna[0].exon[0].end = 11
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0].start = 1
+        gene["mrna"][0].end = 9
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 2
+        gene["mrna"][0]["cds"][0].end = 10
+        gene["mrna"][0]["exon"] = [Mock()]
+        gene["mrna"][0]["exon"][0].start = 3
+        gene["mrna"][0]["exon"][0].end = 11
         
         tran = Transcript([gene], seq)
         tran.fix_feature_lengths()
@@ -329,53 +335,53 @@ class TestTranscript(unittest.TestCase):
         self.assertEqual(tran.sequence.bases, "ACACACTT")
         self.assertEqual(tran.genes[0].start, 1)
         self.assertEqual(tran.genes[0].end, 7)
-        self.assertEqual(tran.genes[0].mrna[0].start, 1)
-        self.assertEqual(tran.genes[0].mrna[0].end, 6)
-        self.assertEqual(tran.genes[0].mrna[0].cds[0].start, 2)
-        self.assertEqual(tran.genes[0].mrna[0].cds[0].end, 7)
-        self.assertEqual(tran.genes[0].mrna[0].exon[0].start, 3)
-        self.assertEqual(tran.genes[0].mrna[0].exon[0].end, 8)
+        self.assertEqual(tran.genes[0]["mrna"][0].start, 1)
+        self.assertEqual(tran.genes[0]["mrna"][0].end, 6)
+        self.assertEqual(tran.genes[0]["mrna"][0]["cds"][0].start, 2)
+        self.assertEqual(tran.genes[0]["mrna"][0]["cds"][0].end, 7)
+        self.assertEqual(tran.genes[0]["mrna"][0]["exon"][0].start, 3)
+        self.assertEqual(tran.genes[0]["mrna"][0]["exon"][0].end, 8)
 
     #### MATCH CDS AND EXON END TESTS ####
 
     def test_match_cds_and_exon_end(self):
         seq = Sequence("foo_seq", "ATGNNN") 
         gene = Mock()
-        gene.mrna = [Mock()]
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 1
-        gene.mrna[0].cds[0].end = 5
-        gene.mrna[0].exon = [Mock()]
-        gene.mrna[0].exon[0].start = 1
-        gene.mrna[0].exon[0].end = 6
-        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 1
+        gene["mrna"][0]["cds"][0].end = 5
+        gene["mrna"][0]["exon"] = [Mock()]
+        gene["mrna"][0]["exon"][0].start = 1
+        gene["mrna"][0]["exon"][0].end = 6
+        gene["mrna"][0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
 
         # method doesn't touch indices if a stop codon is present;
         # mock will return True to the 'hasattr' question unless I do this
-        delattr(gene.mrna[0], "stop_codon")
+        delattr(gene["mrna"][0], "stop_codon")
         
         tran = Transcript([gene], seq)
-        self.assertEquals(5, gene.mrna[0].cds[0].end)
+        self.assertEquals(5, gene["mrna"][0]["cds"][0].end)
         tran.match_cds_and_exon_end()
-        self.assertEquals(6, gene.mrna[0].cds[0].end)
+        self.assertEquals(6, gene["mrna"][0]["cds"][0].end)
 
     def test_match_cds_and_exon_end_does_nothing_if_stop_codon_present(self):
         seq = Sequence("foo_seq", "ATGNNN") 
         gene = Mock()
-        gene.mrna = [Mock()]
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 1
-        gene.mrna[0].cds[0].end = 4
-        gene.mrna[0].exon = [Mock()]
-        gene.mrna[0].exon[0].start = 1
-        gene.mrna[0].exon[0].end = 6
-        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 1
+        gene["mrna"][0]["cds"][0].end = 4
+        gene["mrna"][0]["exon"] = [Mock()]
+        gene["mrna"][0]["exon"][0].start = 1
+        gene["mrna"][0]["exon"][0].end = 6
+        gene["mrna"][0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
         # Note: not necessary to mock stop_codon feature, 
         # since hasattr(Mock, "wateva") returns True
         tran = Transcript([gene], seq)
-        self.assertEquals(4, gene.mrna[0].cds[0].end)
+        self.assertEquals(4, gene["mrna"][0]["cds"][0].end)
         tran.match_cds_and_exon_end()
-        self.assertEquals(4, gene.mrna[0].cds[0].end) # cds end is unchanged
+        self.assertEquals(4, gene["mrna"][0]["cds"][0].end) # cds end is unchanged
 
 
     #### STARTS AND STOPS TESTS ####
@@ -383,60 +389,60 @@ class TestTranscript(unittest.TestCase):
     def test_create_starts_and_stops_creates_a_start(self):
         seq = Sequence("foo_seq", "ATGNNN") 
         gene = Mock()
-        gene.mrna = [Mock()]
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 1
-        gene.mrna[0].cds[0].end = 6
-        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 1
+        gene["mrna"][0]["cds"][0].end = 6
+        gene["mrna"][0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
         tran = Transcript([gene], seq)
-        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        self.assertEquals(0, len(gene["mrna"][0].mock_calls))
         tran.create_starts_and_stops()
-        self.assertEquals(1, len(gene.mrna[0].mock_calls))
-        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
+        self.assertEquals(1, len(gene["mrna"][0].mock_calls))
+        self.assertEquals("add_child", gene["mrna"][0].mock_calls[0][0])
 
     def test_create_starts_and_stops_creates_a_start_reverse_complement(self):
         seq = Sequence("foo_seq", "NNNCAT") 
         gene = Mock()
-        gene.mrna = [Mock()]
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 1
-        gene.mrna[0].cds[0].end = 6
-        gene.mrna[0].cds[0].strand = "-"
-        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 1
+        gene["mrna"][0]["cds"][0].end = 6
+        gene["mrna"][0]["cds"][0].strand = "-"
+        gene["mrna"][0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
         tran = Transcript([gene], seq)
-        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        self.assertEquals(0, len(gene["mrna"][0].mock_calls))
         tran.create_starts_and_stops()
-        self.assertEquals(1, len(gene.mrna[0].mock_calls))
-        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
+        self.assertEquals(1, len(gene["mrna"][0].mock_calls))
+        self.assertEquals("add_child", gene["mrna"][0].mock_calls[0][0])
 
     def test_create_starts_and_stops_creates_a_stop(self):
         seq = Sequence("foo_seq", "NNNTAG") 
         gene = Mock()
-        gene.mrna = [Mock()]
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 1
-        gene.mrna[0].cds[0].end = 6
-        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 1
+        gene["mrna"][0]["cds"][0].end = 6
+        gene["mrna"][0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
         tran = Transcript([gene], seq)
-        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        self.assertEquals(0, len(gene["mrna"][0].mock_calls))
         tran.create_starts_and_stops()
-        self.assertEquals(1, len(gene.mrna[0].mock_calls))
-        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
+        self.assertEquals(1, len(gene["mrna"][0].mock_calls))
+        self.assertEquals("add_child", gene["mrna"][0].mock_calls[0][0])
 
     def test_create_starts_and_stops_creates_a_stop_reverse_complement(self):
         seq = Sequence("foo_seq", "CTANNN") 
         gene = Mock()
-        gene.mrna = [Mock()]
-        gene.mrna[0].cds = [Mock()]
-        gene.mrna[0].cds[0].start = 1
-        gene.mrna[0].cds[0].end = 6
-        gene.mrna[0].cds[0].strand = "-"
-        gene.mrna[0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
+        gene["mrna"] = [Mock()]
+        gene["mrna"][0]["cds"] = [Mock()]
+        gene["mrna"][0]["cds"][0].start = 1
+        gene["mrna"][0]["cds"][0].end = 6
+        gene["mrna"][0]["cds"][0].strand = "-"
+        gene["mrna"][0].attributes = {"ID": "foo_mrna", "Parent": "foo_gene"}
         tran = Transcript([gene], seq)
-        self.assertEquals(0, len(gene.mrna[0].mock_calls))
+        self.assertEquals(0, len(gene["mrna"][0].mock_calls))
         tran.create_starts_and_stops()
-        self.assertEquals(1, len(gene.mrna[0].mock_calls))
-        self.assertEquals("add_child", gene.mrna[0].mock_calls[0][0])
+        self.assertEquals(1, len(gene["mrna"][0].mock_calls))
+        self.assertEquals("add_child", gene["mrna"][0].mock_calls[0][0])
 
 
 ##########################

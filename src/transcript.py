@@ -9,9 +9,9 @@ def gene_to_tbl(gene):
     # Check for starts and stops
     has_start = False
     has_stop = False
-    if hasattr(gene.mrna[0], "start_codon"):
+    if "start_codon" in gene["mrna"][0]:
         has_start = True
-    if hasattr(gene.mrna[0], "stop_codon"):
+    if "stop_codon" in gene["mrna"][0]:
         has_stop = True
     # Create tbl entry
     tbl = ""
@@ -28,27 +28,27 @@ def gene_to_tbl(gene):
     tbl += "\t\t\tlocus_tag\t"+gene.attributes["ID"]+"\n"
     if not has_start:
         tbl += "<"
-    tbl += str(gene.mrna[0].cds[0].start)+"\t"
+    tbl += str(gene["mrna"][0]["cds"][0].start)+"\t"
     if not has_stop:
         tbl += ">"
-    tbl += str(gene.mrna[0].cds[0].end)+"\tCDS\n"
+    tbl += str(gene["mrna"][0]["cds"][0].end)+"\tCDS\n"
     # Codon start
-    if gene.mrna[0].cds[0].phase != 0:
-        tbl += "\t\t\tcodon_start\t"+str(gene.mrna[0].cds[0].phase+1)+"\n"
+    if gene["mrna"][0]["cds"][0].phase != 0:
+        tbl += "\t\t\tcodon_start\t"+str(gene["mrna"][0]["cds"][0].phase+1)+"\n"
     # Protein id
-    tbl += "\t\t\tprotein_id\t"+gene.mrna[0].attributes["ID"]+"\n"
+    tbl += "\t\t\tprotein_id\t"+gene["mrna"][0].attributes["ID"]+"\n"
     # Dbxref if it has any
-    if "Dbxref" in gene.mrna[0].attributes:
-        for dbxref in gene.mrna[0].attributes["Dbxref"].split(","):
+    if "Dbxref" in gene["mrna"][0].attributes:
+        for dbxref in gene["mrna"][0].attributes["Dbxref"].split(","):
             tbl += "\t\t\tdb_xref\t"+dbxref+"\n"
     # product if it has any
-    if "product" in gene.mrna[0].attributes:
-        tbl += "\t\t\tproduct\t"+gene.mrna[0].attributes["product"]+"\n"
+    if "product" in gene["mrna"][0].attributes:
+        tbl += "\t\t\tproduct\t"+gene["mrna"][0].attributes["product"]+"\n"
     else: # no product, write hypothetical protein
         tbl += "\t\t\tproduct\thypothetical protein\n"
     # Ontology_term if it has any
-    if "Ontology_term" in gene.mrna[0].attributes:
-        for term in gene.mrna[0].attributes["Ontology_term"].split(","):
+    if "Ontology_term" in gene["mrna"][0].attributes:
+        for term in gene["mrna"][0].attributes["Ontology_term"].split(","):
             tbl += "\t\t\tOntology_term\t"+term+"\n"
     return tbl
 
@@ -80,43 +80,43 @@ class Transcript:
         """
         for gene in self.genes:
             # Verify we have a valid gene here
-            if not gene.mrna:
+            if not gene["mrna"]:
                 return
-            if not gene.mrna[0].cds:
+            if not gene["mrna"][0]["cds"]:
                 return
             gene_start = gene.start
-            mrna_start = gene.mrna[0].start
-            cds_start = gene.mrna[0].cds[0].start
+            mrna_start = gene["mrna"][0].start
+            cds_start = gene["mrna"][0]["cds"][0].start
 
             # Adjust phase if our feature start on base 2 or 3
-            if not hasattr(gene.mrna[0], "start_codon"):
+            if not "start_codon" in gene["mrna"][0]:
                 if gene_start == 2:
                     gene.start = 1
-                    gene.mrna[0].start = 1
-                    gene.mrna[0].cds[0].start = 1
-                    gene.mrna[0].cds[0].phase = 1
+                    gene["mrna"][0].start = 1
+                    gene["mrna"][0]["cds"][0].start = 1
+                    gene["mrna"][0]["cds"][0].phase = 1
                 elif gene_start == 3:
                     gene.start = 1
-                    gene.mrna[0].start = 1
-                    gene.mrna[0].cds[0].start = 1
-                    gene.mrna[0].cds[0].phase = 2
-                if gene.mrna[0].cds[0].start == 2:
-                    gene.mrna[0].cds[0].start = 1
-                    gene.mrna[0].cds[0].phase = 1
-                elif gene.mrna[0].cds[0].start == 3:
-                    gene.mrna[0].cds[0].start = 1
-                    gene.mrna[0].cds[0].phase = 2
+                    gene["mrna"][0].start = 1
+                    gene["mrna"][0]["cds"][0].start = 1
+                    gene["mrna"][0]["cds"][0].phase = 2
+                if gene["mrna"][0]["cds"][0].start == 2:
+                    gene["mrna"][0]["cds"][0].start = 1
+                    gene["mrna"][0]["cds"][0].phase = 1
+                elif gene["mrna"][0]["cds"][0].start == 3:
+                    gene["mrna"][0]["cds"][0].start = 1
+                    gene["mrna"][0]["cds"][0].phase = 2
             # Adjust end if partial
-            if not hasattr(gene.mrna[0], "stop_codon"):
+            if not "stop_codon" in gene["mrna"][0]:
                 gene.end = len(self.sequence.bases)
-                gene.mrna[0].end = len(self.sequence.bases)
-                gene.mrna[0].cds[0].end = len(self.sequence.bases)
+                gene["mrna"][0].end = len(self.sequence.bases)
+                gene["mrna"][0]["cds"][0].end = len(self.sequence.bases)
 
     def fix_multiple_genes(self):
         longest = None
         length = 0
         for gene in self.genes:
-            this_length = gene.mrna[0].cds[0].length()
+            this_length = gene["mrna"][0]["cds"][0].length()
             if this_length > length:
                 length = this_length
                 longest = gene
@@ -137,13 +137,13 @@ class Transcript:
         for gene in self.genes:
             gene.start, gene.end = seq_len-gene.end+1, seq_len-gene.start+1
             gene.strand = "+"
-            for mrna in gene.mrna:
+            for mrna in gene["mrna"]:
                 mrna.start, mrna.end = seq_len-mrna.end+1, seq_len-mrna.start+1
                 mrna.strand = "+"
-                for cds in mrna.cds:
+                for cds in mrna["cds"]:
                     cds.start, cds.end = seq_len-cds.end+1, seq_len-cds.start+1
                     cds.strand = "+"
-                for exon in mrna.exon:
+                for exon in mrna["exon"]:
                     exon.start, exon.end = seq_len-exon.end+1, seq_len-exon.start+1
                     exon.strand = "+"
 
@@ -153,15 +153,15 @@ class Transcript:
             if gene.end > seq_len:
                 over = gene.end-seq_len
                 gene.end = seq_len-((abs(3-over))%3)
-            for mrna in gene.mrna:
+            for mrna in gene["mrna"]:
                 if mrna.end > seq_len:
                     over = mrna.end-seq_len
                     mrna.end = seq_len-((abs(3-over))%3)
-                for cds in mrna.cds:
+                for cds in mrna["cds"]:
                     if cds.end > seq_len:
                         over = cds.end-seq_len
                         cds.end = seq_len-((abs(3-over))%3)
-                for exon in mrna.exon: 
+                for exon in mrna["exon"]: 
                     if exon.end > seq_len:
                         over = exon.end-seq_len
                         exon.end = seq_len-((abs(3-over))%3)
@@ -170,16 +170,16 @@ class Transcript:
         """Check each mRNA's exon/CDS. If no stop codon, make their ends equal.
         This is a blind attempt to avoid PartialProblem errors from the NCBI."""
         for gene in self.genes:
-            for mrna in gene.mrna:
-                if hasattr(mrna, "stop_codon"):
+            for mrna in gene["mrna"]:
+                if "stop_codon" in mrna:
                     return
                 else:
-                    if mrna.cds[0].end != mrna.exon[0].end:
-                        mrna.cds[0].end = mrna.exon[0].end
+                    if mrna["cds"][0].end != mrna["exon"][0].end:
+                        mrna["cds"][0].end = mrna["exon"][0].end
 
     def create_starts_and_stops(self):
         for gene in self.genes:
-            cds = gene.mrna[0].cds[0]
+            cds = gene["mrna"][0]["cds"][0]
             subseq = get_subsequence(self.sequence.bases, cds.start, cds.end)
             if cds.strand == '-':
                 subseq = reverse_complement(subseq)
@@ -192,11 +192,11 @@ class Transcript:
                 score = None
                 strand = cds.strand
                 phase = cds.phase
-                mrna_id = gene.mrna[0].attributes["ID"]
+                mrna_id = gene["mrna"][0].attributes["ID"]
                 attributes = {"ID": mrna_id+":start", "Parent": mrna_id}
                 start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
                                         strand, phase, attributes)
-                gene.mrna[0].add_child(start_codon)
+                gene["mrna"][0].add_child(start_codon)
             if has_stop_codon(subseq):
                 seqid = cds.seqid
                 source = cds.source
@@ -206,14 +206,14 @@ class Transcript:
                 score = None
                 strand = cds.strand
                 phase = cds.phase
-                mrna_id = gene.mrna[0].attributes["ID"]
+                mrna_id = gene["mrna"][0].attributes["ID"]
                 attributes = {"ID": mrna_id+":stop", "Parent": mrna_id}
                 stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
                                         strand, phase, attributes)
-                gene.mrna[0].add_child(stop_codon)
+                gene["mrna"][0].add_child(stop_codon)
 
     def passes_filtering(self):
-        if self.rsem == None or self.rsem.tpm < 0.5 or self.rsem.isopct < 5.0:
+        if self.rsem and (self.rsem.tpm < 0.5 or self.rsem.isopct < 5.0):
             return False
         return True
 

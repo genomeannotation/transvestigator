@@ -12,6 +12,8 @@ import test.annotation_tests
 import test.rsem_tests
 import test.blast_tests
 import test.config_tests
+import test.gene_tests
+import test.mrna_tests
 
 # get suites from test modules
 suites = [
@@ -25,6 +27,8 @@ test.annotation_tests.suite(),\
 test.rsem_tests.suite(),\
 test.blast_tests.suite(),\
 test.config_tests.suite(),\
+test.gene_tests.suite(),\
+test.mrna_tests.suite(),\
 ]
 
 # collect suites in a TestSuite object

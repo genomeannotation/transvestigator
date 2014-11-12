@@ -30,6 +30,12 @@ class GFFFeature:
     def __setitem__(self, index, value):
         self.children[index] = value
 
+    def __iter__(self):
+        return self.children.__iter__()
+
+    def __contains__(self, item):
+        return item in self.children
+
     def add_annotation(self, key, value):
         if key in self.attributes:
             self.attributes[key] += ","+value
