@@ -25,14 +25,24 @@ class TestTranscript(unittest.TestCase):
     ### TO TBL TESTS ###
 
     def test_to_tbl(self):
-        expected = \
-        ">Feature foo_seq\n"\
-        "1\t4\tREFERENCE\n"\
+        self.gene0.to_tbl.return_value = \
         "<1\t>100\tgene\n"\
         "\t\t\tlocus_tag\tfoo_gene\n"\
         "<1\t>100\tCDS\n"\
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tproduct\thypothetical protein\n"
+        self.transcript.sequence.header = "foo_seq"
+        expected = \
+        ">Feature foo_seq\n"\
+        "1\t6\tREFERENCE\n"\
+        "<1\t>100\tgene\n"\
+        "\t\t\tlocus_tag\tfoo_gene\n"\
+        "<1\t>100\tCDS\n"\
+        "\t\t\tprotein_id\tm.foo\n"\
+        "\t\t\tproduct\thypothetical protein\n"
+        actual = self.transcript.to_tbl()
+        self.assertEquals(expected, actual)
+
         pass
 
     def test_remove_contig_from_gene_id(self):

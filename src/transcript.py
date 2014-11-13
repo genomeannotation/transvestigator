@@ -221,5 +221,5 @@ class Transcript:
         tbl = ""
         tbl += ">Feature "+self.sequence.header+"\n"
         tbl += "1\t"+str(len(self.sequence.bases))+"\tREFERENCE\n"
-        tbl += gene_to_tbl(self.genes[0])
+        tbl += self.genes[0].to_tbl()
         return tbl
