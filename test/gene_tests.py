@@ -5,11 +5,14 @@ from src.gene import Gene
 
 class TestGene(unittest.TestCase):
 
+    def setUp(self):
+        self.gene1 = Gene()
+
     def test_from_gff_feature_success(self):
-        gff_gene = Mock()
-        gff_gene.type = "gene"
+        self.gene1 = Mock()
+        self.gene1.type = "gene"
         
-        tran_gene = Gene.from_gff_feature(gff_gene)
+        tran_gene = Gene.from_gff_feature(self.gene1)
         self.assertTrue(tran_gene)
 
     def test_from_gff_features_fails(self):
@@ -18,6 +21,12 @@ class TestGene(unittest.TestCase):
         
         tran_gene = Gene.from_gff_feature(gff_gene)
         self.assertFalse(tran_gene)
+
+    def test_remove_contig_from_gene_id(self):
+        expected = 'g.123'
+        self.gene1.attributes['ID'] = 'contig123|g.123'
+        self.gene1.remove_contig_from_gene_id()
+        self.assertEquals(expected, self.gene1.attributes['ID'])
 
 """
     def test_gene_to_tbl_nostart_nostop(self):
@@ -174,6 +183,39 @@ class TestGene(unittest.TestCase):
         #self.assertEqual(self.cds0.end, 2)
         self.transcript.fix_phase()
         #self.assertEqual(self.cds0.end, 6)
+
+    #### MAKE POSITIVE TESTS ####
+
+    def test_make_positive(self):
+        pass
+
+    #### FIX LENGTHS TESTS ####
+
+    def test_fix_feature_lengths(self):
+        pass
+
+    #### MATCH CDS AND EXON END TESTS ####
+
+    def test_match_cds_and_exon_end(self):
+        pass
+
+    def test_match_cds_and_exon_end_does_nothing_if_stop_codon_present(self):
+        pass
+
+
+    #### STARTS AND STOPS TESTS ####
+    
+    def test_create_starts_and_stops_creates_a_start(self):
+        pass
+
+    def test_create_starts_and_stops_creates_a_start_reverse_complement(self):
+        pass
+
+    def test_create_starts_and_stops_creates_a_stop(self):
+        pass
+
+    def test_create_starts_and_stops_creates_a_stop_reverse_complement(self):
+        pass
 
 """
 

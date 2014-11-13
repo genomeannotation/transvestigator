@@ -3,7 +3,7 @@
 import unittest
 from unittest.mock import Mock
 from src.sequence import Sequence
-from src.transcript import gene_to_tbl, Transcript 
+from src.transcript import Transcript 
 
 class TestTranscript(unittest.TestCase):
 
@@ -19,10 +19,7 @@ class TestTranscript(unittest.TestCase):
         self.gene0.get_cds_length.return_value = 10
         self.gene1.get_cds_length.return_value = 11
         self.transcript.fix_multiple_genes()
-        self.assertEquals(self.transcript.genes, [self.gene1])
-
-
-    ### TO TBL TESTS ###
+        self.assertEquals([self.gene1], self.transcript.genes)
 
     def test_to_tbl(self):
         self.gene0.to_tbl.return_value = \
@@ -43,43 +40,6 @@ class TestTranscript(unittest.TestCase):
         actual = self.transcript.to_tbl()
         self.assertEquals(expected, actual)
 
-        pass
-
-    def test_remove_contig_from_gene_id(self):
-        pass
-
-    #### MAKE POSITIVE TESTS ####
-
-    def test_make_positive(self):
-        pass
-
-    #### FIX LENGTHS TESTS ####
-
-    def test_fix_feature_lengths(self):
-        pass
-
-    #### MATCH CDS AND EXON END TESTS ####
-
-    def test_match_cds_and_exon_end(self):
-        pass
-
-    def test_match_cds_and_exon_end_does_nothing_if_stop_codon_present(self):
-        pass
-
-
-    #### STARTS AND STOPS TESTS ####
-    
-    def test_create_starts_and_stops_creates_a_start(self):
-        pass
-
-    def test_create_starts_and_stops_creates_a_start_reverse_complement(self):
-        pass
-
-    def test_create_starts_and_stops_creates_a_stop(self):
-        pass
-
-    def test_create_starts_and_stops_creates_a_stop_reverse_complement(self):
-        pass
 
 ##########################
 def suite():
