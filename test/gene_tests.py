@@ -115,7 +115,6 @@ class TestGene(unittest.TestCase):
         tbl = self.gene1.to_tbl()
         self.assertEquals(tbl, expected)
 
-"""
     def test_gene_to_tbl_genename(self):
         expected = \
         "<1\t>100\tgene\n"\
@@ -125,12 +124,12 @@ class TestGene(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tproduct\thypothetical protein\n"
 
-        #gff_gene0 = self.create_fake_gene()
+        self.gene1.attributes["Name"] = "f00x4"
 
-        gff_gene0.attributes["Name"] = "f00x4"
+        self.mrna1.__contains__ = no_start_no_stop
 
-        tbl = gene_to_tbl(gff_gene0)
-        #self.assertEquals(tbl, expected)
+        tbl = self.gene1.to_tbl()
+        self.assertEquals(tbl, expected)
 
     def test_gene_to_tbl_dbxref(self):
         expected = \
@@ -143,13 +142,15 @@ class TestGene(unittest.TestCase):
         "\t\t\tdb_xref\tPfam:baz\n"\
         "\t\t\tproduct\thypothetical protein\n"\
 
-        #gff_gene0 = self.create_fake_gene()
+        self.gene1.get_mrna().attributes["Dbxref"] = "Pfam:foo,Pfam:dog,Pfam:baz"
 
-        gff_gene0["mrna"][0].attributes["Dbxref"] = "Pfam:foo,Pfam:dog,Pfam:baz"
+        self.mrna1.__contains__ = no_start_no_stop
 
-        tbl = gene_to_tbl(gff_gene0)
-        #self.assertEquals(tbl, expected)
+        tbl = self.gene1.to_tbl()
+        self.assertEquals(tbl, expected)
 
+
+"""
     def test_fix_phase(self):
         self.gene0.start = 2
         self.mrna0.start = 2
