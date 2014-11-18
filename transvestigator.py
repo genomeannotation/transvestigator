@@ -129,8 +129,8 @@ def main():
                 cds_count = 0
                 contains_complete_cds = False
                 for gene in transcript.genes:
-                    for mrna in gene.mrna:
-                        cds_count += len(mrna.cds)
+                    for mrna in gene["mrna"]:
+                        cds_count += len(mrna["cds"])
                         if "start_codon" in mrna and "stop_codon" in mrna:
                             contains_complete_cds = True
                 outrsemfile.write("\t".join([transcript_id, str(cds_count), str(contains_complete_cds), str(transcript.rsem.tpm), str(transcript.rsem.fpkm), str(transcript.rsem.isopct)])+"\n")
