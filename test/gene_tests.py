@@ -3,8 +3,24 @@ import unittest
 from unittest.mock import Mock, patch, PropertyMock
 from src.gene import Gene
 
+# Some mock functions
 def no_start_no_stop(self, item):
     return False
+
+def start_stop(self, item):
+    return True
+
+def start_no_stop(self, item):
+    if item == 'start_codon':
+        return True
+    return False
+
+def no_start_stop(self, item):
+    if item == 'stop_codon':
+        return True
+    return False
+
+###################
 
 class TestGene(unittest.TestCase):
 
@@ -22,7 +38,6 @@ class TestGene(unittest.TestCase):
         self.mrna1.start = 1
         self.mrna1.end = 100
         self.mrna1.attributes = {'ID':'m.foo'}
-        self.mrna1.__contains__ = no_start_no_stop
 
         self.cds1.start = 1
         self.cds1.end = 100
@@ -56,10 +71,11 @@ class TestGene(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tproduct\thypothetical protein\n"
 
+        self.mrna1.__contains__ = no_start_no_stop
+
         tbl = self.gene1.to_tbl()
         self.assertEquals(tbl, expected)
 
-"""
     def test_gene_to_tbl_start_nostop(self):
         expected = \
         "1\t>100\tgene\n"\
@@ -68,12 +84,10 @@ class TestGene(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tproduct\thypothetical protein\n"
 
-        #gff_gene0 = self.create_fake_gene()
+        self.mrna1.__contains__ = start_no_stop
 
-        gff_gene0["mrna"][0].start_codon = [Mock()]
-
-        tbl = gene_to_tbl(gff_gene0)
-        #self.assertEquals(tbl, expected)
+        tbl = self.gene1.to_tbl()
+        self.assertEquals(tbl, expected)
 
     def test_gene_to_tbl_nostart_stop(self):
         expected = \
@@ -83,12 +97,10 @@ class TestGene(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tproduct\thypothetical protein\n"
 
-        #gff_gene0 = self.create_fake_gene()
+        self.mrna1.__contains__ = no_start_stop
 
-        gff_gene0["mrna"][0].stop_codon = [Mock()]
-
-        tbl = gene_to_tbl(gff_gene0)
-        #self.assertEquals(tbl, expected)
+        tbl = self.gene1.to_tbl()
+        self.assertEquals(tbl, expected)
 
     def test_gene_to_tbl_start_stop(self):
         expected = \
@@ -98,14 +110,12 @@ class TestGene(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tproduct\thypothetical protein\n"
 
-        #gff_gene0 = self.create_fake_gene()
+        self.mrna1.__contains__ = start_stop
 
-        gff_gene0["mrna"][0].start_codon = [Mock()]
-        gff_gene0["mrna"][0].stop_codon = [Mock()]
+        tbl = self.gene1.to_tbl()
+        self.assertEquals(tbl, expected)
 
-        tbl = gene_to_tbl(gff_gene0)
-        #self.assertEquals(tbl, expected)
-
+"""
     def test_gene_to_tbl_genename(self):
         expected = \
         "<1\t>100\tgene\n"\
