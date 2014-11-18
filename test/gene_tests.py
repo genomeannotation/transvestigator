@@ -3,16 +3,36 @@ import unittest
 from unittest.mock import Mock, patch, PropertyMock
 from src.gene import Gene
 
+def no_start_no_stop(self, item):
+    return False
+
 class TestGene(unittest.TestCase):
 
     def setUp(self):
         self.gene1 = Gene()
+        self.mrna1 = Mock()
+        self.cds1 = Mock()
+        self.gene1.get_mrna = Mock(return_value=self.mrna1)
+        self.mrna1.get_cds = Mock(return_value=self.cds1)
+
+        self.gene1.start = 1
+        self.gene1.end = 100
+        self.gene1.attributes = {'ID':'foo_gene'}
+
+        self.mrna1.start = 1
+        self.mrna1.end = 100
+        self.mrna1.attributes = {'ID':'m.foo'}
+        self.mrna1.__contains__ = no_start_no_stop
+
+        self.cds1.start = 1
+        self.cds1.end = 100
+        self.cds1.phase = 0
 
     def test_from_gff_feature_success(self):
-        self.gene1 = Mock()
-        self.gene1.type = "gene"
+        gff_gene = Mock()
+        gff_gene.type = "gene"
         
-        tran_gene = Gene.from_gff_feature(self.gene1)
+        tran_gene = Gene.from_gff_feature(gff_gene)
         self.assertTrue(tran_gene)
 
     def test_from_gff_features_fails(self):
@@ -28,7 +48,6 @@ class TestGene(unittest.TestCase):
         self.gene1.remove_contig_from_gene_id()
         self.assertEquals(expected, self.gene1.attributes['ID'])
 
-"""
     def test_gene_to_tbl_nostart_nostop(self):
         expected = \
         "<1\t>100\tgene\n"\
@@ -37,11 +56,10 @@ class TestGene(unittest.TestCase):
         "\t\t\tprotein_id\tm.foo\n"\
         "\t\t\tproduct\thypothetical protein\n"
 
-        #gff_gene0 = self.create_fake_gene()
+        tbl = self.gene1.to_tbl()
+        self.assertEquals(tbl, expected)
 
-        tbl = gene_to_tbl(gff_gene0)
-    #    self.assertEquals(tbl, expected)
-
+"""
     def test_gene_to_tbl_start_nostop(self):
         expected = \
         "1\t>100\tgene\n"\

@@ -8,3 +8,6 @@ class Mrna(GFFFeature):
         if feature.type == "mRNA":
             return Mrna(feature.seqid, feature.source, feature.start, feature.end, feature.score, feature.strand, feature.phase, feature.attributes)
         return None
+
+    def get_cds(self):
+        return self["cds"][0]

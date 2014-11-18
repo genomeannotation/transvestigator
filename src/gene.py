@@ -9,13 +9,16 @@ class Gene(GFFFeature):
             return Gene(feature.seqid, feature.source, feature.start, feature.end, feature.score, feature.strand, feature.phase, feature.attributes)
         return None
 
+    def get_mrna(self):
+        return self["mrna"][0]
+
     def to_tbl(self):
         # Check for starts and stops
         has_start = False
         has_stop = False
-        if "start_codon" in self["mrna"][0]:
+        if "start_codon" in self.get_mrna():
             has_start = True
-        if "stop_codon" in self["mrna"][0]:
+        if "stop_codon" in self.get_mrna():
             has_stop = True
         # Create tbl entry
         tbl = ""
@@ -32,27 +35,27 @@ class Gene(GFFFeature):
         tbl += "\t\t\tlocus_tag\t"+self.attributes["ID"]+"\n"
         if not has_start:
             tbl += "<"
-        tbl += str(self["mrna"][0]["cds"][0].start)+"\t"
+        tbl += str(self.get_mrna().get_cds().start)+"\t"
         if not has_stop:
             tbl += ">"
-        tbl += str(self["mrna"][0]["cds"][0].end)+"\tCDS\n"
+        tbl += str(self.get_mrna().get_cds().end)+"\tCDS\n"
         # Codon start
-        if self["mrna"][0]["cds"][0].phase != 0:
-            tbl += "\t\t\tcodon_start\t"+str(self["mrna"][0]["cds"][0].phase+1)+"\n"
+        if self.get_mrna().get_cds().phase != 0:
+            tbl += "\t\t\tcodon_start\t"+str(self.get_mrna().get_cds().phase+1)+"\n"
         # Protein id
-        tbl += "\t\t\tprotein_id\t"+self["mrna"][0].attributes["ID"]+"\n"
+        tbl += "\t\t\tprotein_id\t"+self.get_mrna().attributes["ID"]+"\n"
         # Dbxref if it has any
-        if "Dbxref" in self["mrna"][0].attributes:
-            for dbxref in self["mrna"][0].attributes["Dbxref"].split(","):
+        if "Dbxref" in self.get_mrna().attributes:
+            for dbxref in self.get_mrna().attributes["Dbxref"].split(","):
                 tbl += "\t\t\tdb_xref\t"+dbxref+"\n"
         # product if it has any
-        if "product" in self["mrna"][0].attributes:
-            tbl += "\t\t\tproduct\t"+self["mrna"][0].attributes["product"]+"\n"
+        if "product" in self.get_mrna().attributes:
+            tbl += "\t\t\tproduct\t"+self.get_mrna().attributes["product"]+"\n"
         else: # no product, write hypothetical protein
             tbl += "\t\t\tproduct\thypothetical protein\n"
         # Ontology_term if it has any
-        if "Ontology_term" in self["mrna"][0].attributes:
-            for term in self["mrna"][0].attributes["Ontology_term"].split(","):
+        if "Ontology_term" in self.get_mrna().attributes:
+            for term in self.get_mrna().attributes["Ontology_term"].split(","):
                 tbl += "\t\t\tOntology_term\t"+term+"\n"
         return tbl
 
@@ -74,35 +77,35 @@ class Gene(GFFFeature):
             # Verify we have a valid gene here
             if not gene["mrna"]:
                 return
-            if not gene["mrna"][0]["cds"]:
+            if not gene.get_mrna()["cds"]:
                 return
             gene_start = gene.start
-            mrna_start = gene["mrna"][0].start
-            cds_start = gene["mrna"][0]["cds"][0].start
+            mrna_start = gene.get_mrna().start
+            cds_start = gene.get_mrna().get_cds().start
 
             # Adjust phase if our feature start on base 2 or 3
-            if not "start_codon" in gene["mrna"][0]:
+            if not "start_codon" in gene.get_mrna():
                 if gene_start == 2:
                     gene.start = 1
-                    gene["mrna"][0].start = 1
-                    gene["mrna"][0]["cds"][0].start = 1
-                    gene["mrna"][0]["cds"][0].phase = 1
+                    gene.get_mrna().start = 1
+                    gene.get_mrna().get_cds().start = 1
+                    gene.get_mrna().get_cds().phase = 1
                 elif gene_start == 3:
                     gene.start = 1
-                    gene["mrna"][0].start = 1
-                    gene["mrna"][0]["cds"][0].start = 1
-                    gene["mrna"][0]["cds"][0].phase = 2
-                if gene["mrna"][0]["cds"][0].start == 2:
-                    gene["mrna"][0]["cds"][0].start = 1
-                    gene["mrna"][0]["cds"][0].phase = 1
-                elif gene["mrna"][0]["cds"][0].start == 3:
-                    gene["mrna"][0]["cds"][0].start = 1
-                    gene["mrna"][0]["cds"][0].phase = 2
+                    gene.get_mrna().start = 1
+                    gene.get_mrna().get_cds().start = 1
+                    gene.get_mrna().get_cds().phase = 2
+                if gene.get_mrna().get_cds().start == 2:
+                    gene.get_mrna().get_cds().start = 1
+                    gene.get_mrna().get_cds().phase = 1
+                elif gene.get_mrna().get_cds().start == 3:
+                    gene.get_mrna().get_cds().start = 1
+                    gene.get_mrna().get_cds().phase = 2
             # Adjust end if partial
-            if not "stop_codon" in gene["mrna"][0]:
+            if not "stop_codon" in gene.get_mrna():
                 gene.end = len(self.sequence.bases)
-                gene["mrna"][0].end = len(self.sequence.bases)
-                gene["mrna"][0]["cds"][0].end = len(self.sequence.bases)
+                gene.get_mrna().end = len(self.sequence.bases)
+                gene.get_mrna().get_cds().end = len(self.sequence.bases)
 
     def fix_multiple_genes(self):
         longest = None
@@ -160,12 +163,12 @@ class Gene(GFFFeature):
                 if "stop_codon" in mrna:
                     return
                 else:
-                    if mrna["cds"][0].end != mrna["exon"][0].end:
-                        mrna["cds"][0].end = mrna["exon"][0].end
+                    if mrna.get_cds().end != mrna["exon"][0].end:
+                        mrna.get_cds().end = mrna["exon"][0].end
 
     def create_starts_and_stops(self):
         for gene in self.genes:
-            cds = gene["mrna"][0]["cds"][0]
+            cds = gene.get_mrna().get_cds()
             subseq = get_subsequence(self.sequence.bases, cds.start, cds.end)
             if cds.strand == '-':
                 subseq = reverse_complement(subseq)
@@ -178,11 +181,11 @@ class Gene(GFFFeature):
                 score = None
                 strand = cds.strand
                 phase = cds.phase
-                mrna_id = gene["mrna"][0].attributes["ID"]
+                mrna_id = gene.get_mrna().attributes["ID"]
                 attributes = {"ID": mrna_id+":start", "Parent": mrna_id}
                 start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
                                         strand, phase, attributes)
-                gene["mrna"][0].add_child(start_codon)
+                gene.get_mrna().add_child(start_codon)
             if has_stop_codon(subseq):
                 seqid = cds.seqid
                 source = cds.source
@@ -192,11 +195,11 @@ class Gene(GFFFeature):
                 score = None
                 strand = cds.strand
                 phase = cds.phase
-                mrna_id = gene["mrna"][0].attributes["ID"]
+                mrna_id = gene.get_mrna().attributes["ID"]
                 attributes = {"ID": mrna_id+":stop", "Parent": mrna_id}
                 stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
                                         strand, phase, attributes)
-                gene["mrna"][0].add_child(stop_codon)
+                gene.get_mrna().add_child(stop_codon)
 
 """
 
