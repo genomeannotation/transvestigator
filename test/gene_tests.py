@@ -149,70 +149,73 @@ class TestGene(unittest.TestCase):
         tbl = self.gene1.to_tbl()
         self.assertEquals(tbl, expected)
 
+    ### FIX PHASE TESTS ###
 
-"""
     def test_fix_phase(self):
-        self.gene0.start = 2
-        self.mrna0.start = 2
-        del self.mrna0.start_codon
-        self.cds0.start = 2
-        self.cds0.phase = 0
-        #self.assertEqual(self.cds0.phase, 0)
-        self.transcript.fix_phase()
-        #self.assertEqual(self.cds0.phase, 1)
+        self.gene1.start = 2
+        self.mrna1.start = 2
+        self.mrna1.__contains__ = no_start_stop
+        self.cds1.start = 2
+        self.cds1.phase = 0
+        self.assertEqual(self.cds1.phase, 0)
+        self.gene1.fix_phase("ATGC")
+        self.assertEqual(self.cds1.phase, 1)
         
     def test_fix_phase_to_two(self):
-        self.gene0.start = 3
-        self.mrna0.start = 3
-        del self.mrna0.start_codon
-        self.cds0.start = 3
-        self.cds0.phase = 0
-        #self.assertEqual(self.cds0.phase, 0)
-        self.transcript.fix_phase()
-        #self.assertEqual(self.cds0.phase, 2)
+        self.gene1.start = 3
+        self.mrna1.start = 3
+        self.mrna1.__contains__ = no_start_stop
+        self.cds1.start = 3
+        self.cds1.phase = 0
+        self.assertEqual(self.cds1.phase, 0)
+        self.gene1.fix_phase("ATGC")
+        self.assertEqual(self.cds1.phase, 2)
         
     def test_fix_phase_does_nothing_when_indices_too_large(self):
-        self.gene0.start = 4
-        self.mrna0.start = 4
-        self.cds0.start = 4
-        self.cds0.phase = 0
-        #self.assertEqual(self.cds0.phase, 0)
-        self.transcript.fix_phase()
-        #self.assertEqual(self.cds0.phase, 0)
+        self.gene1.start = 4
+        self.mrna1.start = 4
+        self.mrna1.__contains__ = start_stop
+        self.cds1.start = 4
+        self.cds1.phase = 0
+        self.assertEqual(self.cds1.phase, 0)
+        self.gene1.fix_phase("ATGC")
+        self.assertEqual(self.cds1.phase, 0)
 
     def test_fix_phase_works_on_cds_only(self):
-        self.gene0.start = 1
-        self.mrna0.start = 1
-        self.cds0.start = 3
-        self.cds0.phase = 0
-        del self.mrna0.start_codon
-        #self.assertEqual(self.cds0.phase, 0)
-        #self.assertEqual(self.cds0.start, 3)
-        self.transcript.fix_phase()
-        #self.assertEqual(self.cds0.phase, 2)
-        #self.assertEqual(self.cds0.start, 1)
+        self.gene1.start = 1
+        self.mrna1.start = 1
+        self.mrna1.__contains__ = no_start_stop
+        self.cds1.start = 3
+        self.cds1.phase = 0
+        self.assertEqual(self.cds1.phase, 0)
+        self.assertEqual(self.cds1.start, 3)
+        self.gene1.fix_phase("ATGC")
+        self.assertEqual(self.cds1.phase, 2)
+        self.assertEqual(self.cds1.start, 1)
 
     def test_fix_phase_does_nothing_when_not_partial(self):
-        self.gene0.start = 2
-        self.mrna0.start = 2
-        self.cds0.start = 2
-        self.cds0.phase = 0
-        #self.assertEqual(self.cds0.phase, 0)
-        self.transcript.fix_phase()
-        #self.assertEqual(self.cds0.phase, 0)
+        self.gene1.start = 2
+        self.mrna1.start = 2
+        self.mrna1.__contains__ = start_stop
+        self.cds1.start = 2
+        self.cds1.phase = 0
+        self.assertEqual(self.cds1.phase, 0)
+        self.gene1.fix_phase("ATGC")
+        self.assertEqual(self.cds1.phase, 0)
 
     def test_fix_phase_adjusts_end_on_3prime_partial(self):
-        self.gene0.start = 2
-        self.mrna0.start = 2
-        self.cds0.start = 2
-        self.gene0.end = 2
-        self.mrna0.end = 2
-        self.cds0.end = 2
-        del self.mrna0.stop_codon
-        #self.assertEqual(self.cds0.end, 2)
-        self.transcript.fix_phase()
-        #self.assertEqual(self.cds0.end, 6)
+        self.gene1.start = 2
+        self.mrna1.start = 2
+        self.mrna1.__contains__ = start_no_stop
+        self.cds1.start = 2
+        self.gene1.end = 2
+        self.mrna1.end = 2
+        self.cds1.end = 2
+        self.assertEqual(self.cds1.end, 2)
+        self.gene1.fix_phase("ATGC")
+        self.assertEqual(self.cds1.end, 4)
 
+"""
     #### MAKE POSITIVE TESTS ####
 
     def test_make_positive(self):

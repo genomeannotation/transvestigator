@@ -64,49 +64,42 @@ class Gene(GFFFeature):
         if len(id_split) == 2:
             self.attributes['ID'] = id_split[1]
 
-"""
-
-    def fix_phase(self):
+    def fix_phase(self, bases):
         #Changes start indices and phase values for CDSs starting at 2 or 3.
 
         #Adjusts start index for partial gene, mRNA and CDS to 1 and adds
         #appropriate phase value for the CDS; we theorize that this
         #is necessary to eliminate errors from the NCBI TSA submission.
         
-        for gene in self.genes:
-            # Verify we have a valid gene here
-            if not gene["mrna"]:
-                return
-            if not gene.get_mrna()["cds"]:
-                return
-            gene_start = gene.start
-            mrna_start = gene.get_mrna().start
-            cds_start = gene.get_mrna().get_cds().start
+        gene_start = self.start
+        mrna_start = self.get_mrna().start
+        cds_start = self.get_mrna().get_cds().start
 
-            # Adjust phase if our feature start on base 2 or 3
-            if not "start_codon" in gene.get_mrna():
-                if gene_start == 2:
-                    gene.start = 1
-                    gene.get_mrna().start = 1
-                    gene.get_mrna().get_cds().start = 1
-                    gene.get_mrna().get_cds().phase = 1
-                elif gene_start == 3:
-                    gene.start = 1
-                    gene.get_mrna().start = 1
-                    gene.get_mrna().get_cds().start = 1
-                    gene.get_mrna().get_cds().phase = 2
-                if gene.get_mrna().get_cds().start == 2:
-                    gene.get_mrna().get_cds().start = 1
-                    gene.get_mrna().get_cds().phase = 1
-                elif gene.get_mrna().get_cds().start == 3:
-                    gene.get_mrna().get_cds().start = 1
-                    gene.get_mrna().get_cds().phase = 2
-            # Adjust end if partial
-            if not "stop_codon" in gene.get_mrna():
-                gene.end = len(self.sequence.bases)
-                gene.get_mrna().end = len(self.sequence.bases)
-                gene.get_mrna().get_cds().end = len(self.sequence.bases)
+        # Adjust phase if our feature start on base 2 or 3
+        if not "start_codon" in self.get_mrna():
+            if gene_start == 2:
+                self.start = 1
+                self.get_mrna().start = 1
+                self.get_mrna().get_cds().start = 1
+                self.get_mrna().get_cds().phase = 1
+            elif gene_start == 3:
+                self.start = 1
+                self.get_mrna().start = 1
+                self.get_mrna().get_cds().start = 1
+                self.get_mrna().get_cds().phase = 2
+            if self.get_mrna().get_cds().start == 2:
+                self.get_mrna().get_cds().start = 1
+                self.get_mrna().get_cds().phase = 1
+            elif self.get_mrna().get_cds().start == 3:
+                self.get_mrna().get_cds().start = 1
+                self.get_mrna().get_cds().phase = 2
+        # Adjust end if partial
+        if not "stop_codon" in self.get_mrna():
+            self.end = len(bases)
+            self.get_mrna().end = len(bases)
+            self.get_mrna().get_cds().end = len(bases)
 
+"""
     def fix_multiple_genes(self):
         longest = None
         length = 0
