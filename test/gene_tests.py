@@ -28,8 +28,10 @@ class TestGene(unittest.TestCase):
         self.gene1 = Gene()
         self.mrna1 = Mock()
         self.cds1 = Mock()
+        self.exon1 = Mock()
         self.gene1.get_mrna = Mock(return_value=self.mrna1)
         self.mrna1.get_cds = Mock(return_value=self.cds1)
+        self.mrna1.get_exon = Mock(return_value=self.exon1)
 
         self.gene1.start = 1
         self.gene1.end = 100
@@ -42,6 +44,9 @@ class TestGene(unittest.TestCase):
         self.cds1.start = 1
         self.cds1.end = 100
         self.cds1.phase = 0
+
+        self.exon1.start = 1
+        self.exon1.end = 100
 
     def test_from_gff_feature_success(self):
         gff_gene = Mock()
@@ -215,12 +220,36 @@ class TestGene(unittest.TestCase):
         self.gene1.fix_phase("ATGC")
         self.assertEqual(self.cds1.end, 4)
 
-"""
     #### MAKE POSITIVE TESTS ####
 
     def test_make_positive(self):
-        pass
+        seq_len = 8
+        self.gene1.start = 1
+        self.gene1.end = 7
+        self.gene1.strand = '-'
+        self.gene1.get_mrna().start = 2
+        self.gene1.get_mrna().end = 6
+        self.gene1.get_mrna().get_cds().start = 2
+        self.gene1.get_mrna().get_cds().end = 6
+        self.gene1.get_mrna().get_exon().start = 2
+        self.gene1.get_mrna().get_exon().end = 6
+        
+        self.gene1.make_positive(seq_len)
 
+        self.assertEqual(self.gene1.start, 2)
+        self.assertEqual(self.gene1.end, 8)
+        self.assertEqual(self.gene1.strand, '+')
+        self.assertEqual(self.gene1.get_mrna().start, 3)
+        self.assertEqual(self.gene1.get_mrna().end, 7)
+        self.assertEqual(self.gene1.get_mrna().strand, '+')
+        self.assertEqual(self.gene1.get_mrna().get_cds().start, 3)
+        self.assertEqual(self.gene1.get_mrna().get_cds().end, 7)
+        self.assertEqual(self.gene1.get_mrna().get_cds().strand, '+')
+        self.assertEqual(self.gene1.get_mrna().get_exon().start, 3)
+        self.assertEqual(self.gene1.get_mrna().get_exon().end, 7)
+        self.assertEqual(self.gene1.get_mrna().get_exon().strand, '+')
+
+"""
     #### FIX LENGTHS TESTS ####
 
     def test_fix_feature_lengths(self):

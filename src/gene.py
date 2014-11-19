@@ -99,36 +99,22 @@ class Gene(GFFFeature):
             self.get_mrna().end = len(bases)
             self.get_mrna().get_cds().end = len(bases)
 
-"""
-    def fix_multiple_genes(self):
-        longest = None
-        length = 0
-        for gene in self.genes:
-            this_length = gene.get_cds_length()
-            if this_length > length:
-                length = this_length
-                longest = gene
-        if longest:
-            self.genes = [longest]
-
-    def make_positive(self):
-        if not self.genes or self.genes[0].strand == "+":
+    def make_positive(self, seq_len):
+        if self.strand == "+":
             return
-        seq_len = len(self.sequence.bases)
-        self.sequence.bases = reverse_complement(self.sequence.bases)
-        for gene in self.genes:
-            gene.start, gene.end = seq_len-gene.end+1, seq_len-gene.start+1
-            gene.strand = "+"
-            for mrna in gene["mrna"]:
-                mrna.start, mrna.end = seq_len-mrna.end+1, seq_len-mrna.start+1
-                mrna.strand = "+"
-                for cds in mrna["cds"]:
-                    cds.start, cds.end = seq_len-cds.end+1, seq_len-cds.start+1
-                    cds.strand = "+"
-                for exon in mrna["exon"]:
-                    exon.start, exon.end = seq_len-exon.end+1, seq_len-exon.start+1
-                    exon.strand = "+"
+        self.start, self.end = seq_len-self.end+1, seq_len-self.start+1
+        self.strand = "+"
+        mrna = self.get_mrna()
+        mrna.start, mrna.end = seq_len-mrna.end+1, seq_len-mrna.start+1
+        mrna.strand = "+"
+        cds = mrna.get_cds()
+        cds.start, cds.end = seq_len-cds.end+1, seq_len-cds.start+1
+        cds.strand = "+"
+        exon = mrna.get_exon()
+        exon.start, exon.end = seq_len-exon.end+1, seq_len-exon.start+1
+        exon.strand = "+"
 
+"""
     def fix_feature_lengths(self):
         seq_len = len(self.sequence.bases)
         for gene in self.genes:
