@@ -104,16 +104,8 @@ class Gene(GFFFeature):
             return
         self.start, self.end = seq_len-self.end+1, seq_len-self.start+1
         self.strand = "+"
-        mrna = self.get_mrna()
-        mrna.start, mrna.end = seq_len-mrna.end+1, seq_len-mrna.start+1
-        mrna.strand = "+"
-        cds = mrna.get_cds()
-        cds.start, cds.end = seq_len-cds.end+1, seq_len-cds.start+1
-        cds.strand = "+"
-        exon = mrna.get_exon()
-        exon.start, exon.end = seq_len-exon.end+1, seq_len-exon.start+1
-        exon.strand = "+"
-
+        for mrna in self["mrna"]:
+            mrna.make_positive(seq_len)
 """
     def fix_feature_lengths(self):
         seq_len = len(self.sequence.bases)

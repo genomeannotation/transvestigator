@@ -224,30 +224,20 @@ class TestGene(unittest.TestCase):
 
     def test_make_positive(self):
         seq_len = 8
-        self.gene1.start = 1
-        self.gene1.end = 7
-        self.gene1.strand = '-'
-        self.gene1.get_mrna().start = 2
-        self.gene1.get_mrna().end = 6
-        self.gene1.get_mrna().get_cds().start = 2
-        self.gene1.get_mrna().get_cds().end = 6
-        self.gene1.get_mrna().get_exon().start = 2
-        self.gene1.get_mrna().get_exon().end = 6
-        
-        self.gene1.make_positive(seq_len)
 
-        self.assertEqual(self.gene1.start, 2)
-        self.assertEqual(self.gene1.end, 8)
-        self.assertEqual(self.gene1.strand, '+')
-        self.assertEqual(self.gene1.get_mrna().start, 3)
-        self.assertEqual(self.gene1.get_mrna().end, 7)
-        self.assertEqual(self.gene1.get_mrna().strand, '+')
-        self.assertEqual(self.gene1.get_mrna().get_cds().start, 3)
-        self.assertEqual(self.gene1.get_mrna().get_cds().end, 7)
-        self.assertEqual(self.gene1.get_mrna().get_cds().strand, '+')
-        self.assertEqual(self.gene1.get_mrna().get_exon().start, 3)
-        self.assertEqual(self.gene1.get_mrna().get_exon().end, 7)
-        self.assertEqual(self.gene1.get_mrna().get_exon().strand, '+')
+        gene = Gene(start=1, end=7, strand='-')
+
+        mrna = Mock()
+        mrna.type = 'mrna'
+        mrna.make_positive = Mock()
+        gene.add_child(mrna)
+
+        gene.make_positive(seq_len)
+
+        self.assertEqual(gene.start, 2)
+        self.assertEqual(gene.end, 8)
+        self.assertEqual(gene.strand, '+')
+        mrna.make_positive.assertCalledWith(seq_len)
 
 """
     #### FIX LENGTHS TESTS ####
