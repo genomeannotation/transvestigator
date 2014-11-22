@@ -240,11 +240,6 @@ class TestGene(unittest.TestCase):
         mrna.make_positive.assertCalledWith(seq_len)
 
 """
-    #### FIX LENGTHS TESTS ####
-
-    def test_fix_feature_lengths(self):
-        pass
-
     #### MATCH CDS AND EXON END TESTS ####
 
     def test_match_cds_and_exon_end(self):

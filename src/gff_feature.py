@@ -45,6 +45,17 @@ class GFFFeature:
     def length(self):
         return self.end-self.start+1
 
+    def fix_feature_lengths(self, seq_len):
+        """Trims sequences that extend beyond the end of a sequence, ensuring to only
+        remove full codons
+        """
+        if self.end > seq_len:
+            over = self.end-seq_len
+            self.end = seq_len-((abs(3-over))%3)
+        for features in self.children.values():
+            for feature in features:
+                feature.fix_feature_lengths(seq_len)
+
     def write(self):
         out = ""
         if self.seqid != None:

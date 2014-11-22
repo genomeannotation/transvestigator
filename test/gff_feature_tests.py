@@ -41,6 +41,52 @@ class TestGFFFeature(unittest.TestCase):
         feature = GFFFeature(start=5, end=10)
         self.assertEquals(feature.length(), 6)
 
+    def test_fix_feature_lengths_length_ok(self):
+        feature = GFFFeature(start=1, end=7)
+
+        seq_len = 8
+        feature.fix_feature_lengths(seq_len)
+
+        self.assertEquals(feature.start, 1)
+        self.assertEquals(feature.end, 7)
+
+    def test_fix_feature_lengths_calls_child_features(self):
+        feature = GFFFeature(start=1, end=7)
+        child = Mock()
+        feature.children = {'child':[child]}
+
+        seq_len = 8
+        feature.fix_feature_lengths(seq_len)
+
+        child.fix_feature_lengths.assertCalledWith(seq_len)
+
+    def test_fix_feature_lengths_1(self):
+        feature = GFFFeature(start=1, end=9)
+
+        seq_len = 8
+        feature.fix_feature_lengths(seq_len)
+
+        self.assertEquals(feature.start, 1)
+        self.assertEquals(feature.end, 6)
+
+    def test_fix_feature_lengths_2(self):
+        feature = GFFFeature(start=2, end=10)
+
+        seq_len = 8
+        feature.fix_feature_lengths(seq_len)
+
+        self.assertEquals(feature.start, 2)
+        self.assertEquals(feature.end, 7)
+
+    def test_fix_feature_lengths_2(self):
+        feature = GFFFeature(start=3, end=11)
+
+        seq_len = 8
+        feature.fix_feature_lengths(seq_len)
+
+        self.assertEquals(feature.start, 3)
+        self.assertEquals(feature.end, 8)
+
     def test_write(self):
         test = GFFFeature("foo_seq", "geiblabs", "foo", 1, 42, None, '-', 1, {"ID":"1234", "dog":"bazz"})
         expected = "foo_seq\tgeiblabs\tfoo\t1\t42\t.\t-\t1\tID=1234;dog=bazz"

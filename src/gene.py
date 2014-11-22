@@ -106,26 +106,8 @@ class Gene(GFFFeature):
         self.strand = "+"
         for mrna in self["mrna"]:
             mrna.make_positive(seq_len)
-"""
-    def fix_feature_lengths(self):
-        seq_len = len(self.sequence.bases)
-        for gene in self.genes:
-            if gene.end > seq_len:
-                over = gene.end-seq_len
-                gene.end = seq_len-((abs(3-over))%3)
-            for mrna in gene["mrna"]:
-                if mrna.end > seq_len:
-                    over = mrna.end-seq_len
-                    mrna.end = seq_len-((abs(3-over))%3)
-                for cds in mrna["cds"]:
-                    if cds.end > seq_len:
-                        over = cds.end-seq_len
-                        cds.end = seq_len-((abs(3-over))%3)
-                for exon in mrna["exon"]: 
-                    if exon.end > seq_len:
-                        over = exon.end-seq_len
-                        exon.end = seq_len-((abs(3-over))%3)
 
+"""
     def match_cds_and_exon_end(self):
         #Check each mRNA's exon/CDS. If no stop codon, make their ends equal.
         #This is a blind attempt to avoid PartialProblem errors from the NCBI.
