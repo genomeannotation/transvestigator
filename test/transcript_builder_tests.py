@@ -12,18 +12,22 @@ class TestTranscriptBuilder(unittest.TestCase):
         seq1.header = "seq1"
         
         gene0 = Mock()
+        gene0.type = "gene"
         gene0.seqid = "seq0"
+        gene0.children = {'mrna':[]}
         gene1 = Mock()
+        gene1.type = "gene"
         gene1.seqid = "seq0"
+        gene1.children = {'mrna':[]}
         gene2 = Mock()
+        gene2.type = "gene"
         gene2.seqid = "seq1"
-
-        expected = {"seq0":Transcript([gene0, gene1], seq0), "seq1":Transcript([gene2], seq1)}
+        gene2.children = {'mrna':[]}
 
         transcripts = build_transcript_dictionary({"seq0":seq0, "seq1":seq1}, [gene0, gene1, gene2])
 
-        self.assertEquals(expected["seq0"].genes, transcripts["seq0"].genes)
-        self.assertEquals(expected["seq1"].sequence, transcripts["seq1"].sequence)
+        self.assertEquals(2, len(transcripts["seq0"].genes))
+        self.assertEquals(1, len(transcripts["seq1"].genes))
 
 
 ###################

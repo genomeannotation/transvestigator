@@ -1,16 +1,19 @@
 from src.gff_feature import GFFFeature
 
 class Gene(GFFFeature):
-    def __init__(self, seqid=None, source=None, start=None, end=None, score=None, strand=None, phase=0, attributes=None):
-        GFFFeature.__init__(self, seqid, source, "gene", start, end, score, strand, phase, attributes)
+    def __init__(self, seqid=None, source=None, start=None, end=None, score=None, strand=None, phase=0, attributes=None, children=None):
+        GFFFeature.__init__(self, seqid, source, "gene", start, end, score, strand, phase, attributes, children)
 
     def from_gff_feature(feature):
         if feature.type == "gene":
-            return Gene(feature.seqid, feature.source, feature.start, feature.end, feature.score, feature.strand, feature.phase, feature.attributes)
+            return Gene(feature.seqid, feature.source, feature.start, feature.end, feature.score, feature.strand, feature.phase, feature.attributes, feature.children)
         return None
 
     def get_mrna(self):
         return self["mrna"][0]
+
+    def get_cds_length(self):
+        return self.get_mrna().get_cds().length()
 
     def to_tbl(self):
         # Check for starts and stops
@@ -111,6 +114,6 @@ class Gene(GFFFeature):
         for mrna in self["mrna"]:
             mrna.match_cds_and_exon_end()
 
-    def create_starts_and_stops(self):
+    def create_starts_and_stops(self, bases):
         for mrna in self["mrna"]:
-            mrna.create_starts_and_stops()
+            mrna.create_starts_and_stops(bases)

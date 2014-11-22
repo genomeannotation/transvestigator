@@ -62,6 +62,16 @@ class TestGene(unittest.TestCase):
         tran_gene = Gene.from_gff_feature(gff_gene)
         self.assertFalse(tran_gene)
 
+    def test_get_cds_length(self):
+        gene = Gene()
+        mrna = Mock()
+        cds = Mock()
+        cds.length = Mock(return_value=42)
+        mrna.get_cds = Mock(return_value=cds)
+        gene.children = {'mrna':[mrna]}
+
+        self.assertEquals(gene.get_cds_length(), 42)
+
     def test_remove_contig_from_gene_id(self):
         expected = 'g.123'
         self.gene1.attributes['ID'] = 'contig123|g.123'
@@ -259,9 +269,9 @@ class TestGene(unittest.TestCase):
 
         gene.children = {'mrna':[mrna]}
 
-        gene.create_starts_and_stops()
+        gene.create_starts_and_stops('ATGC')
 
-        mrna.create_starts_and_stops.assertCalled()
+        mrna.create_starts_and_stops.assertCalledWith('ATGC')
 
 
 ###################

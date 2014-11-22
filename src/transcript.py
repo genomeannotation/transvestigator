@@ -24,7 +24,7 @@ class Transcript:
 
     def fix_phase(self):
         for gene in self.genes:
-            gene.fix_phase()
+            gene.fix_phase(self.sequence.bases)
 
     def fix_multiple_genes(self):
         longest = None
@@ -64,7 +64,7 @@ class Transcript:
 
     def create_starts_and_stops(self):
         for gene in self.genes:
-            gene.create_starts_and_stops()
+            gene.create_starts_and_stops(self.sequence.bases)
 
     def passes_filtering(self):
         if self.rsem and (self.rsem.tpm < 0.5 or self.rsem.isopct < 5.0):

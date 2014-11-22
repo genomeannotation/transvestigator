@@ -2,12 +2,12 @@ from src.gff_feature import GFFFeature
 from src.sequtil import get_subsequence, has_start_codon, has_stop_codon, reverse_complement
 
 class Mrna(GFFFeature):
-    def __init__(self, seqid=None, source=None, start=None, end=None, score=None, strand=None, phase=0, attributes=None):
-        GFFFeature.__init__(self, seqid, source, "mRNA", start, end, score, strand, phase, attributes)
+    def __init__(self, seqid=None, source=None, start=None, end=None, score=None, strand=None, phase=0, attributes=None, children=None):
+        GFFFeature.__init__(self, seqid, source, "mRNA", start, end, score, strand, phase, attributes, children)
 
     def from_gff_feature(feature):
         if feature.type == "mRNA":
-            return Mrna(feature.seqid, feature.source, feature.start, feature.end, feature.score, feature.strand, feature.phase, feature.attributes)
+            return Mrna(feature.seqid, feature.source, feature.start, feature.end, feature.score, feature.strand, feature.phase, feature.attributes, feature.children)
         return None
 
     def get_cds(self):
