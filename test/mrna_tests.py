@@ -26,18 +26,15 @@ class TestMrna(unittest.TestCase):
 
         mrna = Mrna(start=1, end=7, strand='-')
         cds = Mock()
-        cds.type = 'cds'
         cds.start = 1
         cds.end = 7
         cds.strand = '-'
         exon = Mock()
-        exon.type = 'exon'
         exon.start = 1
         exon.end = 7
         cds.strand = '-'
 
-        mrna.add_child(cds)
-        mrna.add_child(exon)
+        mrna.children = {'cds':[cds], 'exon':[exon]}
 
         mrna.make_positive(seq_len)
 
