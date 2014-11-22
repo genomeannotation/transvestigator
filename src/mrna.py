@@ -26,3 +26,12 @@ class Mrna(GFFFeature):
         for exon in self["exon"]:
             exon.start, exon.end = seq_len-exon.end+1, seq_len-exon.start+1
             exon.strand = "+"
+
+    def match_cds_and_exon_end(self):
+        #Check exon/CDS. If no stop codon, make their ends equal.
+        #This is a blind attempt to avoid PartialProblem errors from the NCBI.
+        if "stop_codon" in self:
+            return
+        else:
+            if self.get_cds().end != self.get_exon().end:
+                self.get_cds().end = self.get_exon().end

@@ -239,16 +239,19 @@ class TestGene(unittest.TestCase):
         self.assertEqual(gene.strand, '+')
         mrna.make_positive.assertCalledWith(seq_len)
 
-"""
     #### MATCH CDS AND EXON END TESTS ####
 
     def test_match_cds_and_exon_end(self):
-        pass
+        gene = Gene()
+        mrna = Mock()
 
-    def test_match_cds_and_exon_end_does_nothing_if_stop_codon_present(self):
-        pass
+        gene.children = {'mrna':[mrna]}
 
+        gene.match_cds_and_exon_end()
 
+        mrna.match_cds_and_exon_end.assertCalled()
+
+"""
     #### STARTS AND STOPS TESTS ####
     
     def test_create_starts_and_stops_creates_a_start(self):

@@ -107,18 +107,11 @@ class Gene(GFFFeature):
         for mrna in self["mrna"]:
             mrna.make_positive(seq_len)
 
-"""
     def match_cds_and_exon_end(self):
-        #Check each mRNA's exon/CDS. If no stop codon, make their ends equal.
-        #This is a blind attempt to avoid PartialProblem errors from the NCBI.
-        for gene in self.genes:
-            for mrna in gene["mrna"]:
-                if "stop_codon" in mrna:
-                    return
-                else:
-                    if mrna.get_cds().end != mrna["exon"][0].end:
-                        mrna.get_cds().end = mrna["exon"][0].end
+        for mrna in self["mrna"]:
+            mrna.match_cds_and_exon_end()
 
+"""
     def create_starts_and_stops(self):
         for gene in self.genes:
             cds = gene.get_mrna().get_cds()

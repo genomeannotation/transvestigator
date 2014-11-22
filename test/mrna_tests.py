@@ -48,6 +48,36 @@ class TestMrna(unittest.TestCase):
         self.assertEqual(exon.end, 8)
         self.assertEqual(exon.strand, '+')
 
+    #### MATCH CDS AND EXON END TESTS ####
+
+    def test_match_cds_and_exon_end(self):
+        mrna = Mrna()
+        cds = Mock()
+        cds.start = 1
+        cds.end = 5
+        exon = Mock()
+        exon.start = 1
+        exon.end = 6
+
+        mrna.children = {'cds':[cds], 'exon':[exon]}
+
+        mrna.match_cds_and_exon_end()
+        self.assertEquals(cds.end, 6)
+
+    def test_match_cds_and_exon_end_does_nothing_if_stop_codon_present(self):
+        mrna = Mrna()
+        cds = Mock()
+        cds.start = 1
+        cds.end = 5
+        exon = Mock()
+        exon.start = 1
+        exon.end = 6
+
+        mrna.children = {'cds':[cds], 'exon':[exon], 'stop_codon':[Mock()]}
+
+        mrna.match_cds_and_exon_end()
+        self.assertEquals(cds.end, 5)
+
 
 ###################
 def suite():
