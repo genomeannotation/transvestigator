@@ -78,6 +78,60 @@ class TestMrna(unittest.TestCase):
         mrna.match_cds_and_exon_end()
         self.assertEquals(cds.end, 5)
 
+    #### STARTS AND STOPS TESTS ####
+    
+    def test_create_starts_and_stops_creates_a_start(self):
+        mrna = Mrna()
+        cds = Mock()
+        cds.start = 1
+        cds.end = 6
+        cds.strand = '+'
+        mrna.children = {'cds':[cds]}
+        mrna.attributes = {'ID':'m.1234'}
+        
+        mrna.create_starts_and_stops('ATGNNN')
+
+        self.assertTrue('start_codon' in mrna)
+
+    def test_create_starts_and_stops_creates_a_start_reverse_complement(self):
+        mrna = Mrna()
+        cds = Mock()
+        cds.start = 1
+        cds.end = 6
+        cds.strand = '-'
+        mrna.children = {'cds':[cds]}
+        mrna.attributes = {'ID':'m.1234'}
+        
+        mrna.create_starts_and_stops('NNNCAT')
+
+        self.assertTrue('start_codon' in mrna)
+
+    def test_create_starts_and_stops_creates_a_stop(self):
+        mrna = Mrna()
+        cds = Mock()
+        cds.start = 1
+        cds.end = 6
+        cds.strand = '+'
+        mrna.children = {'cds':[cds]}
+        mrna.attributes = {'ID':'m.1234'}
+        
+        mrna.create_starts_and_stops('NNNTAG')
+
+        self.assertTrue('stop_codon' in mrna)
+
+    def test_create_starts_and_stops_creates_a_stop_reverse_complement(self):
+        mrna = Mrna()
+        cds = Mock()
+        cds.start = 1
+        cds.end = 6
+        cds.strand = '-'
+        mrna.children = {'cds':[cds]}
+        mrna.attributes = {'ID':'m.1234'}
+        
+        mrna.create_starts_and_stops('CTANNN')
+
+        self.assertTrue('stop_codon' in mrna)
+
 
 ###################
 def suite():

@@ -251,22 +251,18 @@ class TestGene(unittest.TestCase):
 
         mrna.match_cds_and_exon_end.assertCalled()
 
-"""
     #### STARTS AND STOPS TESTS ####
     
-    def test_create_starts_and_stops_creates_a_start(self):
-        pass
+    def test_create_starts_and_stops(self):
+        gene = Gene()
+        mrna = Mock()
 
-    def test_create_starts_and_stops_creates_a_start_reverse_complement(self):
-        pass
+        gene.children = {'mrna':[mrna]}
 
-    def test_create_starts_and_stops_creates_a_stop(self):
-        pass
+        gene.create_starts_and_stops()
 
-    def test_create_starts_and_stops_creates_a_stop_reverse_complement(self):
-        pass
+        mrna.create_starts_and_stops.assertCalled()
 
-"""
 
 ###################
 def suite():

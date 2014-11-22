@@ -1,4 +1,5 @@
 from src.gff_feature import GFFFeature
+from src.sequtil import get_subsequence, has_start_codon, has_stop_codon, reverse_complement
 
 class Mrna(GFFFeature):
     def __init__(self, seqid=None, source=None, start=None, end=None, score=None, strand=None, phase=0, attributes=None):
@@ -35,3 +36,37 @@ class Mrna(GFFFeature):
         else:
             if self.get_cds().end != self.get_exon().end:
                 self.get_cds().end = self.get_exon().end
+
+    def create_starts_and_stops(self, bases):
+        cds = self.get_cds()
+        subseq = get_subsequence(bases, cds.start, cds.end)
+        if cds.strand == '-':
+            subseq = reverse_complement(subseq)
+        if has_start_codon(subseq):
+            seqid = cds.seqid
+            source = cds.source
+            type = "start_codon"
+            codon_start = cds.start
+            codon_end = cds.start + 2
+            score = None
+            strand = cds.strand
+            phase = cds.phase
+            mrna_id = self.attributes["ID"]
+            attributes = {"ID": mrna_id+":start", "Parent": mrna_id}
+            start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
+                                    strand, phase, attributes)
+            self.add_child(start_codon)
+        if has_stop_codon(subseq):
+            seqid = cds.seqid
+            source = cds.source
+            type = "stop_codon"
+            codon_start = cds.end - 2
+            codon_end = cds.start
+            score = None
+            strand = cds.strand
+            phase = cds.phase
+            mrna_id = self.attributes["ID"]
+            attributes = {"ID": mrna_id+":stop", "Parent": mrna_id}
+            stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
+                                    strand, phase, attributes)
+            self.add_child(stop_codon)

@@ -111,42 +111,6 @@ class Gene(GFFFeature):
         for mrna in self["mrna"]:
             mrna.match_cds_and_exon_end()
 
-"""
     def create_starts_and_stops(self):
-        for gene in self.genes:
-            cds = gene.get_mrna().get_cds()
-            subseq = get_subsequence(self.sequence.bases, cds.start, cds.end)
-            if cds.strand == '-':
-                subseq = reverse_complement(subseq)
-            if has_start_codon(subseq):
-                seqid = cds.seqid
-                source = cds.source
-                type = "start_codon"
-                codon_start = cds.start
-                codon_end = cds.start + 2
-                score = None
-                strand = cds.strand
-                phase = cds.phase
-                mrna_id = gene.get_mrna().attributes["ID"]
-                attributes = {"ID": mrna_id+":start", "Parent": mrna_id}
-                start_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
-                                        strand, phase, attributes)
-                gene.get_mrna().add_child(start_codon)
-            if has_stop_codon(subseq):
-                seqid = cds.seqid
-                source = cds.source
-                type = "stop_codon"
-                codon_start = cds.end - 2
-                codon_end = cds.start
-                score = None
-                strand = cds.strand
-                phase = cds.phase
-                mrna_id = gene.get_mrna().attributes["ID"]
-                attributes = {"ID": mrna_id+":stop", "Parent": mrna_id}
-                stop_codon = GFFFeature(seqid, source, type, codon_start, codon_end, score,
-                                        strand, phase, attributes)
-                gene.get_mrna().add_child(stop_codon)
-
-"""
-
-###################
+        for mrna in self["mrna"]:
+            mrna.create_starts_and_stops()
