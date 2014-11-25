@@ -22,6 +22,9 @@ class Transcript:
             self.sequence = sequence
         self.rsem = None
 
+    def get_gene(self):
+        return self.genes[0]
+
     def fix_phase(self):
         for gene in self.genes:
             gene.fix_phase(self.sequence.bases)

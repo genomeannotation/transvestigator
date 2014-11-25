@@ -1,9 +1,18 @@
 #!/usr/bin/env python
 
 import unittest
-from src.sequtil import reverse_complement, has_start_codon, has_stop_codon, get_subsequence, overlap, nested
+from src.sequtil import translate, reverse_complement, has_start_codon, has_stop_codon, get_subsequence, overlap, nested
 
 class TestTranslate(unittest.TestCase):
+
+    def test_translate_one_codon(self):
+        self.assertEquals('T', translate('act', '+'))
+        self.assertEquals('S', translate('act', '-'))
+
+    def test_translate_longer_sequence(self):
+        test_seq = 'CATGACAGAAGATATTTC'
+        self.assertEquals('HDRRYF', translate(test_seq, '+',))
+        self.assertEquals('EISSVM', translate(test_seq, '-'))
 
     def test_reverse_complement(self):
         self.assertEquals('C', reverse_complement('G'))

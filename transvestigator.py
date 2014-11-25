@@ -3,7 +3,8 @@ import os
 import sys
 from src.gff import read_gff, write_gff
 from src.annotation import read_annotations, annotate_genes
-from src.sequence import read_fasta
+from src.sequence import Sequence, read_fasta
+from src.sequtil import get_subsequence, translate
 from src.transcript import Rsem
 from src.transcript_builder import build_transcript_dictionary
 from src.blast import read_blast
@@ -18,6 +19,8 @@ blacklistpath = "transcriptome.blacklist"  # Optional
 tblpath = "transcriptome.new.tbl"
 outgffpath = "transcriptome.new.gff"
 outfastapath = "transcriptome.new.fsa"
+outcdsfsapath = "transcriptome.new.cds.fsa"
+outcdspeppath = "transcriptome.new.cds.pep"
 outrsempath = "rsem.out"
 
 def verify_path(path):
@@ -167,6 +170,32 @@ def main():
                     not transcript.passes_filtering():
                 continue
             outfastafile.write(transcript.sequence.to_fasta())
+    print("done.\n\n")
+    print("Writing .cds.fsa file ... ")
+    with open(path + outcdsfsapath, "w") as outfastafile:
+        for transcript in transcript_dict.values():
+            if (transcript_blacklist and\
+                    transcript.sequence.header in transcript_blacklist) or\
+                    not transcript.passes_filtering():
+                continue
+            mrna = transcript.get_gene().get_mrna()
+            cds = mrna.get_cds()
+            header = mrna.attributes['ID']
+            bases = get_subsequence(transcript.sequence.bases, cds.start, cds.end)
+            outfastafile.write(Sequence(header, bases).to_fasta())
+    print("done.\n\n")
+    print("Writing .cds.pep file ... ")
+    with open(path + outcdspeppath, "w") as outfastafile:
+        for transcript in transcript_dict.values():
+            if (transcript_blacklist and\
+                    transcript.sequence.header in transcript_blacklist) or\
+                    not transcript.passes_filtering():
+                continue
+            mrna = transcript.get_gene().get_mrna()
+            cds = mrna.get_cds()
+            header = mrna.attributes['ID']
+            bases = translate(get_subsequence(transcript.sequence.bases, cds.start, cds.end), '-')
+            outfastafile.write(Sequence(header, bases).to_fasta())
     print("done.\n\n")
 
 

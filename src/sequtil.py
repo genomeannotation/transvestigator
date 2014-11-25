@@ -1,6 +1,40 @@
 #!/usr/bin/env python
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
+BASES = ['t', 'c', 'a', 'g']
+CODONS = [a+b+c for a in BASES for b in BASES for c in BASES]
+AMINO_ACIDS = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG'
+CODON_TABLE = dict(zip(CODONS, AMINO_ACIDS))
+
+def valid_strand(strand):
+    return strand in ['+', '-']
+
+def translate(seq, strand):
+    seq = seq.lower().replace('\n', '').replace(' ', '')
+
+    # Verify strand
+    if not valid_strand(strand):
+        return ""
+
+    # Adjust according to strand
+    if strand == '-':
+        seq = reverse_complement(seq)
+
+    # Now translate
+    peptide = ''
+    
+    for i in range(0, len(seq), 3):
+        codon = seq[i: i+3]
+        if len(codon) != 3:
+            amino_acid = ''
+        elif 'N' in codon or 'n' in codon or codon not in CODON_TABLE.keys():
+            amino_acid = 'X'
+        else:
+            amino_acid = CODON_TABLE.get(codon, '')
+        peptide += amino_acid
+
+    return peptide
+
 def reverse_complement(seq):
     bases = ['a', 'c', 'g', 't', 'n', 'A', 'C', 'G', 'T', 'N']
     complements = ['t', 'g', 'c', 'a', 'n', 'T', 'G', 'C', 'A', 'N']
