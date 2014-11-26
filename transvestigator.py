@@ -194,7 +194,7 @@ def main():
             mrna = transcript.get_gene().get_mrna()
             cds = mrna.get_cds()
             header = mrna.attributes['ID']
-            bases = translate(get_subsequence(transcript.sequence.bases, cds.start, cds.end), '-')
+            bases = translate(get_subsequence(transcript.sequence.bases, cds.start, cds.end), cds.strand)
             outfastafile.write(Sequence(header, bases).to_fasta())
     print("done.\n\n")
 
