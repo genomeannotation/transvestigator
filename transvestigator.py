@@ -19,7 +19,7 @@ blacklistpath = "transcriptome.blacklist"  # Optional
 tblpath = "transcriptome.new.tbl"
 outgffpath = "transcriptome.new.gff"
 outfastapath = "transcriptome.new.fsa"
-outcdsfsapath = "transcriptome.new.cds.fsa"
+outcdsfastapath = "transcriptome.new.cds.fasta"
 outcdspeppath = "transcriptome.new.cds.pep"
 outrsempath = "rsem.out"
 
@@ -171,8 +171,8 @@ def main():
                 continue
             outfastafile.write(transcript.sequence.to_fasta())
     print("done.\n\n")
-    print("Writing .cds.fsa file ... ")
-    with open(path + outcdsfsapath, "w") as outfastafile:
+    print("Writing .cds.fasta file ... ")
+    with open(path + outcdsfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
             if (transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist) or\
@@ -194,7 +194,7 @@ def main():
             mrna = transcript.get_gene().get_mrna()
             cds = mrna.get_cds()
             header = mrna.attributes['ID']
-            bases = translate(get_subsequence(transcript.sequence.bases, cds.start, cds.end), cds.strand)
+            bases = translate(get_subsequence(transcript.sequence.bases, cds.start + cds.phase, cds.end), cds.strand)
             outfastafile.write(Sequence(header, bases).to_fasta())
     print("done.\n\n")
 
