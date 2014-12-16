@@ -42,7 +42,7 @@ def annotate_genes(genes, annotations):
                 gene_anno = annotations[gene_id]
                 gene_name = gene_anno[0][1]
                 gene.attributes["Name"] = gene_name
-        for mrna in gene.mrna:
+        for mrna in gene["mrna"]:
             if "ID" in mrna.attributes:
                 mrna_id = mrna.attributes["ID"]
                 if mrna_id in annotations:
