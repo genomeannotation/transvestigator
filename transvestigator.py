@@ -89,7 +89,7 @@ def main():
     # Perform transcript annotation if annotations were provided
     if annos:
         print("Annotating genes ... ")
-        annotate_genes(gff.gene, annos)
+        annotate_genes(gff["gene"], annos)
         print("done.\n\n")
 
     # Convert all that data into Transcript objects
