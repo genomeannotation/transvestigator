@@ -35,7 +35,14 @@ class Gene(GFFFeature):
         if "Name" in self.attributes:
             tbl += "\t\t\tgene\t"+self.attributes["Name"]+"\n"
         # Locus tag
-        tbl += "\t\t\tlocus_tag\t"+self.attributes["ID"]+"\n"
+        locus_tag = self.attributes["ID"]
+        if "|" in locus_tag:
+            # Get rid of ugly locus tags that look like c14595_g1_i1|g.5835;
+            # the NCBI *hates* them
+            fields = locus_tag.split("|")
+            if len(fields) > 1:
+                locus_tag = fields[1]
+        tbl += "\t\t\tlocus_tag\t"+locus_tag+"\n"
         if not has_start:
             tbl += "<"
         tbl += str(self.get_mrna().get_cds().start)+"\t"

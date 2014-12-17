@@ -101,7 +101,7 @@ def main():
     # Do magical fixes on transcripts
     print("Cleaning up transcripts ... ")
     for transcript in transcript_dict.values():
-        transcript.remove_contig_from_gene_id()
+        #transcript.remove_contig_from_gene_id()
         transcript.fix_feature_lengths()
         transcript.create_starts_and_stops()
         transcript.fix_multiple_genes() 
