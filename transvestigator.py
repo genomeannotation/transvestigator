@@ -17,6 +17,7 @@ rsempath = "transcriptome.rsem" # Optional
 annopath = "transcriptome.anno"  # Optional
 blacklistpath = "transcriptome.blacklist"  # Optional
 tblpath = "transcriptome.new.tbl"
+statspath = "transcriptome.stats"
 outgffpath = "transcriptome.new.gff"
 outfastapath = "transcriptome.new.fsa"
 outcdsfastapath = "transcriptome.new.cds.fasta"
@@ -148,6 +149,17 @@ def main():
                     not transcript.passes_filtering():
                 continue
             tblfile.write(transcript.to_tbl())
+    print("done.\n\n")
+
+    # Write .stats file
+    print("Writing .stats file ...")
+    with open(path + statspath, "w") as statsfile:
+        for transcript in transcript_dict.values():
+            if (transcript_blacklist and\
+                    transcript.sequence.header in transcript_blacklist) or\
+                    not transcript.passes_filtering():
+                continue
+            statsfile.write(transcript.stats())
     print("done.\n\n")
 
     # Write .gff file

@@ -74,6 +74,9 @@ class Transcript:
             return False
         return True
 
+    def stats(self):
+        return "TODO"
+
     def to_tbl(self):
         tbl = ""
         tbl += ">Feature "+self.sequence.header+"\n"
