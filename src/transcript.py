@@ -75,7 +75,34 @@ class Transcript:
         return True
 
     def stats(self):
-        return "TODO"
+        """Returns a string of tab-separated boolean values:
+        transcript_id\tcomplete\tpfam_domain\tgo_annotation\tgene_name
+        """
+        # add transcript id
+        result = self.sequence.header + "\t"
+        # find other values
+        complete = True
+        pfam = False
+        go = False
+        gene_name = False
+        for gene in self.genes:
+            if not gene.is_complete():
+                complete = False
+            if "Name" in gene.attributes:
+                gene_name = True
+            if "Dbxref" in gene.get_mrna().attributes:
+                for dbxref in gene.get_mrna().attributes["Dbxref"].split(","):
+                    if "PFAM" in dbxref:
+                        pfam = True
+                    if "GO" in dbxref:
+                        go = True
+        # append other values to result string
+        result += str(complete) + "\t"
+        result += str(pfam) + "\t"
+        result += str(go) + "\t"
+        result += str(gene_name)
+        result += "\n"
+        return result
 
     def to_tbl(self):
         tbl = ""

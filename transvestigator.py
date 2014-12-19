@@ -17,7 +17,7 @@ rsempath = "transcriptome.rsem" # Optional
 annopath = "transcriptome.anno"  # Optional
 blacklistpath = "transcriptome.blacklist"  # Optional
 tblpath = "transcriptome.new.tbl"
-statspath = "transcriptome.stats"
+statspath = "transcriptome.new.stats"
 outgffpath = "transcriptome.new.gff"
 outfastapath = "transcriptome.new.fsa"
 outcdsfastapath = "transcriptome.new.cds.fasta"
@@ -154,6 +154,8 @@ def main():
     # Write .stats file
     print("Writing .stats file ...")
     with open(path + statspath, "w") as statsfile:
+        statsfile.write("transcript_id\tcomplete\tpfam_domain\tgo_annotation"
+                "\tgene_name\n")
         for transcript in transcript_dict.values():
             if (transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist) or\

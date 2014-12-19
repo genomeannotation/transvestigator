@@ -15,6 +15,17 @@ class Gene(GFFFeature):
     def get_cds_length(self):
         return self.get_mrna().get_cds().length()
 
+    def is_complete(self):
+        has_start, has_stop = False, False
+        if "start_codon" in self.get_mrna():
+            has_start = True
+        if "stop_codon" in self.get_mrna():
+            has_stop = True
+        if has_start and has_stop:
+            return True
+        else:
+            return False
+
     def to_tbl(self):
         # Check for starts and stops
         has_start = False
