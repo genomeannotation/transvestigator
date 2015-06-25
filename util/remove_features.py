@@ -66,6 +66,7 @@ def main():
                     if header in to_remove:
                         current_header = ""
                     else:
+                        current_header = header
                         fasta_out.write(line)
                 else:
                     # Sequence line
