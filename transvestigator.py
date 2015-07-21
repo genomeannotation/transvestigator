@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
 import sys
+import argparse
 from src.gff import read_gff, write_gff
 from src.annotation import read_annotations, annotate_genes
 from src.sequence import Sequence, read_fasta
@@ -9,20 +10,6 @@ from src.transcript import Rsem
 from src.transcript_builder import build_transcript_dictionary
 from src.blast import read_blast
 from src.rsem import read_rsem
-
-fastapath = "transcriptome.fasta"  # Required
-gffpath = "transcriptome.gff"  # Required
-blastpath = "transcriptome.blastout" #Optional
-rsempath = "transcriptome.rsem" # Optional
-annopath = "transcriptome.anno"  # Optional
-blacklistpath = "transcriptome.blacklist"  # Optional
-tblpath = "transcriptome.new.tbl"
-statspath = "transcriptome.new.stats"
-outgffpath = "transcriptome.new.gff"
-outfastapath = "transcriptome.new.fsa"
-outcdsfastapath = "transcriptome.new.cds.fasta"
-outcdspeppath = "transcriptome.new.cds.pep"
-outrsempath = "rsem.out"
 
 def verify_path(path):
     if not os.path.isfile(path):
@@ -38,49 +25,76 @@ def read_transcript_blacklist(io_buffer):
     return blacklist
 
 def main():
-    path = ""
+    # Handle command line args
+    parser = argparse.ArgumentParser(
+    epilog="""
+    Docs at http://genomeannotation.github.io/transvestigator
+    Bugs and feature requests at https://github.com/genomeannotation/transvestigator/issues
+    """,
+    formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument('-f', '--fasta', required=True)
+    parser.add_argument('-g', '--gff', required=True)
+    parser.add_argument('-a', '--anno')
+    parser.add_argument('-r', '--rsem')
+    parser.add_argument('-bl', '--blacklist')
+    parser.add_argument('-o', '--out')
+    parser.add_argument('--blast')
+    args = parser.parse_args()
+
+    # Make output directory
+    out = "transvestigator_out"
+    if args.out:
+        out = args.out
+    os.system('mkdir ' + out)
+
+
+    tblpath = out + "/transcriptome.new.tbl"
+    statspath = out + "/transcriptome.new.stats"
+    outgffpath = out + "/transcriptome.new.gff"
+    outfastapath = out + "/transcriptome.new.fsa"
+    outcdsfastapath = out + "/transcriptome.new.cds.fasta"
+    outcdspeppath = out + "/transcriptome.new.cds.pep"
+    outrsempath = out + "/rsem.out"
+
     rsems = None
     annos = None
     transcript_blacklist = None
 
-    # Check for optional user-provided path (default is '.')
-    if len(sys.argv) > 1:
-        path = sys.argv[1] + "/"
-
     # Read required inputs; exit on failure
     print("Reading files ... ")
-    with open(path + fastapath, "r") as fastafile:
+    with open(args.fasta, "r") as fastafile:
         seqs = read_fasta(fastafile)
     if not seqs:
         sys.stderr.write("Error reading fasta; exiting now\n")
         exit()
-    with open(path + gffpath, "r") as gfffile:
+    with open(args.gff, "r") as gfffile:
         gff = read_gff(gfffile)
     if not gff:
         sys.stderr.write("Error reading gff; exiting now\n")
         exit()
 
     # Read optional inputs; exit on failure
-    if verify_path(path + blastpath):
-        with open(path + blastpath) as blastfile:
+    if args.blast and verify_path(args.blast):
+        with open(args.blast, 'r') as blastfile:
             blast_hits = read_blast(blastfile)
         if not blast_hits:
             sys.stderr.write("Error reading blast output file; exiting now\n")
             exit()
-    if verify_path(path + rsempath):
-        with open(path + rsempath) as rsemfile:
+    if args.rsem and verify_path(args.rsem):
+        with open(args.rsem, 'r') as rsemfile:
             rsems = read_rsem(rsemfile)
         if not rsems:
             sys.stderr.write("Error reading rsem; exiting now\n")
             exit()
-    if verify_path(path + annopath):
-        with open(path + annopath, "r") as annofile:
+    if args.anno and verify_path(args.anno):
+        with open(args.anno, "r") as annofile:
             annos = read_annotations(annofile)
         if not annos:
             sys.stderr.write("Error reading annotations; exiting now\n")
             exit() 
-    if verify_path(blacklistpath):
-        with open(path + blacklistpath, "r") as transcript_blacklist_file:
+    if args.blacklist and verify_path(args.blacklist):
+        with open(args.blacklist, "r") as transcript_blacklist_file:
             transcript_blacklist = read_transcript_blacklist(transcript_blacklist_file)
         if not transcript_blacklist:
             sys.stderr.write("Error reading blacklist; exiting now\n")
@@ -123,7 +137,7 @@ def main():
         print("done.\n\n")
 
         print("Writing RSEM info...")
-        with open(path + outrsempath, "w") as outrsemfile:
+        with open(outrsempath, "w") as outrsemfile:
             outrsemfile.write("transcript_id\tnumber_of_CDSs\tcontains_complete_CDS\tTPM\tFPKM\tIsoPct\n")
             for transcript_id, transcript in transcript_dict.items():
                 if (transcript_blacklist and\
@@ -142,7 +156,7 @@ def main():
 
     # Write .tbl file
     print("Writing .tbl file ... ")
-    with open(path + tblpath, "w") as tblfile:
+    with open(tblpath, "w") as tblfile:
         for transcript in transcript_dict.values():
             if (transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist) or\
@@ -153,7 +167,7 @@ def main():
 
     # Write .stats file
     print("Writing .stats file ...")
-    with open(path + statspath, "w") as statsfile:
+    with open(statspath, "w") as statsfile:
         statsfile.write("transcript_id\tcomplete\tpfam_domain\tgo_annotation"
                 "\tgene_name\n")
         for transcript in transcript_dict.values():
@@ -166,7 +180,7 @@ def main():
 
     # Write .gff file
     print("Writing new .gff file...")
-    with open(path + outgffpath, "w") as outgfffile:
+    with open(outgffpath, "w") as outgfffile:
         for transcript in transcript_dict.values():
             if (transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist) or\
@@ -177,7 +191,7 @@ def main():
 
     # Write .fsa file
     print("Writing .fsa file ... ")
-    with open(path + outfastapath, "w") as outfastafile:
+    with open(outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
             if (transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist) or\
@@ -186,7 +200,7 @@ def main():
             outfastafile.write(transcript.sequence.to_fasta())
     print("done.\n\n")
     print("Writing .cds.fasta file ... ")
-    with open(path + outcdsfastapath, "w") as outfastafile:
+    with open(outcdsfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
             if (transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist) or\
@@ -199,7 +213,7 @@ def main():
             outfastafile.write(Sequence(header, bases).to_fasta())
     print("done.\n\n")
     print("Writing .cds.pep file ... ")
-    with open(path + outcdspeppath, "w") as outfastafile:
+    with open(outcdspeppath, "w") as outfastafile:
         for transcript in transcript_dict.values():
             if (transcript_blacklist and\
                     transcript.sequence.header in transcript_blacklist) or\
