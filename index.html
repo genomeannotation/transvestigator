@@ -36,23 +36,21 @@
 <h2>
 <a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic Usage</h2>
 
-<p>Type</p>
+<p>Assuming you have a transcriptome assembly consisting of a fasta and GFF3 file (creatively titled "transcriptome.fasta" and "transcriptome.gff"), type:</p>
 
-<pre><code>python3 transvestigator.py
+<pre><code>python3 transvestigator.py -f transcriptome.fasta -g transcriptome.gff
 </code></pre>
 
-<p>in a directory containing files called "transcriptome.fasta" and "transcriptome.gff".</p>
+<p>Optionally, you may use the <code>-a</code> flag to include an annotation file -- this is a tab-separated file of annotations in the format specified <a href="http://genomeannotation.github.io/GAG/#functional-annotations">here</a>.</p>
 
-<p>Optionally, you may include a file called "transcriptome.anno" -- this is a tab-separated file of annotations in the format specified <a href="http://genomeannotation.github.io/GAG/#functional-annotations">here</a>.</p>
+<p>Transcripts can be filtered according to a blacklist (using the <code>-bl</code> flag) and/or RSEM statistics (using the <code>-r</code> flag).
 
-<p>If you include a file named "transcriptome.blacklist", the transcripts listed in that file will be excluded from your output.</p>
-
-<p>After the program runs, you will find files called "transcriptome.new.gff", "transcriptome.new.fsa" and "transcriptome.new.tbl". The latter two are your input files for <a href="https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2">tbl2asn</a>.</p>
+<p>After the program runs, you will find a folder called "transvestigator_out", containing files called "transcriptome.new.gff", "transcriptome.new.fsa" and "transcriptome.new.tbl". The latter two are your input files for <a href="https://www.ncbi.nlm.nih.gov/genbank/tbl2asn2">tbl2asn</a>.</p>
 
 <h2>
 <a name="what-it-does" class="anchor" href="#what-it-does"><span class="octicon octicon-link"></span></a>What It Does:</h2>
 
-<p>When you run transvestigator, it reads the transcriptome into memory. It then fixes feature lengths, creates starts and stops, removes multiple CDS features, adjusts CDS phase, places transcript on the positive strand (if not already),  and writes a .fasta and .tbl file. If the directory contained a "transcriptome.anno" file, the .tbl file will contain functional annotations. If the directory contained a "transcriptome.blacklist" file, those transcripts will be excluded.</p>
+<p>When you run transvestigator, it reads the transcriptome into memory. It then fixes feature lengths, creates starts and stops, removes multiple CDS features, adjusts CDS phase, places transcript on the positive strand (if not already),  and writes a .fasta and .tbl file. If you included an annotation file, the .tbl file will contain functional annotations. If you provided a blacklist file, those transcripts will be excluded.</p>
 
 <h4>
 <a name="fix-feature-lengths" class="anchor" href="#fix-feature-lengths"><span class="octicon octicon-link"></span></a>Fix Feature Lengths</h4>
@@ -99,9 +97,11 @@ comp10026_c0_seq1	.	CDS	1568	1969	.	+	.	ID=cds.m.4873;Parent=m.4873
 </code></pre>
 <p>Note that the contig 'comp100026_c0_seq1' contains two gene/mRNA/exon/CDS features. We can only have one in our final submission. Take care of this by running transvestigator.</p>
 <p>If you're in the root folder of the repository, you can run it by typing</p>
-<pre><code>python3 transvestigator.py walkthrough/multi_cds/
+<pre><code>python3 transvestigator.py\
+        -f walkthrough/multi_cds/transcriptome.fasta\
+        -g walkthrough/multi_cds/transcriptome.gff
 </code></pre>
-<p>After the program runs, take a look at the file 'walkthrough/multi_cds/transcriptome.new.gff':</p>
+<p>After the program runs, take a look at the file 'transvestigator_out/transcriptome.new.gff':</p>
 <pre><code>
 comp10026_c0_seq1	.	gene	1	1674	.	+	0	ID=g.4872
 comp10026_c0_seq1	.	mRNA	1	1674	.	+	0	ID=m.4872;Parent=g.4872
