@@ -56,6 +56,7 @@ def main():
     outcdsfastapath = out + "/transcriptome.new.cds.fasta"
     outcdspeppath = out + "/transcriptome.new.cds.pep"
     outrsempath = out + "/rsem.out"
+    rsemerrpath = out + "/rsem.err"
 
     rsems = None
     annos = None
@@ -129,12 +130,13 @@ def main():
     # Write RSEM info if provided
     if rsems:
         print("Adding RSEM info to transcripts...")
-        for rsem in rsems:
-            if rsem.transcript_id not in transcript_dict:
-                sys.stderr.write("RSEM transcript "+rsem.transcript_id+" does not exist. Skipping...\n")
-                continue
-            transcript = transcript_dict[rsem.transcript_id]
-            transcript.rsem = Rsem(rsem.tpm, rsem.fpkm, rsem.isopct)
+        with open(rsemerrpath, 'w') as rsem_err:
+            for rsem in rsems:
+                if rsem.transcript_id not in transcript_dict:
+                    rsem_err.write("RSEM transcript "+rsem.transcript_id+" does not exist. Skipping...\n")
+                    continue
+                transcript = transcript_dict[rsem.transcript_id]
+                transcript.rsem = Rsem(rsem.tpm, rsem.fpkm, rsem.isopct)
         print("done.\n\n")
 
         print("Writing RSEM info...")
