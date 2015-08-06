@@ -123,6 +123,7 @@ def main():
         transcript.make_positive()
         transcript.match_cds_and_exon_end()
         transcript.fix_phase()
+        transcript.fix_long_gene_names()
     print("done.\n\n")
 
     # Write RSEM info if provided

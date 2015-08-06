@@ -21,6 +21,7 @@ class Transcript:
         else:
             self.sequence = sequence
         self.rsem = None
+        self.MAXIMUM_GENE_LENGTH = 50  # I made this up :/
 
     def get_gene(self):
         return self.genes[0]
@@ -39,6 +40,16 @@ class Transcript:
                 longest = gene
         if longest:
             self.genes = [longest]
+
+    def name_too_long(self, gene_name):
+        return len(gene_name) >= self.MAXIMUM_GENE_LENGTH
+
+    def fix_long_gene_names(self):
+        for gene in self.genes:
+            if "Name" in gene.attributes:
+                gene_name = gene.attributes["Name"]
+                if self.name_too_long(gene_name):
+                    del gene.attributes["Name"]
 
     def remove_contig_from_gene_id(self):
         for gene in self.genes:
