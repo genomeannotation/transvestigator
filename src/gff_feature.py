@@ -3,7 +3,7 @@
 
 class GFFFeature:
 
-    def __init__(self, seqid=None, source=None, feature_type=None, start=None,end=None,
+    def __init__(self, seqid=None, source=None, feature_type=None, start=None, end=None,
                  score=None, strand=None, phase=0, attributes=None, children=None):
         self.seqid = seqid
         self.source = source
@@ -14,10 +14,10 @@ class GFFFeature:
         self.strand = strand
         self.phase = phase
         if not attributes:
-            self.attributes = {} # Empty dictionary
+            self.attributes = {}  # Empty dictionary
         else:
             self.attributes = attributes
-        if children == None:
+        if children is None:
             self.children = {}
         else:
             self.children = children
@@ -63,35 +63,35 @@ class GFFFeature:
 
     def write(self):
         out = ""
-        if self.seqid != None:
+        if self.seqid is not None:
             out += self.seqid+"\t"
         else:
             out += ".\t"
-        if self.source != None:
+        if self.source is not None:
             out += self.source+"\t"
         else:
             out += ".\t"
-        if self.feature_type != None:
+        if self.feature_type is not None:
             out += self.feature_type + "\t"
         else:
             out += ".\t"
-        if self.start != None:
+        if self.start is not None:
             out += str(self.start)+"\t"
         else:
             out += ".\t"
-        if self.end != None:
+        if self.end is not None:
             out += str(self.end)+"\t"
         else:
             out += ".\t"
-        if self.score != None:
+        if self.score is not None:
             out += str(self.score)+"\t"
         else:
             out += ".\t"
-        if self.strand != None:
+        if self.strand is not None:
             out += self.strand+"\t"
         else:
             out += ".\t"
-        if self.phase != None:
+        if self.phase is not None:
             out += str(self.phase)+"\t"
         else:
             out += ".\t"

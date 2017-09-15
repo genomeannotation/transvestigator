@@ -10,14 +10,14 @@ def build_transcript_dictionary(seqs, genes):
 
     for gene in genes:
         gene = Gene.from_gff_feature(gene)
-        if gene == None:
+        if gene is None:
             print("Could not convert GFFFeature to Gene, skipping")
             continue
 
         new_mrnas = []
         for mrna in gene['mrna']:
             mrna = Mrna.from_gff_feature(mrna)
-            if mrna == None:
+            if mrna is None:
                 print("Could not convert GFFFeature to Mrna, skipping")
                 continue
             new_mrnas.append(mrna)
