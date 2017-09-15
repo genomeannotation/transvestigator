@@ -7,7 +7,7 @@ def read_annotations(io_buffer):
 
     Input file should be in the format 'id\tkey\tvalue'.
     """
-    error_message = ("Error on read_annotations -- skipping invalid line:\n")
+    error_message = "Error on read_annotations -- skipping invalid line:\n"
     annotations = {}
     for line in io_buffer:
         splitline = line.strip().split("\t")

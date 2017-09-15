@@ -5,7 +5,7 @@ class Gene(GFFFeature):
         GFFFeature.__init__(self, seqid, source, "gene", start, end, score, strand, phase, attributes, children)
 
     def from_gff_feature(feature):
-        if feature.type == "gene":
+        if feature.feature_type == "gene":
             return Gene(feature.seqid, feature.source, feature.start, feature.end, feature.score, feature.strand, feature.phase, feature.attributes, feature.children)
         return None
 

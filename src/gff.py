@@ -65,7 +65,7 @@ def read_gff(io_buffer):
         if columns[1] != '.':
             feature.source = columns[1]
         if columns[2] != '.':
-            feature.type = columns[2]
+            feature.feature_type = columns[2]
         if columns[3] != '.':
             feature.start = int(columns[3])
         if columns[4] != '.':

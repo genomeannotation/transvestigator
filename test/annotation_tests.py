@@ -48,6 +48,7 @@ class TestAnnotation(unittest.TestCase):
 
 ##########################
 
+# noinspection PyShadowingNames
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAnnotation))

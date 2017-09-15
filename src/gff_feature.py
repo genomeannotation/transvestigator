@@ -2,10 +2,11 @@
 
 class GFFFeature:
 
-    def __init__(self, seqid=None, source=None, type=None, start=None, end=None, score=None, strand=None, phase=0, attributes=None, children=None):
+    def __init__(self, seqid=None, source=None, feature_type=None, start=None,end=None,
+                 score=None, strand=None, phase=0, attributes=None, children=None):
         self.seqid = seqid
         self.source = source
-        self.type = type
+        self.feature_type = feature_type
         self.start = start
         self.end = end
         self.score = score
@@ -69,8 +70,8 @@ class GFFFeature:
             out += self.source+"\t"
         else:
             out += ".\t"
-        if self.type != None:
-            out += self.type+"\t"
+        if self.feature_type != None:
+            out += self.feature_type + "\t"
         else:
             out += ".\t"
         if self.start != None:

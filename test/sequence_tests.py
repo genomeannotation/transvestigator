@@ -31,6 +31,7 @@ class TestSequence(unittest.TestCase):
         self.assertEquals('NNNNNNNNGATTACAGATTACAGATTACANNNNNNNNNNN', seqs["seq_2"].bases)
         
 ##########################
+# noinspection PyShadowingNames
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestSequence))

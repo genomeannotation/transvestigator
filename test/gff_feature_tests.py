@@ -9,11 +9,11 @@ class TestGFFFeature(unittest.TestCase):
     def test_add_child(self):
         root = GFFFeature()
         gene0 = GFFFeature()
-        gene0.type = "gene"
+        gene0.feature_type = "gene"
         gene1 = GFFFeature()
-        gene1.type = "gene"
+        gene1.feature_type = "gene"
         mrna = GFFFeature()
-        mrna.type = "mRNA"
+        mrna.feature_type = "mRNA"
 
         root.add_child(gene0)
         root.add_child(gene1)
@@ -94,6 +94,7 @@ class TestGFFFeature(unittest.TestCase):
 
 
 ###################
+# noinspection PyShadowingNames
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGFFFeature))
