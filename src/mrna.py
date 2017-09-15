@@ -1,3 +1,4 @@
+# coding=utf-8
 from src.gff_feature import GFFFeature
 from src.sequtil import get_subsequence, has_start_codon, has_stop_codon, reverse_complement
 

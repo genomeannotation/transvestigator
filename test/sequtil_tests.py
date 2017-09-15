@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 import unittest
 from src.sequtil import translate, reverse_complement, has_start_codon, has_stop_codon, get_subsequence, overlap, nested

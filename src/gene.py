@@ -1,3 +1,4 @@
+# coding=utf-8
 from src.gff_feature import GFFFeature
 
 class Gene(GFFFeature):

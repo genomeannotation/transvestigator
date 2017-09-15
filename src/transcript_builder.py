@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 from src.transcript import Transcript 
 from src.gene import Gene

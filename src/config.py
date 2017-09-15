@@ -1,3 +1,4 @@
+# coding=utf-8
 import ast
 
 def read_config(io_buffer):

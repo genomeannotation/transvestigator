@@ -1,3 +1,4 @@
+# coding=utf-8
 from collections import namedtuple
 
 Rsem = namedtuple('Rsem', ['transcript_id', 'gene_id', 'length', 'effective_length', 'expected_count', 'tpm', 'fpkm', 'isopct'])
