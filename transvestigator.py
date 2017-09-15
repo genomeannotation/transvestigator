@@ -93,7 +93,7 @@ def main():
             annos = read_annotations(annofile)
         if not annos:
             sys.stderr.write("Error reading annotations; exiting now\n")
-            exit() 
+            exit()
     if args.blacklist and verify_path(args.blacklist):
         with open(args.blacklist, "r") as transcript_blacklist_file:
             transcript_blacklist = read_transcript_blacklist(transcript_blacklist_file)
@@ -120,7 +120,7 @@ def main():
         #transcript.remove_contig_from_gene_id()
         transcript.fix_feature_lengths()
         transcript.create_starts_and_stops()
-        transcript.fix_multiple_genes() 
+        transcript.fix_multiple_genes()
         transcript.make_positive()
         transcript.match_cds_and_exon_end()
         transcript.fix_phase()
@@ -143,9 +143,10 @@ def main():
         with open(outrsempath, "w") as outrsemfile:
             outrsemfile.write("transcript_id\tnumber_of_CDSs\tcontains_complete_CDS\tTPM\tFPKM\tIsoPct\n")
             for transcript_id, transcript in transcript_dict.items():
-                if (transcript_blacklist and\
-                        transcript.sequence.header in transcript_blacklist) or\
-                        not transcript.passes_filtering():
+                if (
+                        (transcript_blacklist and transcript.sequence.header in transcript_blacklist)
+                        or not transcript.passes_filtering()
+                ):
                     continue
                 cds_count = 0
                 contains_complete_cds = False
@@ -161,9 +162,10 @@ def main():
     print("Writing .tbl file ... ")
     with open(tblpath, "w") as tblfile:
         for transcript in transcript_dict.values():
-            if (transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist) or\
-                    not transcript.passes_filtering():
+            if (
+                    (transcript_blacklist and transcript.sequence.header in transcript_blacklist)
+                    or not transcript.passes_filtering()
+            ):
                 continue
             tblfile.write(transcript.to_tbl())
     print("done.\n\n")
@@ -174,9 +176,10 @@ def main():
         statsfile.write("transcript_id\tcomplete\tpfam_domain\tgo_annotation"
                 "\tgene_name\n")
         for transcript in transcript_dict.values():
-            if (transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist) or\
-                    not transcript.passes_filtering():
+            if (
+                    (transcript_blacklist and transcript.sequence.header in transcript_blacklist)
+                    or not transcript.passes_filtering()
+            ):
                 continue
             statsfile.write(transcript.stats())
     print("done.\n\n")
@@ -185,9 +188,10 @@ def main():
     print("Writing new .gff file...")
     with open(outgffpath, "w") as outgfffile:
         for transcript in transcript_dict.values():
-            if (transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist) or\
-                    not transcript.passes_filtering():
+            if (
+                    (transcript_blacklist and transcript.sequence.header in transcript_blacklist)
+                    or not transcript.passes_filtering()
+            ):
                 continue
             write_gff(outgfffile, transcript.genes[0])
     print("done.\n\n")
@@ -196,18 +200,20 @@ def main():
     print("Writing .fsa file ... ")
     with open(outfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
-            if (transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist) or\
-                    not transcript.passes_filtering():
+            if (
+                    (transcript_blacklist and transcript.sequence.header in transcript_blacklist)
+                    or not transcript.passes_filtering()
+            ):
                 continue
             outfastafile.write(transcript.sequence.to_fasta())
     print("done.\n\n")
     print("Writing .cds.fasta file ... ")
     with open(outcdsfastapath, "w") as outfastafile:
         for transcript in transcript_dict.values():
-            if (transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist) or\
-                    not transcript.passes_filtering():
+            if (
+                    (transcript_blacklist and transcript.sequence.header in transcript_blacklist)
+                    or not transcript.passes_filtering()
+            ):
                 continue
             mrna = transcript.get_gene().get_mrna()
             cds = mrna.get_cds()
@@ -218,9 +224,10 @@ def main():
     print("Writing .cds.pep file ... ")
     with open(outcdspeppath, "w") as outfastafile:
         for transcript in transcript_dict.values():
-            if (transcript_blacklist and\
-                    transcript.sequence.header in transcript_blacklist) or\
-                    not transcript.passes_filtering():
+            if (
+                    (transcript_blacklist and transcript.sequence.header in transcript_blacklist)
+                    or not transcript.passes_filtering()
+            ):
                 continue
             mrna = transcript.get_gene().get_mrna()
             cds = mrna.get_cds()

@@ -17,18 +17,18 @@ import test.mrna_tests
 
 # get suites from test modules
 suites = [
-test.sequtil_tests.suite(),\
-test.sequence_tests.suite(),\
-test.gff_tests.suite(),\
-test.gff_feature_tests.suite(),\
-test.transcript_tests.suite(),\
-test.transcript_builder_tests.suite(),\
-test.annotation_tests.suite(),\
-test.rsem_tests.suite(),\
-test.blast_tests.suite(),\
-test.config_tests.suite(),\
-test.gene_tests.suite(),\
-test.mrna_tests.suite(),\
+    test.sequtil_tests.suite(),
+    test.sequence_tests.suite(),
+    test.gff_tests.suite(),
+    test.gff_feature_tests.suite(),
+    test.transcript_tests.suite(),
+    test.transcript_builder_tests.suite(),
+    test.annotation_tests.suite(),
+    test.rsem_tests.suite(),
+    test.blast_tests.suite(),
+    test.config_tests.suite(),
+    test.gene_tests.suite(),
+    test.mrna_tests.suite(),
 ]
 
 # collect suites in a TestSuite object

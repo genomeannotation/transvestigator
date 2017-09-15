@@ -18,14 +18,13 @@ class TestGFF(unittest.TestCase):
         self.assertEquals(parse_gff_attributes(attr), {"ID":"foo_feature", "foo":"dog,baz,buzz"})
 
     def test_read_gff(self):
-        test_gff = io.StringIO(\
-        "seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\tID=foo_feat;Parent=foo_cds\n"+\
-        "seq0\tGeibLabs\tgene\t1\t42\t.\t+\t.\tID=foo_gene\n"+\
-        "seq0\tGeibLabs\tmRNA\t1\t42\t.\t+\t.\tID=foo_mrna;Parent=foo_gene\n"+\
-        "seq0\tGeibLabs\texon\t1\t42\t0.9\t+\t.\tID=foo_exon0;Parent=foo_mrna\n"+\
-        "seq0\tGeibLabs\texon\t1\t24\t0.9\t+\t.\tID=foo_exon1;Parent=foo_mrna\n"+\
-        "seq0\tGeibLabs\tCDS\t1\t42\t.\t+\t2\tID=foo_cds;Parent=foo_mrna\n"\
-        )
+        test_gff = io.StringIO(
+            "seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\tID=foo_feat;Parent=foo_cds\n"
+            "seq0\tGeibLabs\tgene\t1\t42\t.\t+\t.\tID=foo_gene\n"
+            "seq0\tGeibLabs\tmRNA\t1\t42\t.\t+\t.\tID=foo_mrna;Parent=foo_gene\n"
+            "seq0\tGeibLabs\texon\t1\t42\t0.9\t+\t.\tID=foo_exon0;Parent=foo_mrna\n"
+            "seq0\tGeibLabs\texon\t1\t24\t0.9\t+\t.\tID=foo_exon1;Parent=foo_mrna\n"
+            "seq0\tGeibLabs\tCDS\t1\t42\t.\t+\t2\tID=foo_cds;Parent=foo_mrna\n")
 
         gff = read_gff(test_gff)
 
@@ -59,9 +58,7 @@ class TestGFF(unittest.TestCase):
         self.assertEquals(len(gff["gene"][0]["mrna"][0]["cds"][0]["foo_feature"]), 1)
 
     def test_read_gff_throws_on_missing_id(self):
-        test_gff = io.StringIO(\
-        "seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\t.\n"\
-        )
+        test_gff = io.StringIO("seq0\tGeibLabs\tfoo_feature\t.\t.\t.\t.\t.\t.\n")
 
         thrown = False
         try:

@@ -6,17 +6,17 @@ from src.config import read_config
 class TestConfig(unittest.TestCase):
 
     def test_read_config(self):
-        config = io.StringIO(\
-        "foo='bar'\n"\
-        "bar=42.2\n"\
-        "#Hello this is a comment\n"\
-        "\n"\
-        "baz=True\n"\
+        config = io.StringIO(
+            "foo='bar'\n"
+            "bar=42.2\n"
+            "#Hello this is a comment\n"
+            "\n"
+            "baz=True\n"
         )
-        expected = {\
-        "foo" : "bar",
-        "bar" : 42.2,
-        "baz" : True,
+        expected = {
+            "foo": "bar",
+            "bar": 42.2,
+            "baz": True,
         }
         self.assertEquals(read_config(config), expected)
 
