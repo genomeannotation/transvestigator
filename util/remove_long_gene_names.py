@@ -49,8 +49,10 @@ def main():
 
     # Update gff if provided
     if gff_filename:
+        # noinspection PyUnusedLocal
         with open(gff_filename, 'r') as gff_file, \
                 open(out_prefix + ".gff", 'w') as gff_out:
+            # noinspection PyUnusedLocal
             for line in gff_file:
                 # ToDo:
                 pass

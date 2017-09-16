@@ -62,7 +62,7 @@ class TestGFF(unittest.TestCase):
 
         thrown = False
         try:
-            gff = read_gff(test_gff)
+            read_gff(test_gff)
         except GFFError as error:
             self.assertEquals(str(error), "at line 0: feature has no ID attribute")
             thrown = True
