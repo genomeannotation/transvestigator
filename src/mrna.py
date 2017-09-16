@@ -2,6 +2,7 @@
 from src.gff_feature import GFFFeature
 from src.sequtil import get_subsequence, has_start_codon, has_stop_codon, reverse_complement
 
+
 class Mrna(GFFFeature):
     def __init__(self, seqid=None, source=None, start=None, end=None, score=None,
                  strand=None, phase=0, attributes=None, children=None):
@@ -22,18 +23,18 @@ class Mrna(GFFFeature):
     def make_positive(self, seq_len):
         if self.strand == '+':
             return
-        self.start, self.end = seq_len-self.end+1, seq_len-self.start+1
+        self.start, self.end = seq_len - self.end + 1, seq_len - self.start + 1
         self.strand = "+"
         for cds in self["cds"]:
-            cds.start, cds.end = seq_len-cds.end+1, seq_len-cds.start+1
+            cds.start, cds.end = seq_len - cds.end + 1, seq_len - cds.start + 1
             cds.strand = "+"
         for exon in self["exon"]:
-            exon.start, exon.end = seq_len-exon.end+1, seq_len-exon.start+1
+            exon.start, exon.end = seq_len - exon.end + 1, seq_len - exon.start + 1
             exon.strand = "+"
 
     def match_cds_and_exon_end(self):
-        #Check exon/CDS. If no stop codon, make their ends equal.
-        #This is a blind attempt to avoid PartialProblem errors from the NCBI.
+        # Check exon/CDS. If no stop codon, make their ends equal.
+        # This is a blind attempt to avoid PartialProblem errors from the NCBI.
         if "stop_codon" in self:
             return
         else:
@@ -55,9 +56,9 @@ class Mrna(GFFFeature):
             strand = cds.strand
             phase = cds.phase
             mrna_id = self.attributes["ID"]
-            attributes = {"ID": mrna_id+":start", "Parent": mrna_id}
+            attributes = {"ID": mrna_id + ":start", "Parent": mrna_id}
             start_codon = GFFFeature(seqid, source, feature_type, codon_start, codon_end, score,
-                                    strand, phase, attributes)
+                                     strand, phase, attributes)
             self.add_child(start_codon)
         if has_stop_codon(subseq):
             seqid = cds.seqid
@@ -69,7 +70,7 @@ class Mrna(GFFFeature):
             strand = cds.strand
             phase = cds.phase
             mrna_id = self.attributes["ID"]
-            attributes = {"ID": mrna_id+":stop", "Parent": mrna_id}
+            attributes = {"ID": mrna_id + ":stop", "Parent": mrna_id}
             stop_codon = GFFFeature(seqid, source, feature_type, codon_start, codon_end, score,
                                     strand, phase, attributes)
             self.add_child(stop_codon)

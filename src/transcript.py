@@ -2,16 +2,16 @@
 # coding=utf-8
 
 from collections import namedtuple
+
 from src.sequence import Sequence
 from src.sequtil import reverse_complement
-from src.gff_feature import GFFFeature
 
 Rsem = namedtuple('Rsem', ['tpm', 'fpkm', 'isopct'])
+
 
 ###################
 
 class Transcript:
-
     def __init__(self, genes=None, sequence=None):
         if not genes:
             self.genes = []
@@ -118,7 +118,7 @@ class Transcript:
 
     def to_tbl(self):
         tbl = ""
-        tbl += ">Feature "+self.sequence.header+"\n"
-        tbl += "1\t"+str(len(self.sequence.bases))+"\tREFERENCE\n"
+        tbl += ">Feature " + self.sequence.header + "\n"
+        tbl += "1\t" + str(len(self.sequence.bases)) + "\tREFERENCE\n"
         tbl += self.genes[0].to_tbl()
         return tbl

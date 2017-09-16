@@ -5,18 +5,18 @@ import unittest
 import io
 from src.gff import *
 
-class TestGFF(unittest.TestCase):
 
+class TestGFF(unittest.TestCase):
     def setUp(self):
         pass
 
     def test_parse_gff_attributes(self):
         attr = "\t; foo=dog;baz=bub;  \t\n"
-        self.assertEquals(parse_gff_attributes(attr), {"foo":"dog", "baz":"bub"})
+        self.assertEquals(parse_gff_attributes(attr), {"foo": "dog", "baz": "bub"})
 
     def test_parse_gff_attributes_multiple_identical_attributes(self):
         attr = "ID=foo_feature;foo=dog;foo=baz;foo=buzz"
-        self.assertEquals(parse_gff_attributes(attr), {"ID":"foo_feature", "foo":"dog,baz,buzz"})
+        self.assertEquals(parse_gff_attributes(attr), {"ID": "foo_feature", "foo": "dog,baz,buzz"})
 
     def test_read_gff(self):
         test_gff = io.StringIO(
@@ -51,7 +51,6 @@ class TestGFF(unittest.TestCase):
         self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][1].start, 1)
         self.assertEquals(gff["gene"][0]["mrna"][0]["exon"][1].end, 24)
 
-
         self.assertEquals(gff["gene"][0]["mrna"][0]["cds"][0].start, 1)
         self.assertEquals(gff["gene"][0]["mrna"][0]["cds"][0].end, 42)
         self.assertEquals(gff["gene"][0]["mrna"][0]["cds"][0].phase, 2)
@@ -66,9 +65,9 @@ class TestGFF(unittest.TestCase):
             gff = read_gff(test_gff)
         except GFFError as error:
             self.assertEquals(str(error), "at line 0: feature has no ID attribute")
-            thrown = True 
+            thrown = True
         self.assertTrue(thrown)
-    
+
 
 ##########################
 # noinspection PyShadowingNames
@@ -76,6 +75,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGFF))
     return suite
+
 
 if __name__ == "__main__":
     unittest.main()

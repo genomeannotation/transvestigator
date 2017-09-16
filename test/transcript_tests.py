@@ -3,11 +3,11 @@
 
 import unittest
 from unittest.mock import Mock
-from src.sequence import Sequence
-from src.transcript import Transcript 
+
+from src.transcript import Transcript
+
 
 class TestTranscript(unittest.TestCase):
-
     def setUp(self):
         self.transcript = Transcript()
         self.transcript.sequence = Mock()
@@ -24,20 +24,20 @@ class TestTranscript(unittest.TestCase):
 
     def test_to_tbl(self):
         self.gene0.to_tbl.return_value = \
-        "<1\t>100\tgene\n"\
-        "\t\t\tlocus_tag\tfoo_gene\n"\
-        "<1\t>100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"\
-        "\t\t\tproduct\thypothetical protein\n"
+            "<1\t>100\tgene\n" \
+            "\t\t\tlocus_tag\tfoo_gene\n" \
+            "<1\t>100\tCDS\n" \
+            "\t\t\tprotein_id\tm.foo\n" \
+            "\t\t\tproduct\thypothetical protein\n"
         self.transcript.sequence.header = "foo_seq"
         expected = \
-        ">Feature foo_seq\n"\
-        "1\t6\tREFERENCE\n"\
-        "<1\t>100\tgene\n"\
-        "\t\t\tlocus_tag\tfoo_gene\n"\
-        "<1\t>100\tCDS\n"\
-        "\t\t\tprotein_id\tm.foo\n"\
-        "\t\t\tproduct\thypothetical protein\n"
+            ">Feature foo_seq\n" \
+            "1\t6\tREFERENCE\n" \
+            "<1\t>100\tgene\n" \
+            "\t\t\tlocus_tag\tfoo_gene\n" \
+            "<1\t>100\tCDS\n" \
+            "\t\t\tprotein_id\tm.foo\n" \
+            "\t\t\tproduct\thypothetical protein\n"
         actual = self.transcript.to_tbl()
         self.assertEquals(expected, actual)
 
@@ -48,6 +48,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTranscript))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

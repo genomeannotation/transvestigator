@@ -6,8 +6,8 @@ import io
 from src.annotation import read_annotations, annotate_genes
 from src.gff import GFFFeature
 
-class TestAnnotation(unittest.TestCase):
 
+class TestAnnotation(unittest.TestCase):
     def test_read_annotations(self):
         anno_input = io.StringIO("foo_mrna\tproduct\tfoo-like protein\n"
                                  "foo_gene\tname\tfgnX\n")
@@ -20,7 +20,7 @@ class TestAnnotation(unittest.TestCase):
         gene = GFFFeature()
         gene['mrna'] = [GFFFeature()]
         gene['mrna'][0].attributes["ID"] = ":)"
-        annotations = {":(" : [["DBXREF", "123"]], ":)" : [["DBXREF", "321"]]}
+        annotations = {":(": [["DBXREF", "123"]], ":)": [["DBXREF", "321"]]}
         self.assertTrue("DBXREF" not in gene['mrna'][0].attributes)
         annotate_genes([gene], annotations)
         self.assertTrue("DBXREF" in gene['mrna'][0].attributes)
@@ -30,7 +30,7 @@ class TestAnnotation(unittest.TestCase):
         gene = GFFFeature()
         gene['mrna'] = [GFFFeature()]
         gene['mrna'][0].attributes["ID"] = ":)"
-        annotations = {":(" : [["DBXREF", "123"]], ":)" : [["product", "foo product"]]}
+        annotations = {":(": [["DBXREF", "123"]], ":)": [["product", "foo product"]]}
         self.assertTrue("product" not in gene['mrna'][0].attributes)
         annotate_genes([gene], annotations)
         self.assertTrue("product" in gene['mrna'][0].attributes)
@@ -54,6 +54,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestAnnotation))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

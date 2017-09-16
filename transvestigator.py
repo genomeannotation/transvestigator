@@ -12,10 +12,12 @@ from src.transcript_builder import build_transcript_dictionary
 from src.blast import read_blast
 from src.rsem import read_rsem
 
+
 def verify_path(path):
     if not os.path.isfile(path):
         return False
     return True
+
 
 def read_transcript_blacklist(io_buffer):
     blacklist = []
@@ -25,14 +27,13 @@ def read_transcript_blacklist(io_buffer):
             blacklist.append(transcript)
     return blacklist
 
+
 def main():
     # Handle command line args
     parser = argparse.ArgumentParser(
-    epilog="""
-    Docs at http://genomeannotation.github.io/transvestigator
-    Bugs and feature requests at https://github.com/genomeannotation/transvestigator/issues
-    """,
-    formatter_class=argparse.RawDescriptionHelpFormatter
+        epilog=("Docs at http://genomeannotation.github.io/transvestigator\n"
+                "Bugs and feature requests at https://github.com/genomeannotation/transvestigator/issues"),
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument('-f', '--fasta', required=True)
     parser.add_argument('-g', '--gff', required=True)
@@ -48,7 +49,6 @@ def main():
     if args.out:
         out = args.out
     os.system('mkdir ' + out)
-
 
     tblpath = out + "/transcriptome.new.tbl"
     statspath = out + "/transcriptome.new.stats"
@@ -118,7 +118,8 @@ def main():
     # Do magical fixes on transcripts
     print("Cleaning up transcripts ... ")
     for transcript in transcript_dict.values():
-        #transcript.remove_contig_from_gene_id()
+        # ToDo: why is this commented?
+        # transcript.remove_contig_from_gene_id()
         transcript.fix_feature_lengths()
         transcript.create_starts_and_stops()
         transcript.fix_multiple_genes()
@@ -156,7 +157,12 @@ def main():
                         cds_count += len(mrna["cds"])
                         if "start_codon" in mrna and "stop_codon" in mrna:
                             contains_complete_cds = True
-                outrsemfile.write("\t".join([transcript_id, str(cds_count), str(contains_complete_cds), str(transcript.rsem.tpm), str(transcript.rsem.fpkm), str(transcript.rsem.isopct)])+"\n")
+                outrsemfile.write("\t".join([transcript_id,
+                                             str(cds_count),
+                                             str(contains_complete_cds),
+                                             str(transcript.rsem.tpm),
+                                             str(transcript.rsem.fpkm),
+                                             str(transcript.rsem.isopct)])+"\n")
         print("done.\n\n")
 
     # Write .tbl file
@@ -174,8 +180,7 @@ def main():
     # Write .stats file
     print("Writing .stats file ...")
     with open(statspath, "w") as statsfile:
-        statsfile.write("transcript_id\tcomplete\tpfam_domain\tgo_annotation"
-                "\tgene_name\n")
+        statsfile.write("transcript_id\tcomplete\tpfam_domain\tgo_annotation\tgene_name\n")
         for transcript in transcript_dict.values():
             if (
                     (transcript_blacklist and transcript.sequence.header in transcript_blacklist)

@@ -1,11 +1,11 @@
 # coding=utf-8
 import io
 import unittest
-from unittest.mock import Mock, patch, PropertyMock
+
 from src.rsem import read_rsem
 
-class TestRsem(unittest.TestCase):
 
+class TestRsem(unittest.TestCase):
     def test_read_rsem(self):
         rsem = io.StringIO(
             "transcript_id\tgene_id\tlength\teffective_length\texpected_count\tTPM\tFPKM\tIsoPct\n"
@@ -25,6 +25,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestRsem))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

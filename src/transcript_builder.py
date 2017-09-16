@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from src.transcript import Transcript 
+from src.transcript import Transcript
 from src.gene import Gene
 from src.mrna import Mrna
+
 
 def build_transcript_dictionary(seqs, genes):
     transcripts = {}
@@ -29,6 +30,7 @@ def build_transcript_dictionary(seqs, genes):
             if gene.seqid in seqs:
                 transcripts[gene.seqid] = Transcript([gene], seqs[gene.seqid])
             else:
-                print("Gene "+gene.attributes["ID"]+" is on sequence "+gene.seqid+" which does not exist. Skipping...")
+                print("Gene " + gene.attributes[
+                    "ID"] + " is on sequence " + gene.seqid + " which does not exist. Skipping...")
 
     return transcripts

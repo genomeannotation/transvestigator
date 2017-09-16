@@ -3,39 +3,25 @@
 
 # import all the lovely files
 import unittest
-import test.sequtil_tests
-import test.sequence_tests
-import test.gff_tests
-import test.gff_feature_tests
-import test.transcript_tests
-import test.transcript_builder_tests
-import test.annotation_tests
-import test.rsem_tests
-import test.blast_tests
-import test.config_tests
-import test.gene_tests
-import test.mrna_tests
+from test import sequtil_tests, sequence_tests, gff_tests, gff_feature_tests, transcript_tests, \
+    transcript_builder_tests, annotation_tests, rsem_tests, blast_tests, config_tests, gene_tests, mrna_tests
 
 # get suites from test modules
-suites = [
-    test.sequtil_tests.suite(),
-    test.sequence_tests.suite(),
-    test.gff_tests.suite(),
-    test.gff_feature_tests.suite(),
-    test.transcript_tests.suite(),
-    test.transcript_builder_tests.suite(),
-    test.annotation_tests.suite(),
-    test.rsem_tests.suite(),
-    test.blast_tests.suite(),
-    test.config_tests.suite(),
-    test.gene_tests.suite(),
-    test.mrna_tests.suite(),
-]
 
-# collect suites in a TestSuite object
 suite = unittest.TestSuite()
-for s in suites:
-    suite.addTest(s)
+
+suite.addTest(sequtil_tests.suite())
+suite.addTest(sequence_tests.suite())
+suite.addTest(gff_tests.suite())
+suite.addTest(gff_feature_tests.suite())
+suite.addTest(transcript_tests.suite())
+suite.addTest(transcript_builder_tests.suite())
+suite.addTest(annotation_tests.suite())
+suite.addTest(rsem_tests.suite())
+suite.addTest(blast_tests.suite())
+suite.addTest(config_tests.suite())
+suite.addTest(gene_tests.suite())
+suite.addTest(mrna_tests.suite())
 
 # run suite
 unittest.TextTestRunner(verbosity=2).run(suite)

@@ -4,6 +4,7 @@
 
 import sys
 
+
 def main():
     if len(sys.argv) != 2:
         sys.stderr.write("usage: summarize_stats.py <file.stats>\n")
@@ -50,6 +51,7 @@ def main():
     print("Count(%) with PFAM:\t" + str(total_pfam) + "(" + str(pfam_percent) + ")")
     print("Count(%) with GO:\t" + str(total_go) + "(" + str(go_percent) + ")")
     print("Count(%) with gene name:\t" + str(total_gene_name) + "(" + str(gene_name_percent) + ")")
+
 
 #####################################################################################
 

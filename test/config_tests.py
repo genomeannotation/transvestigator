@@ -1,11 +1,11 @@
 # coding=utf-8
 import io
 import unittest
-from unittest.mock import Mock, patch, PropertyMock
+
 from src.config import read_config
 
-class TestConfig(unittest.TestCase):
 
+class TestConfig(unittest.TestCase):
     def test_read_config(self):
         config = io.StringIO(
             "foo='bar'\n"
@@ -28,6 +28,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestConfig))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

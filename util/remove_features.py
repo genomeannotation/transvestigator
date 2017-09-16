@@ -4,12 +4,14 @@
 
 import sys
 
+
 def print_usage():
     sys.stderr.write("usage: remove_features.py <remove=file.txt> ")
     sys.stderr.write(" [fasta=file.fasta] ")
     sys.stderr.write("[tbl=file.tbl] [gff=file.gff]")
     sys.stderr.write("[out=prefix] \n")
     sys.stderr.write("file.txt is a list of feature ids to remove\n")
+
 
 def main():
     if len(sys.argv) < 2:
@@ -52,8 +54,8 @@ def main():
 
     # Update fasta if provided
     if fasta_filename:
-        with open(fasta_filename, 'r') as fasta_file,\
-            open(out_prefix + ".fasta", 'w') as fasta_out:
+        with open(fasta_filename, 'r') as fasta_file, \
+                open(out_prefix + ".fasta", 'w') as fasta_out:
             current_header = ""
             current_seq = ""
             for line in fasta_file:
@@ -77,11 +79,10 @@ def main():
             if current_seq:
                 fasta_out.write(current_seq + "\n")
 
-
     # Update tbl if provided
     if tbl_filename:
-        with open(tbl_filename, 'r') as tbl_file,\
-            open(out_prefix + ".tbl", 'w') as tbl_out:
+        with open(tbl_filename, 'r') as tbl_file, \
+                open(out_prefix + ".tbl", 'w') as tbl_out:
             valid_feature = False
             for line in tbl_file:
                 if line.startswith(">"):
@@ -96,14 +97,14 @@ def main():
 
     # Update gff if provided
     if gff_filename:
-        with open(gff_filename, 'r') as gff_file,\
-            open(out_prefix + ".gff", 'w') as gff_out:
-                for line in gff_file:
-                    feature_id = line.strip().split("\t")[0]
-                    if feature_id not in to_remove:
-                        gff_out.write(line)
+        with open(gff_filename, 'r') as gff_file, \
+                open(out_prefix + ".gff", 'w') as gff_out:
+            for line in gff_file:
+                feature_id = line.strip().split("\t")[0]
+                if feature_id not in to_remove:
+                    gff_out.write(line)
 
-        
+
 #####################################################################################
 
 if __name__ == '__main__':

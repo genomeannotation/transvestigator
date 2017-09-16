@@ -1,12 +1,11 @@
 # coding=utf-8
 import unittest
-import io
-import os
-from unittest.mock import Mock, patch, PropertyMock
+from unittest.mock import Mock
+
 from src.gff_feature import *
 
-class TestGFFFeature(unittest.TestCase):
 
+class TestGFFFeature(unittest.TestCase):
     def test_add_child(self):
         root = GFFFeature()
         gene0 = GFFFeature()
@@ -54,7 +53,7 @@ class TestGFFFeature(unittest.TestCase):
     def test_fix_feature_lengths_calls_child_features(self):
         feature = GFFFeature(start=1, end=7)
         child = Mock()
-        feature.children = {'child':[child]}
+        feature.children = {'child': [child]}
 
         seq_len = 8
         feature.fix_feature_lengths(seq_len)
@@ -79,7 +78,7 @@ class TestGFFFeature(unittest.TestCase):
         self.assertEquals(feature.start, 2)
         self.assertEquals(feature.end, 7)
 
-    def test_fix_feature_lengths_2(self):
+    def test_fix_feature_lengths_3(self):
         feature = GFFFeature(start=3, end=11)
 
         seq_len = 8
@@ -89,7 +88,7 @@ class TestGFFFeature(unittest.TestCase):
         self.assertEquals(feature.end, 8)
 
     def test_write(self):
-        test = GFFFeature("foo_seq", "geiblabs", "foo", 1, 42, None, '-', 1, {"ID":"1234", "dog":"bazz"})
+        test = GFFFeature("foo_seq", "geiblabs", "foo", 1, 42, None, '-', 1, {"ID": "1234", "dog": "bazz"})
         expected = "foo_seq\tgeiblabs\tfoo\t1\t42\t.\t-\t1\tID=1234;dog=bazz"
         self.assertEqual(test.write(), expected)
 
@@ -100,6 +99,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestGFFFeature))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,15 +4,15 @@
 import unittest
 from src.sequtil import translate, reverse_complement, has_start_codon, has_stop_codon, get_subsequence, overlap, nested
 
-class TestTranslate(unittest.TestCase):
 
+class TestTranslate(unittest.TestCase):
     def test_translate_one_codon(self):
         self.assertEquals('T', translate('act', '+'))
         self.assertEquals('S', translate('act', '-'))
 
     def test_translate_longer_sequence(self):
         test_seq = 'CATGACAGAAGATATTTC'
-        self.assertEquals('HDRRYF', translate(test_seq, '+',))
+        self.assertEquals('HDRRYF', translate(test_seq, '+', ))
         self.assertEquals('EISSVM', translate(test_seq, '-'))
 
     def test_reverse_complement(self):
@@ -23,7 +23,8 @@ class TestTranslate(unittest.TestCase):
         self.assertEquals('CATN', reverse_complement('MATG'))
 
     def test_reverse_complement_longer_seq(self):
-        self.assertEquals('TGTAATCTGTAATCTGTAATCTGTAATCTGTAATC', reverse_complement('GATTACAGATTACAGATTACAGATTACAGATTACA'))
+        self.assertEquals('TGTAATCTGTAATCTGTAATCTGTAATCTGTAATC',
+                          reverse_complement('GATTACAGATTACAGATTACAGATTACAGATTACA'))
 
     def test_get_subsequence(self):
         bases = "GATTACA"
@@ -32,7 +33,7 @@ class TestTranslate(unittest.TestCase):
 
     def test_has_start_codon(self):
         self.assertTrue(has_start_codon('auggattaca'))
-        self.assertFalse(has_start_codon('guggattaca')) # currently no support for alternate start codons
+        self.assertFalse(has_start_codon('guggattaca'))  # currently no support for alternate start codons
 
     def test_has_stop_codon(self):
         self.assertTrue(has_stop_codon('gattacatag'))
@@ -40,7 +41,7 @@ class TestTranslate(unittest.TestCase):
         self.assertTrue(has_stop_codon('gattacatga'))
         self.assertFalse(has_stop_codon('gattacaact'))
 
-    #### OVERLAP TESTS ####
+    # OVERLAP TESTS #
 
     def test_overlap(self):
         indices1 = [1, 10]
@@ -57,7 +58,7 @@ class TestTranslate(unittest.TestCase):
         indices2 = [2, 9]
         self.assertFalse(overlap(indices1, indices2))
 
-    def test_overlap_returns_false_when_identical(self): # not sure if this really happens
+    def test_overlap_returns_false_when_identical(self):  # not sure if this really happens
         indices1 = [1, 10]
         indices2 = [1, 10]
         self.assertFalse(overlap(indices1, indices2))
@@ -65,18 +66,17 @@ class TestTranslate(unittest.TestCase):
     def test_overlap_returns_true_when_sharing_one_base(self):
         indices1 = [1, 5]
         indices2 = [5, 10]
-        self.assertTrue(overlap(indices1,indices2))
-        
+        self.assertTrue(overlap(indices1, indices2))
+
     def test_overlap_returns_true_when_sharing_one_base_case2(self):
         indices1 = [5, 10]
         indices2 = [1, 5]
-        self.assertTrue(overlap(indices1,indices2))
+        self.assertTrue(overlap(indices1, indices2))
 
     def test_list_of_index_pairs_contains_overlap(self):
         pass
 
-
-    #### NESTED TESTS ####
+    # NESTED TESTS #
 
     def test_nested(self):
         indices1 = [1, 10]
@@ -103,13 +103,14 @@ class TestTranslate(unittest.TestCase):
         indices2 = [1, 5]
         self.assertTrue(nested(indices1, indices2))
 
-        
+
 ##########################
 # noinspection PyShadowingNames
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestTranslate))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,26 +1,26 @@
 # coding=utf-8
-import io
 import unittest
-from unittest.mock import Mock, patch, PropertyMock
+from unittest.mock import Mock
+
 from src.mrna import Mrna
 
-class TestMrna(unittest.TestCase):
 
+class TestMrna(unittest.TestCase):
     def test_from_gff_feature_success(self):
         gff_mrna = Mock()
-        gff_mrna.type = "mRNA"
-        
+        gff_mrna.feature_type = "mRNA"
+
         mrna = Mrna.from_gff_feature(gff_mrna)
         self.assertTrue(mrna)
 
     def test_from_gff_features_fails(self):
         gff_mrna = Mock()
-        gff_mrna.type = "asdf"
-        
+        gff_mrna.feature_type = "asdf"
+
         mrna = Mrna.from_gff_feature(gff_mrna)
         self.assertFalse(mrna)
 
-    #### MAKE POSITIVE TESTS ####
+    # MAKE POSITIVE TESTS #
 
     def test_make_positive(self):
         seq_len = 8
@@ -35,7 +35,7 @@ class TestMrna(unittest.TestCase):
         exon.end = 7
         cds.strand = '-'
 
-        mrna.children = {'cds':[cds], 'exon':[exon]}
+        mrna.children = {'cds': [cds], 'exon': [exon]}
 
         mrna.make_positive(seq_len)
 
@@ -49,7 +49,7 @@ class TestMrna(unittest.TestCase):
         self.assertEqual(exon.end, 8)
         self.assertEqual(exon.strand, '+')
 
-    #### MATCH CDS AND EXON END TESTS ####
+    # MATCH CDS AND EXON END TESTS #
 
     def test_match_cds_and_exon_end(self):
         mrna = Mrna()
@@ -60,7 +60,7 @@ class TestMrna(unittest.TestCase):
         exon.start = 1
         exon.end = 6
 
-        mrna.children = {'cds':[cds], 'exon':[exon]}
+        mrna.children = {'cds': [cds], 'exon': [exon]}
 
         mrna.match_cds_and_exon_end()
         self.assertEquals(cds.end, 6)
@@ -74,22 +74,22 @@ class TestMrna(unittest.TestCase):
         exon.start = 1
         exon.end = 6
 
-        mrna.children = {'cds':[cds], 'exon':[exon], 'stop_codon':[Mock()]}
+        mrna.children = {'cds': [cds], 'exon': [exon], 'stop_codon': [Mock()]}
 
         mrna.match_cds_and_exon_end()
         self.assertEquals(cds.end, 5)
 
-    #### STARTS AND STOPS TESTS ####
-    
+    # STARTS AND STOPS TESTS #
+
     def test_create_starts_and_stops_creates_a_start(self):
         mrna = Mrna()
         cds = Mock()
         cds.start = 1
         cds.end = 6
         cds.strand = '+'
-        mrna.children = {'cds':[cds]}
-        mrna.attributes = {'ID':'m.1234'}
-        
+        mrna.children = {'cds': [cds]}
+        mrna.attributes = {'ID': 'm.1234'}
+
         mrna.create_starts_and_stops('ATGNNN')
 
         self.assertTrue('start_codon' in mrna)
@@ -100,9 +100,9 @@ class TestMrna(unittest.TestCase):
         cds.start = 1
         cds.end = 6
         cds.strand = '-'
-        mrna.children = {'cds':[cds]}
-        mrna.attributes = {'ID':'m.1234'}
-        
+        mrna.children = {'cds': [cds]}
+        mrna.attributes = {'ID': 'm.1234'}
+
         mrna.create_starts_and_stops('NNNCAT')
 
         self.assertTrue('start_codon' in mrna)
@@ -113,9 +113,9 @@ class TestMrna(unittest.TestCase):
         cds.start = 1
         cds.end = 6
         cds.strand = '+'
-        mrna.children = {'cds':[cds]}
-        mrna.attributes = {'ID':'m.1234'}
-        
+        mrna.children = {'cds': [cds]}
+        mrna.attributes = {'ID': 'm.1234'}
+
         mrna.create_starts_and_stops('NNNTAG')
 
         self.assertTrue('stop_codon' in mrna)
@@ -126,9 +126,9 @@ class TestMrna(unittest.TestCase):
         cds.start = 1
         cds.end = 6
         cds.strand = '-'
-        mrna.children = {'cds':[cds]}
-        mrna.attributes = {'ID':'m.1234'}
-        
+        mrna.children = {'cds': [cds]}
+        mrna.attributes = {'ID': 'm.1234'}
+
         mrna.create_starts_and_stops('CTANNN')
 
         self.assertTrue('stop_codon' in mrna)
@@ -140,6 +140,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestMrna))
     return suite
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,6 +3,7 @@
 
 import sys
 
+
 def read_annotations(io_buffer):
     """Reads input buffer of annotations, returns dictionary of id: [(key, value)].
 
@@ -27,12 +28,14 @@ def read_annotations(io_buffer):
             annotations[identifier] = [(key, value)]
     return annotations
 
+
 def validate_key(key):
     """Checks annotation key against list of approved keys."""
     permitted_keys = ["name", "Dbxref", "Ontology_term", "product"]
     if key in permitted_keys:
         return True
     return False
+
 
 def annotate_genes(genes, annotations):
     for gene in genes:

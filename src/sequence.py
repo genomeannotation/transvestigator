@@ -2,7 +2,6 @@
 # coding=utf-8
 
 class Sequence:
-
     def __init__(self, header="", bases=""):
         self.header = header
         self.bases = bases
@@ -11,6 +10,7 @@ class Sequence:
         result = '>' + self.header + '\n'
         result += self.bases + '\n'
         return result
+
 
 ####################################################
 
@@ -23,11 +23,10 @@ def read_fasta(io_buffer):
             if len(header) > 0:
                 # Save the data
                 seqs[header] = Sequence(header, bases)
-            header = line[1:].strip().split()[0] # Get the next header
+            header = line[1:].strip().split()[0]  # Get the next header
             bases = ''
         else:
             bases += line.strip()
     # Add the last sequence
     seqs[header] = Sequence(header, bases)
     return seqs
-

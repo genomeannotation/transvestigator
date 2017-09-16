@@ -1,6 +1,7 @@
 # coding=utf-8
 import ast
 
+
 def read_config(io_buffer):
     config = {}
     for line in io_buffer:
